@@ -1,0 +1,198 @@
+% TODO añadir secciones y subsecciones. 2 horas de presentacion! viene bien estructurar
+% TODO añadir resumen al final
+
+
+\documentclass[hyperref={pdfpagelabels=false},tree-dvips]{beamer}
+% By  using hyperref={pdfpagelabels=false} you get rid off:
+%	Package hyperref Warning: Option `pdfpagelabels' is turned off
+%	(hyperref)                because \thepage is undefined.
+%	Hyperref stopped early
+\usetheme{Warsaw}
+%\setbeameroption{show notes}
+%\setbeameroption{hide notes} % default
+%\setbeameroption{show notes on second screen=left}
+%\setbeameroption{show only notes} % for printing the notes only
+
+
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+\usepackage[utf8]{inputenc}
+
+\usepackage{adjustbox}
+\usepackage{graphicx}
+
+\usepackage{xcolor}
+\definecolor{green}{RGB}{0,170,0} % redefine green for visibility
+
+\usepackage{bold-extra} % for having boldfaced monospaced font in listings
+\usepackage{listings}
+\lstdefinestyle{procesos}{
+	language=C,
+	emptylines=1,
+	breaklines=true,
+	basicstyle=\ttfamily\bfseries\color{black},
+	moredelim=**[is][\color{red}]{@red@}{@},
+	moredelim=**[is][\color{blue}]{@blue@}{@},
+	moredelim=**[is][\color{green}]{@green@}{@},
+}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,calc,shapes,decorations.pathreplacing}
+
+\usepackage{bytefield}
+	\newcommand{\colorbitbox}[3]{%
+	\rlap{\bitbox{#2}{\color{#1}\rule{\width}{\height}}}%
+	\bitbox{#2}{#3}}
+	\definecolor{lightcyan}{rgb}	{0.80, 	0.90   , 1   }
+	\definecolor{lightgreen}{rgb}	{0.50, 	1   , 0.50}
+	\definecolor{lightred}{rgb}		{1   , 	0.70, 0.71}
+	\definecolor{lightblue}{rgb}	{0   , 	0.90, 1   }
+
+
+
+\title{Tema 2.7. Subprogramas. Traducción}
+\author{Pedro Javier Rodríguez Rodrigo, Víctor Cuadrado Juan}
+%Basado en las trasparencias de José Luis Sierra y Juan Antonio Recio.}
+\date{\today}
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\titlepage
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Organización de la memoria}
+\begin{frame}[fragile]
+\frametitle{Organización de la memoria}
+\note{Talk no more than 1 minute.}
+
+\begin{itemize}[<+->]% [<+->] makes it uncoverable
+	\item Es posible acceder a los datos globales
+	\item Desde cualquier registro de activación es necesario referir al registro de activación asociado con el bloque padre (que no tiene porque ser necesariamente el registro de activación anterior).
+	\item Dos Posibles organizaciones:
+		\begin{itemize}[<+->]
+			\item Enlaces estáticos
+			\item Displays
+		\end{itemize}
+\end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Enlaces estáticos}
+
+\begin{frame}[fragile] % fragile: needed for verbatim/lstlistings
+\frametitle{Enlaces estáticos: ejemplo}
+
+\begin{columns}[T]
+\column{.4\textwidth}
+	\begin{lstlisting}[style=procesos]
+	@red@proc proc1(){
+	    x: num;
+	    y: num;
+	    proc1();
+	}@
+	@blue@proc proc2(){
+	    w: bool;
+	    proc1();
+	}@
+	@green@main(){
+	    a: bool;
+	    proc2();
+	}@
+	\end{lstlisting}
+\column{.3\textwidth}
+	\begin{tikzpicture}
+	  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
+	    rectangle split parts=14,minimum width=2cm}]
+	    \node (R) at (2,4){
+	    	\nodepart{two}proc2()
+	    	\nodepart{five}proc1()
+	    	\nodepart{nine}proc1()
+	    	\nodepart{twelve}proc2()
+	    	\nodepart{fourteen}proc1()
+	    };
+	  \end{scope}
+	\end{tikzpicture}
+\column{.3\textwidth}
+	aqui la pila de registros
+\end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Enlaces estáticos}
+\begin{itemize}%[<+->]% [<+->] makes it uncoverable
+	\item En el registro de activación se incluye un enlace al registro de activación del bloque padre (enlace estático)
+	\item La memoria se organiza en forma de pila de registros de activación, enlazados a través de los enlaces estáticos
+\end{itemize}
+
+Dibujito guapo
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+
+\frametitle{Enlaces estáticos: problemas}
+
+\uncover<1->{¿Qué problemas hay?}
+
+\begin{enumerate}%[<+->]% [<+->] makes it uncoverable
+	\item<2-> La recuperación del enlace de un identificador global supone seguir toda la cadena de enlaces estáticos. Si el identificador ha sido declarado \emph{k} niveles por encima, es necesario realizar \emph{k} indirecciones hasta llegar al correspondiente registro de activación.
+	\item<3-> Hay que considerar la complejidad de generar código que gestione de manera adecuada los enlaces estáticos.
+\end{enumerate}
+
+\uncover<4->{Solución:\\
+Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. La estructura que los almacena se llama \textbf{display}.}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Displays}
+
+\begin{frame}[fragile]
+
+% \frametitle{Enlaces estáticos: problemas}
+
+% \uncover<1->{¿Qué problemas hay?}
+
+% \begin{enumerate}%[<+->]% [<+->] makes it uncoverable
+% 	\item<2-> La recuperación del enlace de un identificador global supone seguir toda la cadena de enlaces estáticos. Si el identificador ha sido declarado \emph{k} niveles por encima, es necesario realizar \emph{k} indirecciones hasta llegar al correspondiente registro de activación.
+% 	\item<3-> Hay que considerar la complejidad de generar código que gestione de manera adecuada los enlaces estáticos.
+% \end{enumerate}
+
+% \uncover<4->{Solución:\\
+% Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. La estructura que los almacena se llama \textbf{display}.}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+\frametitle{Codigo del ejemplo}
+
+
+
+\begin{bytefield}[endianness=little,bitwidth=0.10\linewidth]{9}
+	\bitheader[endianness=little,]{0-9} \\
+	\colorbitbox{white}{1}{8} &
+	\colorbitbox{lightgreen}{1}{4} &
+	\colorbitbox{lightgreen}{1}{?} &
+	\colorbitbox{lightgreen}{1}{?} &
+	\colorbitbox{lightcyan}{2}{par1} &
+	\colorbitbox{lightcyan}{2}{par2} &
+	\colorbitbox{lightcyan}{1}{res} &
+	\colorbitbox{lightred}{1}{527}
+\end{bytefield}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Displays}
+\section{Nueva arquitectura para la máquina virtual}
+\section{Paso de parámetros}
+\section{Traducción}
+\section{paso de parámetros: ampliación de la TS}
+
+\end{document}
