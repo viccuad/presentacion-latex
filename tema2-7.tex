@@ -1,18 +1,19 @@
-% TODO añadir secciones y subsecciones. 2 horas de presentacion! viene bien estructurar
+% TODO añadir resumen al principio de la segunda hora
 % TODO añadir resumen al final
-
 
 \documentclass[hyperref={pdfpagelabels=false},tree-dvips]{beamer}
 % By  using hyperref={pdfpagelabels=false} you get rid off:
 %	Package hyperref Warning: Option `pdfpagelabels' is turned off
 %	(hyperref)                because \thepage is undefined.
 %	Hyperref stopped early
-\usetheme{Warsaw}
+
+%\usetheme{Madrid}
+\usetheme{Warsaw} %muestra las secciones, pero ocupa mucho espacio
+
 %\setbeameroption{show notes}
 %\setbeameroption{hide notes} % default
 %\setbeameroption{show notes on second screen=left}
 %\setbeameroption{show only notes} % for printing the notes only
-
 
 \usepackage[spanish]{babel}
 \selectlanguage{spanish}
@@ -21,16 +22,47 @@
 \usepackage{adjustbox}
 \usepackage{graphicx}
 
+\usepackage{qtree}
+%\usepackage{tree-dvips}
+% para que funcionen las anotaciones en los arboles de tree-dvips hay que compilar a dvi, no usar pdflatex. Y luego de dvi, pasar a pdf.
+
 \usepackage{xcolor}
 \definecolor{green}{RGB}{0,170,0} % redefine green for visibility
 
 \usepackage{bold-extra} % for having boldfaced monospaced font in listings
 \usepackage{listings}
+% para no perder los tabs en los listings:
+% https://tex.stackexchange.com/questions/8370/how-to-prevent-beamer-from-removing-the-tab-alignment-of-lstlisting
 \lstdefinestyle{procesos}{
 	language=C,
 	emptylines=1,
 	breaklines=true,
 	basicstyle=\ttfamily\bfseries\color{black},
+	moredelim=**[is][\color{red}]{@red@}{@},
+	moredelim=**[is][\color{blue}]{@blue@}{@},
+	moredelim=**[is][\color{green}]{@green@}{@},
+}
+\lstdefinestyle{codigo}{
+	language=C,
+	emptylines=1,
+	breaklines=true,
+	basicstyle=\tiny\ttfamily\color{black},
+	%numbers=left,
+	columns=fullflexible,
+	keepspaces=true,
+	tabsize=3,
+	morecomment=[l]{//},
+	moredelim=**[is][\color{red}]{@red@}{@},
+	moredelim=**[is][\color{blue}]{@blue@}{@},
+	moredelim=**[is][\color{green}]{@green@}{@},
+	tabsize=2,
+	showtabs
+}
+\lstdefinestyle{gramaticas}{
+	language=C,
+	emptylines=1,
+	breaklines=true,
+	basicstyle=\ttfamily\color{black},
 	moredelim=**[is][\color{red}]{@red@}{@},
 	moredelim=**[is][\color{blue}]{@blue@}{@},
 	moredelim=**[is][\color{green}]{@green@}{@},
@@ -50,6 +82,7 @@
 
 
 
+
 \title{Tema 2.7. Subprogramas. Traducción}
 \author{Pedro Javier Rodríguez Rodrigo, Víctor Cuadrado Juan}
 %Basado en las trasparencias de José Luis Sierra y Juan Antonio Recio.}
@@ -64,13 +97,14 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Organización de la memoria}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Organización de la memoria}
 \note{Talk no more than 1 minute.}
 
 \begin{itemize}[<+->]% [<+->] makes it uncoverable
 	\item Es posible acceder a los datos globales
-	\item Desde cualquier registro de activación es necesario referir al registro de activación asociado con el bloque padre (que no tiene porque ser necesariamente el registro de activación anterior).
+	\item Desde cualquier registro de activación es necesario referir al registro de activación asociado con el bloque padre (que no tiene porque ser necesariamente el registro de activación anterior)
 	\item Dos Posibles organizaciones:
 		\begin{itemize}[<+->]
 			\item Enlaces estáticos
@@ -81,9 +115,20 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Enlaces estáticos}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Enlaces estáticos}
+\begin{itemize}%[<+->]% [<+->] makes it uncoverable
+	\item En el registro de activación se incluye un enlace al registro de activación del bloque padre (enlace estático)
+	\item La memoria se organiza en forma de pila de registros de activación, enlazados a través de los enlaces estáticos
+\end{itemize}
 
+Dibujito guapo
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] % fragile: needed for verbatim/lstlistings
-\frametitle{Enlaces estáticos: ejemplo}
+\frametitle{Enlaces estáticos: Ejemplo}
 
 \begin{columns}[T]
 \column{.4\textwidth}
@@ -122,25 +167,13 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Enlaces estáticos}
-\begin{itemize}%[<+->]% [<+->] makes it uncoverable
-	\item En el registro de activación se incluye un enlace al registro de activación del bloque padre (enlace estático)
-	\item La memoria se organiza en forma de pila de registros de activación, enlazados a través de los enlaces estáticos
-\end{itemize}
-
-Dibujito guapo
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
-
-\frametitle{Enlaces estáticos: problemas}
+\frametitle{Enlaces estáticos: Problemas}
 
 \uncover<1->{¿Qué problemas hay?}
 
 \begin{enumerate}%[<+->]% [<+->] makes it uncoverable
-	\item<2-> La recuperación del enlace de un identificador global supone seguir toda la cadena de enlaces estáticos. Si el identificador ha sido declarado \emph{k} niveles por encima, es necesario realizar \emph{k} indirecciones hasta llegar al correspondiente registro de activación.
-	\item<3-> Hay que considerar la complejidad de generar código que gestione de manera adecuada los enlaces estáticos.
+	\item<2-> La recuperación del enlace de un identificador global supone seguir toda la cadena de enlaces estáticos. Si el identificador ha sido declarado \emph{k} niveles por encima, es necesario realizar \emph{k} indirecciones hasta llegar al correspondiente registro de activación
+	\item<3-> Hay que considerar la complejidad de generar código que gestione de manera adecuada los enlaces estáticos
 \end{enumerate}
 
 \uncover<4->{Solución:\\
@@ -149,50 +182,171 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Displays}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
+\frametitle{Display}
 
-% \frametitle{Enlaces estáticos: problemas}
+\begin{enumerate}[<+->]% [<+->] makes it uncoverable
+	\item Secuencia de celdas consecutivas que apuntan a registros de activación
+	\item La celda \emph{i} apunta al registro de activación que está siendo utilizado en el nivel de anidamiento \emph{i}
+	\item Esta estructura facilita el acceso a los datos globales:\\
+		el enlance para un identificador declarado en un bloque que se encuentra a profunidad \emph{i} estará en el registro de activación referido por la celda \emph{i} del display (el \emph{display i} a partir de ahora)
+\end{enumerate}
 
-% \uncover<1->{¿Qué problemas hay?}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Display: Ejemplo}
 
-% \begin{enumerate}%[<+->]% [<+->] makes it uncoverable
-% 	\item<2-> La recuperación del enlace de un identificador global supone seguir toda la cadena de enlaces estáticos. Si el identificador ha sido declarado \emph{k} niveles por encima, es necesario realizar \emph{k} indirecciones hasta llegar al correspondiente registro de activación.
-% 	\item<3-> Hay que considerar la complejidad de generar código que gestione de manera adecuada los enlaces estáticos.
-% \end{enumerate}
+\begin{columns}[T]
+\column{.4\textwidth}
+	\begin{lstlisting}[style=procesos]
+	@red@proc proc1(){
+	    x: num;
+	    y: num;
+	    proc1();
+	}@
+	@blue@proc proc2(){
+	    w: bool;
+	    proc1();
+	}@
+	@green@main(){
+	    a: bool;
+	    proc2();
+	}@
+	\end{lstlisting}
+\column{.3\textwidth}
+	Pila de llamadas
+\column{.3\textwidth}
+	dibujo del display
+\end{columns}
 
-% \uncover<4->{Solución:\\
-% Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. La estructura que los almacena se llama \textbf{display}.}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Nueva arquitectura para la MV}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Memoria de un programa I}
+
+dibujo resumen de toda la memoria del programa (instrucciones, estatico, reg. activacion, heap)
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Memoria de un programa II}
+
+Las primeras celdas de la memoria se destinarán a mantener la información de estado necesaria para gestionar adecuadamente la pila de registros de activación:
+\begin{itemize}[<+->]% [<+->] makes it uncoverable
+	\item Registro \emph{CP}: Contendrá siempre la dirección de la \textbf{última celda ocupada} por la pila de registros de activación (cuando la pila esté vacía, el valor de \emph{CP} será la dirección de la celda anterior -la última celda ocupada por el display-)
+	\item \emph{Display}
+\end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Estructura de los Registros de activación}
+
+dibujo del registro de activación
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Organización de la traducción}
+\subsection{Inicio}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Inicio}
+
+\begin{itemize}[<+->]% [<+->] makes it uncoverable
+	\item Se fija el \emph{display 0} a la primera celda de datos estáticos
+	\item Se fija el \emph{CP} a la posición de la última celda del display (la última celda ocupada)
+	\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación
+\end{itemize}
+
+dibujo
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Ejemplo de invocación}
+
+\begin{columns}[T]
+\column{.5\textwidth}
+\begin{lstlisting}[style=codigo]
+	tipo tpar= rec x:num; y:num;
+	@red@proc distanciaEuclidea(p1:tpar, p2:tpar, var res:num)
+	    a: num; b: num;@
+	    @blue@proc sumacuadrado(a:num, b:num, var r:num)
+            a:=a*a;
+	        b:=b*b
+	        r:=a+b;@
+	    @green@proc raizcuadrada(var n:num)
+	        ...@
+	    @red@&
+	    a:=p1.x-p2.x;
+	    b:=p1.y-p2.y;
+	    sumacuadrado(a, b, res);
+	    raizcuadrada(res);@
+	par1:tpar; par2:tpar; resultado:num;
+	&
+	par1.x:=1; par1.y:=5;
+	par2.x:=8; par2.y:=12;
+	distanciaEuclidea(par1,par2,resultado);
+\end{lstlisting}
+\column{.5\textwidth}
+	\uncover<2->{
+			\Tree
+			[.main()
+			    [.{\color{red}distanciaEuclidea()}
+			        [.{\color{blue}sumaCuadrado()}  ]
+			        [.{\color{green}raizCuadrada()} ]
+			    ]
+			]
+	}
+\end{columns}
+\uncover<1->{¿Cual es el máximo nivel de anidamiento para éste programa?}
+\uncover<2->{2}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Esquema de la traducción de subprogramas}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Esquema de la traducción}
+
+Dibujo de cómo queda la traducción de subprogramas y el main, y el salto con ir-a.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Manejo de la activación y desactivación I}
+
+dibujo con la explicación de ir-ind
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Manejo de la activación y desactivación II}
+
+orden de la ejecución del código generado
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]
-\frametitle{Codigo del ejemplo}
+\subsection{Prellamada}
+\subsection{Prólogo}
+\subsection{Epílogo}
+\subsection{Postllamada}
 
 
-
-\begin{bytefield}[endianness=little,bitwidth=0.10\linewidth]{9}
-	\bitheader[endianness=little,]{0-9} \\
-	\colorbitbox{white}{1}{8} &
-	\colorbitbox{lightgreen}{1}{4} &
-	\colorbitbox{lightgreen}{1}{?} &
-	\colorbitbox{lightgreen}{1}{?} &
-	\colorbitbox{lightcyan}{2}{par1} &
-	\colorbitbox{lightcyan}{2}{par2} &
-	\colorbitbox{lightcyan}{1}{res} &
-	\colorbitbox{lightred}{1}{527}
-\end{bytefield}
-
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\subsection{Displays}
-\section{Nueva arquitectura para la máquina virtual}
 \section{Paso de parámetros}
-\section{Traducción}
-\section{paso de parámetros: ampliación de la TS}
+\subsection{Por valor}
+\subsection{Por referencia}
+\subsection{Amplicación de la TS}
+\subsection{Traducción}
+
+
+
+% dentro de lstlisting, y por culpa de beamer, solo se pueden usar espacios y no tabs para indentar :(
+
 
 \end{document}
