@@ -1,5 +1,6 @@
 % TODO añadir resumen al principio de la segunda hora
 % TODO añadir resumen al final
+% TODO tildes dentro de lstlistings
 
 \documentclass[hyperref={pdfpagelabels=false},tree-dvips]{beamer}
 % By  using hyperref={pdfpagelabels=false} you get rid off:
@@ -52,6 +53,25 @@
 	keepspaces=true,
 	tabsize=3,
 	morecomment=[l]{//},
+	moredelim=**[is][\color{red}]{@red@}{@},
+	moredelim=**[is][\color{blue}]{@blue@}{@},
+	moredelim=**[is][\color{green}]{@green@}{@},
+	tabsize=2,
+	showtabs
+}
+\lstdefinestyle{codigoMP}{
+	language=C,
+	morekeywords={fun,ffun,cons,devuelve},
+	keywordstyle=\itshape\color{black},
+	emptylines=1,
+	breaklines=true,
+	basicstyle=\small\ttfamily\color{black},
+	numbers=left,
+	columns=fullflexible,
+	keepspaces=true,
+	tabsize=3,
+	morecomment=[l]{//},
+	commentstyle=\color{gray},
 	moredelim=**[is][\color{red}]{@red@}{@},
 	moredelim=**[is][\color{blue}]{@blue@}{@},
 	moredelim=**[is][\color{green}]{@green@}{@},
@@ -267,6 +287,26 @@ dibujo
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
+\frametitle{Inicio}
+\begin{lstlisting}[style=codigoMP]
+fun inicio(numNiveles,tamDatos) devuelve
+   // fijamos display 0 a la 1a celda de datos estaticos:
+   apila(numNiveles+2)           ||// +2: CP, display 0
+   desapila-dir(1)               ||
+   // fijamos CP a la ultima celda de datos estaticos:
+   apila(1+numNiveles+tamDatos)  ||// +1: display 0
+   desapila-dir(0)
+ffun
+cons longInicio = 4
+\end{lstlisting}
+
+Ejemplo: inicio(2,5)
+
+Dibujo del movimiento del cp
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
 \frametitle{Ejemplo de invocación}
 
 \begin{columns}[T]
@@ -331,8 +371,45 @@ orden de la ejecución del código generado
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \subsection{Prellamada}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Prellamada I}
+
+Asociada con la invocación $p(e_1,...,e_k)$:
+\begin{enumerate}[<+->]
+	\item
+	\item
+	\item
+\end{enumerate}
+
+dibujo de lo que aparece al hacer los pasos
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Prellamada II}
+
+\begin{lstlisting}[style=codigoMP]
+fun apila-ret(ret) devuelve
+   // calcular CP+1:
+   apila-dir(0)          ||
+   apila(1)              ||
+   suma                  ||
+   // guardar dir retorno:
+   apila(ret)            ||
+   desapila-ind          ||
+ffun
+cons longApilaRet = 5
+\end{lstlisting}
+
+Ejemplo: apila-ret(0x527) , siendo 0x527 el nº de instrucción.
+
+Dibujo
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Prólogo}
 \subsection{Epílogo}
 \subsection{Postllamada}
