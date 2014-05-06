@@ -69,7 +69,7 @@
 }
 
 \usepackage{tikz}
-\usetikzlibrary{arrows,calc,shapes,decorations.pathreplacing}
+\usetikzlibrary{arrows,calc,shapes,decorations.pathreplacing,positioning}
 
 \usepackage{bytefield}
 	\newcommand{\colorbitbox}[3]{%
@@ -122,9 +122,6 @@
 	\item En el registro de activación se incluye un enlace al registro de activación del bloque padre (enlace estático)
 	\item La memoria se organiza en forma de pila de registros de activación, enlazados a través de los enlaces estáticos
 \end{itemize}
-
-Dibujito guapo
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile] % fragile: needed for verbatim/lstlistings
@@ -148,22 +145,57 @@ Dibujito guapo
 	}@
 	\end{lstlisting}
 \column{.3\textwidth}
-	\begin{tikzpicture}
-	  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
-	    rectangle split parts=14,minimum width=2cm}]
-	    \node (R) at (2,4){
-	    	\nodepart{two}proc2()
-	    	\nodepart{five}proc1()
-	    	\nodepart{nine}proc1()
-	    	\nodepart{twelve}proc2()
-	    	\nodepart{fourteen}proc1()
-	    };
-	  \end{scope}
-	\end{tikzpicture}
+	\small{Mem. instrucciones}
+	\begin{center}
+		\begin{tikzpicture}
+		  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
+		    rectangle split parts=12,minimum width=2cm,
+		    rectangle split part fill={gray!20,red!60,red!60,red!60,red!60,
+		    blue!60,blue!60,blue!60,green!66,green!66,green!66,gray!20}}]
+		    \node (Inst) at (2,4){
+		    	\nodepart{one}...
+		    	\nodepart{two}def proc1()
+		    	\nodepart{three}x: num
+		    	\nodepart{four}y: num
+		    	\nodepart{five}proc1()
+		    	\nodepart{six}def proc2()
+		    	\nodepart{seven}w: bool
+		    	\nodepart{eight}proc1()
+		    	\nodepart{nine}def main()
+		    	\nodepart{ten}a: bool
+		    	\nodepart{eleven}proc2()
+		    	\nodepart{twelve}...
+		    };
+		  \end{scope}
+		\end{tikzpicture}
+	\end{center}
 \column{.3\textwidth}
-	aqui la pila de registros
+	\small{Regs. de activación}
+	\begin{center}
+		\begin{tikzpicture}
+		  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
+		    rectangle split parts=10,minimum width=2cm,
+		    rectangle split part fill={gray!20,red!60,red!60,red!60,red!60,red!60,red!60,
+		    blue!60,blue!60,green!66}}]
+		    \node (Reg) at (2,4){
+		    	\nodepart{one}...
+		    	\nodepart{two}y
+		    	\nodepart{three}x
+		    	\nodepart{four}padre
+		    	\nodepart{five}y
+		    	\nodepart{six}x
+		    	\nodepart{seven}padre
+		        \nodepart{eight}w
+		        \nodepart{nine}padre
+		        \nodepart{ten}a
+		    };
+		  \end{scope}
+		  \draw[-latex] (Reg.four west) to [out=225,in=135] (Reg.seven west);
+		  \draw[-latex] (Reg.seven west) to [out=225,in=135] (Reg.nine west);
+		  \draw[-latex] (Reg.nine west) to [out=225,in=135] (Reg.ten west);
+		\end{tikzpicture}
+	\end{center}
 \end{columns}
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -190,7 +222,7 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 	\item Secuencia de celdas consecutivas que apuntan a registros de activación
 	\item La celda \emph{i} apunta al registro de activación que está siendo utilizado en el nivel de anidamiento \emph{i}
 	\item Esta estructura facilita el acceso a los datos globales:\\
-		el enlance para un identificador declarado en un bloque que se encuentra a profunidad \emph{i} estará en el registro de activación referido por la celda \emph{i} del display (el \emph{display i} a partir de ahora)
+		el enlace para un identificador declarado en un bloque que se encuentra a profunidad \emph{i} estará en el registro de activación referido por la celda \emph{i} del display (el \emph{display i} a partir de ahora)
 \end{itemize}
 
 \end{frame}
@@ -215,10 +247,40 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 	    proc2();
 	}@
 	\end{lstlisting}
-\column{.3\textwidth}
-	Pila de llamadas
-\column{.3\textwidth}
-	dibujo del display
+\column{.6\textwidth}
+	\small{Displays y regs. de activación}
+	\begin{center}
+		\begin{tikzpicture}
+		  \begin{scope}
+			  	[every node/.style={rectangle split, draw, anchor=text,
+			    rectangle split parts=7,minimum width=2cm,
+			    rectangle split part fill={gray!20,red!60,red!60,red!60,red!60,
+			    blue!60,green!66}}]
+		    \node (Reg) at (2,-1){
+		    	\nodepart{one}...
+		    	\nodepart{two}y
+		    	\nodepart{three}x
+		    	\nodepart{four}y
+		    	\nodepart{five}x
+		        \nodepart{six}w
+		        \nodepart{seven}a
+		    };
+		  \end{scope}
+
+		  \begin{scope}[every node/.style={draw, rectangle, node distance=0pt, outer sep=0pt}]
+			  \node (A) at (-2,-1) {0};
+			  \node [right = of A] (B) {1};
+			  \node [right = of B] (C) {2};
+			  \node [right = of C] (D) {3};
+		  \end{scope}
+
+		  \draw[-latex] (A.south) to [out=270,in=180] (Reg.seven west);
+		  \draw[-latex] (B.south) to [out=270,in=180] (Reg.six west);
+		  \draw[-latex] (C.south) to [out=270,in=180] (Reg.five west);
+		  \draw[-latex] (D.south) to [out=270,in=180] (Reg.three west);
+
+		\end{tikzpicture}
+	\end{center}
 \end{columns}
 
 \end{frame}
