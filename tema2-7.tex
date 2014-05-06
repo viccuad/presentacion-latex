@@ -65,7 +65,7 @@
 	keywordstyle=\itshape\color{black},
 	emptylines=1,
 	breaklines=true,
-	basicstyle=\small\ttfamily\color{black},
+	basicstyle=\small\ttfamily,
 	numbers=left,
 	columns=fullflexible,
 	keepspaces=true,
@@ -73,8 +73,8 @@
 	morecomment=[l]{//},
 	commentstyle=\color{gray},
 	moredelim=**[is][\color{red}]{@red@}{@},
-	moredelim=**[is][\color{blue}]{@blue@}{@},
 	moredelim=**[is][\color{green}]{@green@}{@},
+	moredelim=**[is][\bfseries]{@b@}{@},
 	tabsize=2,
 	showtabs
 }
@@ -374,7 +374,7 @@ orden de la ejecución del código generado
 \subsection{Prellamada}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Prellamada I}
+\frametitle{Prellamada}
 
 Asociada con la invocación $p(e_1,...,e_k)$:
 \begin{enumerate}[<+->]
@@ -389,7 +389,7 @@ dibujo de lo que aparece al hacer los pasos
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Prellamada II}
+\frametitle{Prellamada: Ejemplo}
 
 \begin{lstlisting}[style=codigoMP]
 fun apila-ret(ret) devuelve
@@ -411,9 +411,295 @@ Dibujo
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Prólogo}
-\subsection{Epílogo}
-\subsection{Postllamada}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Prólogo I}
 
+Asociado con el prodecimiento $proc p(...)$:
+\begin{enumerate}[<+->]
+	\item
+	\item
+	\item
+\end{enumerate}
+
+dibujo de lo que aparece al hacer los pasos
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Prólogo II}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily]
+fun prologo(nivel,tamlocales) devuelve
+   // salvar display antiguo:
+   apila-dir(0)          ||
+   apila(2)              ||
+   suma                  ||
+   apila-dir(1+nivel)    ||
+   desapila-ind          ||
+   // fijar el display actual:
+   apila-dir(0)          ||
+   apila(3)              ||
+   suma                  ||
+   desapila-dir(1+nivel) ||
+   // reservar espacio para datos locales:
+   apila-dir(0)          ||
+   apila(tamlocales+2)   ||
+   suma                  ||
+   desapila-dir(0)
+ffun
+cons longPrologo = 13
+\end{lstlisting}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Prólogo: Ejemplo I}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
+fun prologo(nivel,tamlocales) devuelve
+   // salvar display antiguo:
+   @b@apila-dir(0)          ||@
+   @b@apila(2)              ||@ // dir. retorno, antiguo display
+   @b@suma                  ||@
+   @b@apila-dir(1+nivel)    ||@ // +1: saltar al display 0
+   @b@desapila-ind          ||@
+   // fijar el display actual:
+   apila-dir(0)          ||
+   apila(3)              ||
+   suma                  ||
+   desapila-dir(1+nivel) ||
+   // reservar espacio para datos locales:
+   apila-dir(0)          ||
+   apila(tamlocales+2)   ||
+   suma                  ||
+   desapila-dir(0)
+ffun
+\end{lstlisting}
+
+Ejemplo: prologo(1,7)
+
+Dibujo
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Prólogo: Ejemplo II}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
+fun prologo(nivel,tamlocales) devuelve
+   // salvar display antiguo:
+   apila-dir(0)          ||
+   apila(2)              || // dir. retorno, antiguo display
+   suma                  ||
+   apila-dir(1+nivel)    || // +1: saltar al display 0
+   desapila-ind          ||
+   // fijar el display actual:
+   @b@apila-dir(0)          ||@
+   @b@apila(3)              ||@
+   @b@suma                  ||@
+   @b@desapila-dir(1+nivel) ||@
+   // reservar espacio para datos locales:
+   apila-dir(0)          ||
+   apila(tamlocales+2)   ||
+   suma                  ||
+   desapila-dir(0)
+ffun
+\end{lstlisting}
+
+Ejemplo: prologo(1,7)
+
+Dibujo
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Prólogo: Ejemplo III}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
+fun prologo(nivel,tamlocales) devuelve
+   // salvar display antiguo:
+   apila-dir(0)          ||
+   apila(2)              || // dir. retorno, antiguo display
+   suma                  ||
+   apila-dir(1+nivel)    || // +1: saltar al display 0
+   desapila-ind          ||
+   // fijar el display actual:
+   apila-dir(0)          ||
+   apila(3)              ||
+   suma                  ||
+   desapila-dir(1+nivel) ||
+   // reservar espacio para datos locales:
+   @b@apila-dir(0)          ||@ // Mem[1+nivel] = Pila[Cima]
+   @b@apila(tamlocales+2)   ||@ // +2: dir. retorno, antiguo display
+   @b@suma                  ||@
+   @b@desapila-dir(0)         @
+ffun
+\end{lstlisting}
+
+Ejemplo: prologo(1,7)
+
+Dibujo
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Epílogo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Epílogo I}
+
+Asociado con el prodecimiento $proc p(...)$:
+\begin{enumerate}[<+->]
+	\item
+	\item
+	\item
+\end{enumerate}
+
+dibujo de lo que aparece al hacer los pasos
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Epílogo II}
+\begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily]
+fun epilogo(nivel) devuelve
+   // apilar la dir. retorno:
+   apila-dir(1+nivel)    ||
+   apila(2)              ||
+   resta                 ||
+   apila-ind             ||
+   // liberar espacio (mover CP):
+   apila-dir(1+nivel)    ||
+   apila(3)              ||
+   resta                 ||
+   copia                 ||
+   desapila-dir(0)       ||
+   // recupear antiguo display:
+   apila(2)              ||
+   suma                  ||
+   apila-ind             ||
+   desapila-dir(1+nivel)
+ffun
+cons longEpilogo = 13
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Epílogo: Ejemplo I}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
+fun epilogo(nivel) devuelve
+   // apilar la dir. retorno:
+   @b@apila-dir(1+nivel)    ||@
+   @b@apila(2)              ||@
+   @b@resta                 ||@
+   @b@apila-ind             ||@
+   // liberar espacio (mover CP):
+   apila-dir(1+nivel)    ||
+   apila(3)              ||
+   resta                 ||
+   copia                 ||
+   desapila-dir(0)       ||
+   // recupear antiguo display:
+   apila(2)              ||
+   suma                  ||
+   apila-ind             ||
+   desapila-dir(1+nivel)
+ffun
+\end{lstlisting}
+
+Ejemplo: epilogo(1)
+
+Dibujo
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Epílogo: Ejemplo II}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
+fun epilogo(nivel) devuelve
+   // apilar la dir. retorno:
+   apila-dir(1+nivel)    ||
+   apila(2)              ||
+   resta                 ||
+   apila-ind             ||
+   // liberar espacio (mover CP):
+   @b@apila-dir(1+nivel)    ||@
+   @b@apila(3)              ||@
+   @b@resta                 ||@
+   @b@copia                 ||@ // si no se usa copia, hay que mover CP lo ultimo
+   @b@desapila-dir(0)       ||@
+   // recupear antiguo display:
+   apila(2)              ||
+   suma                  ||
+   apila-ind             ||
+   desapila-dir(1+nivel)
+ffun
+\end{lstlisting}
+
+Ejemplo: epilogo(1)
+
+¿Es la mejor forma de implementar el epílogo, con mover el CP en 2º lugar?
+
+Dibujo
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Epílogo: Ejemplo III}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
+fun epilogo(nivel) devuelve
+   // apilar la dir. retorno:
+   apila-dir(1+nivel)    ||
+   apila(2)              ||
+   resta                 ||
+   apila-ind             ||
+   // liberar espacio (mover CP):
+   apila-dir(1+nivel)    ||
+   apila(3)              ||
+   resta                 ||
+   copia                 ||
+   desapila-dir(0)       ||
+   // recupear antiguo display:
+   @b@apila(2)              ||@
+   @b@suma                  ||@
+   @b@apila-ind             ||@
+   @b@desapila-dir(1+nivel)   @
+ffun
+\end{lstlisting}
+
+Ejemplo: epilogo(1)
+
+Dibujo
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Postllamada}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Postllamada}
+
+\begin{itemize}[<+->]
+	\item No es necesaria en nuestra implementación, ya que el epílogo recupera el estado anterior a la invocación.
+	\item Hemos terminado con la dirección (indirecta) de retorno en la cima de la pila
+\end{itemize}
+dibujo de la cima de la pila
+
+dibujo de la memoria
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Resumen}
+
+repetir dibujo del manejo de la activacion y la desactivacion
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Paso de parámetros}
 \subsection{Por valor}
