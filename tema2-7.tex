@@ -10,6 +10,15 @@
 
 %\usetheme{Madrid}
 \usetheme{Warsaw} %muestra las secciones, pero ocupa mucho espacio
+%\usetheme{Madrid}
+%\usetheme{Amsterdam}
+%\usetheme{Darmstadt}
+
+%\usetheme{CambridgeUS}
+%\usecolortheme{whale}
+%\usetheme{Frankfurt}
+% lista de themes: http://www.hartwork.org/beamer-theme-matrix/
+
 
 %\setbeameroption{show notes}
 %\setbeameroption{hide notes} % default
@@ -40,6 +49,7 @@
 	breaklines=true,
 	basicstyle=\ttfamily\bfseries\color{black},
 	moredelim=**[is][\color{red}]{@red@}{@},
+	moredelim=**[is][\color{violet}]{@vio@}{@},
 	moredelim=**[is][\color{blue}]{@blue@}{@},
 	moredelim=**[is][\color{green}]{@green@}{@},
 }
@@ -54,6 +64,7 @@
 	tabsize=3,
 	morecomment=[l]{//},
 	moredelim=**[is][\color{red}]{@red@}{@},
+	moredelim=**[is][\color{violet}]{@vio@}{@},
 	moredelim=**[is][\color{blue}]{@blue@}{@},
 	moredelim=**[is][\color{green}]{@green@}{@},
 	tabsize=2,
@@ -62,7 +73,7 @@
 \lstdefinestyle{codigoMP}{
 	language=C,
 	morekeywords={fun,ffun,cons,devuelve},
-	keywordstyle=\itshape\color{black},
+	keywordstyle=\bfseries\color{black},
 	emptylines=1,
 	breaklines=true,
 	basicstyle=\small\ttfamily,
@@ -73,8 +84,9 @@
 	morecomment=[l]{//},
 	commentstyle=\color{gray},
 	moredelim=**[is][\color{red}]{@red@}{@},
+	moredelim=**[is][\color{violet}]{@vio@}{@},
 	moredelim=**[is][\color{green}]{@green@}{@},
-	moredelim=**[is][\bfseries]{@b@}{@},
+	moredelim=**[is][\bfseries\color{blue}]{@b@}{@},
 	tabsize=2,
 	showtabs
 }
@@ -84,24 +96,13 @@
 	breaklines=true,
 	basicstyle=\ttfamily\color{black},
 	moredelim=**[is][\color{red}]{@red@}{@},
+	moredelim=**[is][\color{magenta}]{@mag@}{@},
 	moredelim=**[is][\color{blue}]{@blue@}{@},
 	moredelim=**[is][\color{green}]{@green@}{@},
 }
 
 \usepackage{tikz}
 \usetikzlibrary{arrows,calc,shapes,decorations.pathreplacing,positioning}
-
-\usepackage{bytefield}
-	\newcommand{\colorbitbox}[3]{%
-	\rlap{\bitbox{#2}{\color{#1}\rule{\width}{\height}}}%
-	\bitbox{#2}{#3}}
-	\definecolor{lightcyan}{rgb}	{0.80, 	0.90   , 1   }
-	\definecolor{lightgreen}{rgb}	{0.50, 	1   , 0.50}
-	\definecolor{lightred}{rgb}		{1   , 	0.70, 0.71}
-	\definecolor{lightblue}{rgb}	{0   , 	0.90, 1   }
-
-
-
 
 \title{Tema 2.7. Subprogramas. Traducción}
 \author{Pedro Javier Rodríguez Rodrigo, Víctor Cuadrado Juan}
@@ -152,9 +153,9 @@
 	\begin{lstlisting}[style=procesos]
 	@red@proc proc1(){
 	    x: num;
-	    y: num;
-	    proc1();
-	}@
+	    y: num;@
+	    @vio@proc1();@
+	@red@}@
 	@blue@proc proc2(){
 	    w: bool;
 	    proc1();
@@ -168,7 +169,7 @@
 	\begin{tikzpicture}
 	  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
 	    rectangle split parts=12,minimum width=2cm,
-	    rectangle split part fill={gray!20,red!40,red!40,red!40,red!40,
+	    rectangle split part fill={gray!20,red!40,red!40,red!40,violet!40,
 	    blue!40,blue!40,blue!40,green!40,green!40,green!40,gray!20}}]
 	    \node (Inst) at (2,4){
 	    	\nodepart{one}...
@@ -191,7 +192,7 @@
 		\begin{tikzpicture}
 		  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
 		    rectangle split parts=10,minimum width=2cm,
-		    rectangle split part fill={gray!20,red!40,red!40,red!40,red!40,red!40,red!40,
+		    rectangle split part fill={gray!20,violet!40,violet!40,violet!40,red!40,red!40,red!40,
 		    blue!40,blue!40,green!40}}]
 		    \node (Reg) at (2,4){
 		    	\nodepart{one}...
@@ -251,9 +252,9 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 	\begin{lstlisting}[style=procesos]
 	@red@proc proc1(){
 	    x: num;
-	    y: num;
-	    proc1();
-	}@
+	    y: num;@
+	    @vio@proc1();@
+	@red@}@
 	@blue@proc proc2(){
 	    w: bool;
 	    proc1();
@@ -269,7 +270,7 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 		  \begin{scope}
 			  	[every node/.style={rectangle split, draw, anchor=text,
 			    rectangle split parts=7,minimum width=2cm,
-			    rectangle split part fill={gray!20,red!40,red!40,red!40,red!40,
+			    rectangle split part fill={gray!20,violet!40,violet!40,red!40,red!40,
 			    blue!40,green!40}}]
 		    \node (Reg) at (3,-1.5){
 		    	\nodepart{one}...
@@ -306,13 +307,13 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 
 	\begin{tikzpicture}
 		[box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
-		
+
 		\node[box, fill=red!40] at (0,0) (A) {CP};
 		\node[box, right = of A, fill=green!40, minimum width=4em] (B) {Displays};
 		\node[box, right = of B, text width=5em, align=center, fill=blue!40] (C) {Datos estáticos};
 		\node[box, right = of C, minimum width=12em] (D) {\ldots};
 		\node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
-		
+
 		\draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
 		\draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
 
@@ -453,9 +454,9 @@ orden de la ejecución del código generado
 
 Asociada con la invocación $p(e_1,...,e_k)$:
 \begin{enumerate}[<+->]
-	\item
-	\item
-	\item
+	\item Guardar en memoria la direccion de retorno
+    \item Evaluar y almacenar parámetros de ejecución del procedimiento
+    \item Saltar a la dirección de inicio del procedimiento
 \end{enumerate}
 
 dibujo de lo que aparece al hacer los pasos
@@ -490,11 +491,11 @@ Dibujo
 \begin{frame}[fragile]
 \frametitle{Prólogo I}
 
-Asociado con el prodecimiento $proc p(...)$:
+Asociado con el prodecimiento $proc \ p(...)$:
 \begin{enumerate}[<+->]
-	\item
-	\item
-	\item
+	\item Guardar el antiguo valor del display
+    \item Actualizar el valor nuevo del display
+    \item Reservar espacio para las variables locales
 \end{enumerate}
 
 dibujo de lo que aparece al hacer los pasos
@@ -566,9 +567,9 @@ Dibujo
 fun prologo(nivel,tamlocales) devuelve
    // salvar display antiguo:
    apila-dir(0)          ||
-   apila(2)              || // dir. retorno, antiguo display
+   apila(2)              ||
    suma                  ||
-   apila-dir(1+nivel)    || // +1: saltar al display 0
+   apila-dir(1+nivel)    ||
    desapila-ind          ||
    // fijar el display actual:
    @b@apila-dir(0)          ||@
@@ -596,9 +597,9 @@ Dibujo
 fun prologo(nivel,tamlocales) devuelve
    // salvar display antiguo:
    apila-dir(0)          ||
-   apila(2)              || // dir. retorno, antiguo display
+   apila(2)              ||
    suma                  ||
-   apila-dir(1+nivel)    || // +1: saltar al display 0
+   apila-dir(1+nivel)    ||
    desapila-ind          ||
    // fijar el display actual:
    apila-dir(0)          ||
@@ -624,11 +625,14 @@ Dibujo
 \begin{frame}[fragile]
 \frametitle{Epílogo I}
 
-Asociado con el prodecimiento $proc p(...)$:
+Asociado con el prodecimiento $proc \ p(...)$:
+\begin{itemize}[<+->]
+	\item Almacenar el valor devuelto por la función (en nuestro caso no se hace, no tenemos funciones)
+\end{itemize}
 \begin{enumerate}[<+->]
-	\item
-	\item
-	\item
+    \item Liberar el espacio utilizado por las variables locales (mover hacia atrás el CP)
+    \item Restaurar el antiguo display
+    \item Apilar la dirección de retorno y saltar usando \emph{ir-ind}
 \end{enumerate}
 
 dibujo de lo que aparece al hacer los pasos
@@ -759,9 +763,15 @@ Dibujo
 \frametitle{Postllamada}
 
 \begin{itemize}[<+->]
-	\item No es necesaria en nuestra implementación, ya que el epílogo recupera el estado anterior a la invocación.
+	\item No es necesaria en nuestra implementación, ya que el epílogo recupera el estado anterior a la invocación
 	\item Hemos terminado con la dirección (indirecta) de retorno en la cima de la pila
 \end{itemize}
+\uncover<+->{En otras arquitecturas:}
+\begin{itemize}[<+->]
+	\item Soportan funciones con retorno de valor: copiar el valor devuelto por la función donde sea necesario
+	\item $x86,x86\_64,ARM$ \ldots: restaurar el estado (registros, diferentes punteros)\ldots
+\end{itemize}
+
 dibujo de la cima de la pila
 
 dibujo de la memoria
@@ -775,8 +785,46 @@ repetir dibujo del manejo de la activacion y la desactivacion
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Paso de parámetros}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros}
+
+\begin{itemize}[<+->]
+	\item Las posiciones de los parámetros en el reg. de activación son relativas al \emph{CP}
+	\item Durante la prellamada, el \emph{CP} apunta a la celda anterior a la primera del reg. de activación
+	\item Por lo tanto, los parámetros y variables locales empezarán a partir de \emph{CP} + 3
+	\item Sus direcciones deben precalcularse en ejecución (antes de ejecutar el método) y guardarse en la TS
+\end{itemize}
+
+\uncover<+->{¿Por qué deben precalcularse en ejecución?}
+\uncover<+->{Por que el \emph{CP} se va moviendo y dejan de ser accesibles}
+
+dibujo del registro de activación con CP +3 y CP+4
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros por valor}
+
+Dos formas:
+\begin{enumerate}[<+->]
+	\item modo \textbf{var}: proc1(\textbf{x});
+	\item modo \textbf{val}: proc1(\textbf{3}); ó proc1(\textbf{x+1}); ó proc1(\textbf{3+4});\\
+	Es decir, si pasa por la pila de evaluación, es de tipo \textbf{val}
+\end{enumerate}
+
+\uncover<+->{¿Que se hace en nuestra arquitectura?}
+\begin{enumerate}[<+->]
+	\item modo \textbf{var}: se copia el valor en el
+registro de activación (instrucción mueve)
+	\item modo \textbf{val}: la cima de la pila de
+evaluación contendrá el valor de la expresión. Debemos desapilar el valor en el registro de activación
+\end{enumerate}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Por valor}
 \subsection{Por referencia}
 \subsection{Amplicación de la TS}
