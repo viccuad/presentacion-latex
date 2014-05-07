@@ -313,26 +313,27 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 \begin{frame}[fragile]
 \frametitle{Memoria de un programa I}
 
-	\begin{tikzpicture}
-		[box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
+    \begin{tikzpicture}
+        [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
 
-		\node[box, fill=red!40] at (0,0) (A) {CP};
-		\node[box, right = of A, fill=green!40, minimum width=4em] (B) {Displays};
-		\node[box, right = of B, text width=5em, align=center, fill=blue!40] (C) {Datos estáticos};
-		\node[box, right = of C, minimum width=12em] (D) {\ldots};
-		\node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
+        \node[box, fill=red!40] at (0,0) (A) {CP};
+        \node[box, right = of A, fill=green!40, minimum width=4em] (B) {Displays};
+        \node[box, right = of B, text width=5em, align=center, fill=blue!40] (C) {Datos estáticos};
+        \node[box, right = of C, minimum width=11em] (D) {\ldots};
+        \node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
+        \node[box, right = of E] (F) {Code};
+        
+        \draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
+        \draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
 
-		\draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
-		\draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
+        \node[above = of A.north west, anchor=west, xshift=.5cm] (etqA) {0x0000000};
+        \draw[-latex] (etqA.west) to [out=180, in=90] (A.north west);
+        \node[above = of F.north east, anchor=east, xshift=-.5cm] (etqB) {0xFFFFFFFF};
+        \draw[-latex] (etqB.east) to [out=0, in=90] (F.north east);
 
-		\node[above = of A.north west, anchor=west, xshift=.5cm] (etqA) {0x0000000};
-		\draw[-latex] (etqA.west) to [out=180, in=90] (A.north west);
-		\node[above = of E.north east, anchor=east, xshift=-.5cm] (etqB) {0xFFFFFFFF};
-		\draw[-latex] (etqB.east) to [out=0, in=90] (E.north east);
+        \draw[-latex, dashed] (A.south) |- ($(C.south east)-(0.2,0.5)$) -- ($(C.south east)-(0.2,0)$);
 
-		\draw[-latex, dashed] (A.south) |- ($(C.south east)-(0,0.5)$) -- (C.south east);
-
-	\end{tikzpicture}
+    \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -342,15 +343,44 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 Las primeras celdas de la memoria se destinarán a mantener la información de estado necesaria para gestionar adecuadamente la pila de registros de activación:
 \begin{itemize}[<+->]% [<+->] makes it uncoverable
 	\item Registro \emph{CP}: Contendrá siempre la dirección de la \textbf{última celda ocupada} por la pila de registros de activación (cuando la pila esté vacía, el valor de \emph{CP} será la dirección de la celda anterior -la última celda ocupada por el display-)
-	\item \emph{Display}
+	\item \emph{Display}: Secuencia de celdas ocupadas por los displays.
 \end{itemize}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Estructura de los Registros de activación}
+    \begin{tikzpicture}
+        [minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+        box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4.2em, align=center}]
+        
+        \node[minibox, fill=red!40] at (0,1.5) (A) {\small{CP}};
+        \node[minibox, right = of A, fill=green!40] (B) {\small{Displays}};
+        \node[minibox, right = of B, text width=3.5em, align=center, fill=blue!40] (C) {\small{Datos estáticos}};
+        \node[minibox, right = of C, text width=4em, align=center, fill=cyan!40] (D) {\small{Reg. activación}};
+        \node[minibox, right = of D, text width=4em, align=center, fill=cyan!40] (E) {\small{Reg. activación}};
+        \node[minibox, right = of E, minimum width=4em] (F) {};
+        \node[minibox, right = of F, fill=lime!40] (G) {\small{Heap}};
+        \node[minibox, right = of G] (H) {\small{Code}};
+        
+        
+        \draw[-latex, thick] (E.east) -- ( $(E.east)!0.5cm!(F)$);
+        \draw[-latex, thick] (G.west) -- ( $(G.west)!0.5cm!(F)$);
 
-dibujo del registro de activación
+        \draw[-latex, dashed] (A.north) |- ($(E.north east)+(0,0.5)-(0.2,0)$) -- ($(E.north east)-(0.2,0)$);
+
+        \node[box, text width=3em, fill=pink!40] at (0,-1.5) (rA) {Dir. retorno};
+        \node[box, right = of rA, text width=3.3em, fill=pink!40] (rB) {Valor display antiguo};
+        \node[box, right = of rB, fill=cyan!40] (rC) {Parám. 1};
+        \node[box, right = of rC, text width=1em, fill=cyan!40] (rD) {\ldots};
+        \node[box, right = of rD, fill=cyan!40] (rE) {Parám. $k$};
+        \node[box, right = of rE, text width=3.3em, fill=cyan!40] (rF) {Variable 1};
+        \node[box, right = of rF, text width=1em, fill=cyan!40] (rG) {\ldots};
+        \node[box, right = of rG, text width=3.3em, fill=cyan!40] (rH) {Variable $q$};
+
+        \draw (D.south west) -- (rA.north west);
+        \draw (D.south east) -- (rH.north east);
+    \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -360,13 +390,30 @@ dibujo del registro de activación
 \begin{frame}[fragile]
 \frametitle{Inicio}
 
-\begin{itemize}[<+->]% [<+->] makes it uncoverable
-	\item Se fija el \emph{display 0} a la primera celda de datos estáticos
-	\item Se fija el \emph{CP} a la posición de la última celda del display (la última celda ocupada)
-	\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación
+\begin{itemize}
+	\uncover<1->{\item Se fija el \emph{display 0} a la primera celda de datos estáticos}
+	\uncover<2->{\item Se fija el \emph{CP} a la posición de la última celda ocupada por los datos estáticos.}
+	\uncover<3->{\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación}
 \end{itemize}
 
-dibujo
+\begin{tikzpicture}
+        [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
+
+        \node[box, fill=red!40] at (0,0) (A) {CP};
+        \node[box, right = of A, fill=green!40, minimum width=4em] (B) {Displays};
+        \node[box, right = of B, text width=5em, align=center, fill=blue!40] (C) {Datos estáticos};
+        \node[box, right = of C, minimum width=11em] (D) {\ldots};
+        \node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
+        \node[box, right = of E] (F) {Code};
+        
+        \draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
+        \draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
+
+        \uncover<1->{\draw[-latex, dashed] ($(B.south west)+(0.2,0)$) |- ($(C.south west)+(0.2,0)-(0,0.5)$) -- ($(C.south west)+(0.2,0)$);}
+        \uncover<2->{\draw[-latex, dashed] (A.south) |- ($(C.south east)-(0.2,1)$) -- ($(C.south east)-(0.2,0)$);}
+
+    \end{tikzpicture}
+
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -437,14 +484,58 @@ Dibujo del movimiento del cp
 \begin{frame}[fragile]
 \frametitle{Esquema de la traducción}
 
-Dibujo de cómo queda la traducción de subprogramas y el main, y el salto con ir-a.
+	\begin{tikzpicture}
+	[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+	box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+
+		\node[minibox, fill=red!40] at (0,0) (A) {\small{CP}};
+    \node[minibox, right = of A, fill=green!40] (B) {\small{Displays}};
+    \node[minibox, right = of B, text width=3.5em, align=center, fill=blue!40] (C) {\small{Datos estáticos}};
+    \node[minibox, right = of C, text width=4em, align=center, fill=cyan!40] (D) {\small{Reg. activación}};
+    \node[minibox, right = of D, text width=4em, align=center, fill=cyan!40] (E) {\small{Reg. activación}};
+    \node[minibox, right = of E, minimum width=4em] (F) {};
+    \node[minibox, right = of F, fill=lime!40] (G) {\small{Heap}};
+    \node[minibox, right = of G] (H) {\small{Code}};
+    
+    \draw[-latex, thick] (E.east) -- ( $(E.east)!0.5cm!(F)$);
+    \draw[-latex, thick] (G.west) -- ( $(G.west)!0.5cm!(F)$);
+
+  	\node[box, fill=gray!20, anchor=west] at (2,-1.5) (tA) {Inicio};
+  	\node[box, below = of tA, minimum height=2em] (tB) {ir-a};
+  	\node[box, below = of tB, minimum height=4em] (tC) {Traducción de subprogramas};
+  	\node[box, below = of tC, minimum height=4em, fill=gray!20] (tD) {Traducción bloque principal};
+
+  	\draw[-latex,dashed] (tB.east) -- ($(tB.east)+(0.5,0)$) -- ($(tD.north east)+(0.5,0)-(0,0.2)$) -- ($(tD.north east)-(0,0.2)$);
+
+  	\draw (H.south west) to [out=270,in=0] (tA.north east);
+  	\draw (H.south east) to [out=270,in=0] (tD.south east);
+	\end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Manejo de la activación y desactivación I}
 
-dibujo con la explicación de ir-ind
+	\begin{tikzpicture}
+		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+
+		\node (A) {Subprograma};
+    \node[box, below = of A, fill=gray!20] (B) {Prólogo};
+    \node[box, below = of B] (C) {Cuerpo};
+    \node[box, below = of C, fill=gray!20] (D) {Epílogo};
+    \node[box, below = of D] (E) {ir-ind};
+    
+    \node[below = of E] (F) {Main()};
+    \node[box, below = of F, fill=gray!20] (G) {Prellamada};
+    \node[box, below = of G] (H) {ir-a};
+    \node[box, below = of H, fill=gray!20] (I) {Postllamada};
+
+    \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
+    \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
+
+    \node[text width = 8em] at (6,-2.5) (explicacion) {ir-ind salta a la dirección indicada en la cima de la pila de evaluación, consumiendo dicha cima.\\PC $\leftarrow$ Pila[cima]\\cima $\leftarrow$ cima - 1};
+	\end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
