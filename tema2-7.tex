@@ -511,27 +511,50 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 \begin{frame}[fragile]
 \frametitle{Manejo de la activación y desactivación II}
 
-\begin{itemize}
-	\item Orden de la ejecución del código generado:
-\end{itemize}
+\begin{columns}[T]
+\column{.5\textwidth}
+	\begin{tikzpicture}
+			[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+			box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
 
-\Tree
-[.main()
-    [.{Prellamada}
-        [.{Ir-a}
-	        [.{Subprograma: Prólogo}
-	        	[.{Subprograma: Cuerpo}
-	        		[.{Subprograma: epílogo}
-		        		[.{Ir-ind}
-			        		[.{Postllamada}
-	        				]
-	        			]
-	        		]
-	        	]
+			\node (A) {Subprograma};
+	    \node[box, below = of A, fill=gray!20] (B) {Prólogo};
+	    \node[box, below = of B] (C) {Cuerpo};
+	    \node[box, below = of C, fill=gray!20] (D) {Epílogo};
+	    \node[box, below = of D] (E) {ir-ind};
+
+	    \node[below = of E] (F) {Main()};
+	    \node[box, below = of F, fill=gray!20] (G) {Prellamada};
+	    \node[box, below = of G] (H) {ir-a};
+	    \node[box, below = of H, fill=gray!20] (I) {Postllamada};
+
+	    \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
+	    \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
+	\end{tikzpicture}
+
+\column{.5\textwidth}
+	\begin{itemize}
+		\item Orden de ejecución:
+	\end{itemize}
+
+	\Tree
+	[.main()
+	    [.{main: Prellamada}
+	        [.{Ir-a}
+		        [.{subprograma: Prólogo}
+		        	[.{subprograma: Cuerpo}
+		        		[.{subprograma: epílogo}
+			        		[.{Ir-ind}
+				        		[.{main: Postllamada}
+		        				]
+		        			]
+		        		]
+		        	]
+		        ]
 	        ]
-        ]
-    ]
-]
+	    ]
+	]
+\end{columns}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -681,7 +704,7 @@ Asociada con la invocación $p(e_1,...,e_k)$:
 \begin{enumerate}[<+->]
 	\item Guardar en memoria la direccion de retorno
     \item Evaluar y almacenar parámetros de ejecución del procedimiento
-    \item Saltar a la dirección de inicio del procedimiento
+    \item Saltar a la dirección de inicio del procedimiento (\emph{ir-a})
 \end{enumerate}
 
 dibujo de lo que aparece al hacer los pasos
