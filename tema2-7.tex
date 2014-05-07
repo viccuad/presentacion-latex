@@ -321,7 +321,7 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 		\node[above = of E.north east, anchor=east, xshift=-.5cm] (etqB) {0xFFFFFFFF};
 		\draw[-latex] (etqB.east) to [out=0, in=90] (E.north east);
 
-		\draw[-latex, dashed] (A.south) to [out=270,in=270] (C.south east);
+		\draw[-latex, dashed] (A.south) |- ($(C.south east)-(0,0.5)$) -- (C.south east);
 
 	\end{tikzpicture}
 
