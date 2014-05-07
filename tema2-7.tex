@@ -388,99 +388,6 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Organización de la traducción}
-\subsection{Inicio}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
-\frametitle{Inicio}
-
-\begin{itemize}
-	\uncover<1->{\item Se fija el \emph{display 0} a la primera celda de datos estáticos}
-	\uncover<2->{\item Se fija el \emph{CP} a la posición de la última celda ocupada por los datos estáticos.}
-	\uncover<3->{\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación}
-\end{itemize}
-
-\begin{tikzpicture}
-        [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
-
-        \node[box, fill=red!40] at (0,0) (A) {CP};
-        \node[box, right = of A, fill=green!40, minimum width=4em] (B) {Displays};
-        \node[box, right = of B, text width=5em, align=center, fill=blue!40] (C) {Datos estáticos};
-        \node[box, right = of C, minimum width=11em] (D) {\ldots};
-        \node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
-        \node[box, right = of E] (F) {Code};
-
-        \draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
-        \draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
-
-        \uncover<1->{\draw[-latex, dashed] ($(B.south west)+(0.2,0)$) |- ($(C.south west)+(0.2,0)-(0,0.5)$) -- ($(C.south west)+(0.2,0)$);}
-        \uncover<2->{\draw[-latex, dashed] (A.south) |- ($(C.south east)-(0.2,1)$) -- ($(C.south east)-(0.2,0)$);}
-
-    \end{tikzpicture}
-
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
-\frametitle{Inicio}
-\begin{lstlisting}[style=codigoMP]
-fun inicio(numNiveles,tamDatos) devuelve
-   // fijamos display 0 a la 1a celda de datos estaticos:
-   apila(numNiveles+2)           ||// +2: CP, display 0
-   desapila-dir(1)               ||
-   // fijamos CP a la ultima celda de datos estaticos:
-   apila(1+numNiveles+tamDatos)  ||// +1: display 0
-   desapila-dir(0)
-ffun
-cons longInicio = 4
-\end{lstlisting}
-
-Ejemplo: inicio(2,5)
-
-Dibujo del movimiento del cp
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
-\frametitle{Ejemplo de invocación}
-
-\begin{columns}[T]
-\column{.5\textwidth}
-\begin{lstlisting}[style=codigo]
-	tipo tpar= rec x:num; y:num;
-	@red@proc distanciaEuclidea(p1:tpar, p2:tpar, var res:num)
-	    a: num; b: num;@
-	    @blue@proc sumacuadrado(a:num, b:num, var r:num)
-            a:=a*a;
-	        b:=b*b
-	        r:=a+b;@
-	    @green@proc raizcuadrada(var n:num)
-	        ...@
-	    @red@&
-	    a:=p1.x-p2.x;
-	    b:=p1.y-p2.y;
-	    sumacuadrado(a, b, res);
-	    raizcuadrada(res);@
-	par1:tpar; par2:tpar; resultado:num;
-	&
-	par1.x:=1; par1.y:=5;
-	par2.x:=8; par2.y:=12;
-	distanciaEuclidea(par1,par2,resultado);
-\end{lstlisting}
-\column{.5\textwidth}
-	\uncover<2->{
-			\Tree
-			[.main()
-			    [.{\color{red}distanciaEuclidea()}
-			        [.{\color{blue}sumaCuadrado()}  ]
-			        [.{\color{green}raizCuadrada()} ]
-			    ]
-			]
-	}
-\end{columns}
-\uncover<1->{¿Cual es el máximo nivel de anidamiento para éste programa?}
-\uncover<2->{2}
-
-\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Esquema de la traducción de subprogramas}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -569,7 +476,144 @@ Dibujo del movimiento del cp
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Inicio}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Inicio: Recapitulación}
+
+	\begin{tikzpicture}
+	[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+	box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+
+  	\node[box, fill=green!40, anchor=west] at (2,-1.5) (tA) {Inicio};
+  	\node[box, below = of tA, minimum height=2em] (tB) {ir-a};
+  	\node[box, below = of tB, minimum height=4em] (tC) {Traducción de subprogramas};
+  	\node[box, below = of tC, minimum height=4em, fill=gray!20] (tD) {Traducción bloque principal};
+
+  	\draw[-latex,dashed] (tB.east) -- ($(tB.east)+(0.5,0)$) -- ($(tD.north east)+(0.5,0)-(0,0.2)$) -- ($(tD.north east)-(0,0.2)$);
+
+	\end{tikzpicture}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Inicio I}
+
+\begin{itemize}
+	\uncover<1->{\item Se fija el \emph{display 0} a la primera celda de datos estáticos}
+	\uncover<2->{\item Se fija el \emph{CP} a la posición de la última celda ocupada por los datos estáticos.}
+	\uncover<3->{\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación}
+\end{itemize}
+
+\begin{tikzpicture}
+        [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
+
+        \node[box, fill=red!40] at (0,0) (A) {CP};
+        \node[box, right = of A, fill=green!40, minimum width=4em] (B) {Displays};
+        \node[box, right = of B, text width=5em, align=center, fill=blue!40] (C) {Datos estáticos};
+        \node[box, right = of C, minimum width=11em] (D) {\ldots};
+        \node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
+        \node[box, right = of E] (F) {Code};
+
+        \draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
+        \draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
+
+        \uncover<1->{\draw[-latex, dashed] ($(B.south west)+(0.2,0)$) |- ($(C.south west)+(0.2,0)-(0,0.5)$) -- ($(C.south west)+(0.2,0)$);}
+        \uncover<2->{\draw[-latex, dashed] (A.south) |- ($(C.south east)-(0.2,1)$) -- ($(C.south east)-(0.2,0)$);}
+
+    \end{tikzpicture}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Inicio II}
+\begin{lstlisting}[style=codigoMP]
+fun inicio(numNiveles,tamDatos) devuelve
+   // fijamos display 0 a la 1a celda de datos estaticos:
+   apila(numNiveles+2)           ||// +2: CP, display 0
+   desapila-dir(1)               ||
+   // fijamos CP a la ultima celda de datos estaticos:
+   apila(1+numNiveles+tamDatos)  ||// +1: display 0
+   desapila-dir(0)
+ffun
+cons longInicio = 4
+\end{lstlisting}
+
+Ejemplo: inicio(2,5)
+
+Dibujo del movimiento del cp
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Ejemplo de invocación}
+
+\begin{columns}[T]
+\column{.5\textwidth}
+\begin{lstlisting}[style=codigo]
+	tipo tpar= rec x:num; y:num;
+	@red@proc distanciaEuclidea(p1:tpar, p2:tpar, var res:num)
+	    a: num; b: num;@
+	    @blue@proc sumacuadrado(a:num, b:num, var r:num)
+            a:=a*a;
+	        b:=b*b
+	        r:=a+b;@
+	    @green@proc raizcuadrada(var n:num)
+	        ...@
+	    @red@&
+	    a:=p1.x-p2.x;
+	    b:=p1.y-p2.y;
+	    sumacuadrado(a, b, res);
+	    raizcuadrada(res);@
+	par1:tpar; par2:tpar; resultado:num;
+	&
+	par1.x:=1; par1.y:=5;
+	par2.x:=8; par2.y:=12;
+	distanciaEuclidea(par1,par2,resultado);
+\end{lstlisting}
+\column{.5\textwidth}
+	\uncover<2->{
+			\Tree
+			[.main()
+			    [.{\color{red}distanciaEuclidea()}
+			        [.{\color{blue}sumaCuadrado()}  ]
+			        [.{\color{green}raizCuadrada()} ]
+			    ]
+			]
+	}
+\end{columns}
+\uncover<1->{¿Cual es el máximo nivel de anidamiento para éste programa?}
+\uncover<2->{2}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Prellamada}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Prellamada: Recapitulación}
+
+	\begin{tikzpicture}
+		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+
+		\node (A) {Subprograma};
+    \node[box, below = of A, fill=gray!20] (B) {Prólogo};
+    \node[box, below = of B] (C) {Cuerpo};
+    \node[box, below = of C, fill=gray!20] (D) {Epílogo};
+    \node[box, below = of D] (E) {ir-ind};
+
+    \node[below = of E] (F) {Main()};
+    \node[box, below = of F, fill=green!40] (G) {Prellamada};
+    \node[box, below = of G] (H) {ir-a};
+    \node[box, below = of H, fill=gray!20] (I) {Postllamada};
+
+    \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
+    \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
+
+	\end{tikzpicture}
+
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Prellamada}
@@ -609,6 +653,31 @@ Dibujo
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Prólogo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Prólogo: Recapitulación}
+
+	\begin{tikzpicture}
+		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+
+		\node (A) {Subprograma};
+    \node[box, below = of A, fill=green!40] (B) {Prólogo};
+    \node[box, below = of B] (C) {Cuerpo};
+    \node[box, below = of C, fill=gray!20] (D) {Epílogo};
+    \node[box, below = of D] (E) {ir-ind};
+
+    \node[below = of E] (F) {Main()};
+    \node[box, below = of F, fill=gray!20] (G) {Prellamada};
+    \node[box, below = of G] (H) {ir-a};
+    \node[box, below = of H, fill=gray!20] (I) {Postllamada};
+
+    \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
+    \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
+
+	\end{tikzpicture}
+
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Prólogo I}
@@ -743,6 +812,31 @@ Dibujo
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Epílogo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Epílogo: Recapitulación}
+
+	\begin{tikzpicture}
+		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+
+		\node (A) {Subprograma};
+    \node[box, below = of A, fill=gray!20] (B) {Prólogo};
+    \node[box, below = of B] (C) {Cuerpo};
+    \node[box, below = of C, fill=green!40] (D) {Epílogo};
+    \node[box, below = of D] (E) {ir-ind};
+
+    \node[below = of E] (F) {Main()};
+    \node[box, below = of F, fill=gray!20] (G) {Prellamada};
+    \node[box, below = of G] (H) {ir-a};
+    \node[box, below = of H, fill=gray!20] (I) {Postllamada};
+
+    \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
+    \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
+
+	\end{tikzpicture}
+
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Epílogo I}
@@ -882,6 +976,31 @@ Dibujo
 \subsection{Postllamada}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
+\frametitle{Postllamada: Recapitulación}
+
+	\begin{tikzpicture}
+		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+
+		\node (A) {Subprograma};
+    \node[box, below = of A, fill=gray!20] (B) {Prólogo};
+    \node[box, below = of B] (C) {Cuerpo};
+    \node[box, below = of C, fill=gray!20] (D) {Epílogo};
+    \node[box, below = of D] (E) {ir-ind};
+
+    \node[below = of E] (F) {Main()};
+    \node[box, below = of F, fill=gray!20] (G) {Prellamada};
+    \node[box, below = of G] (H) {ir-a};
+    \node[box, below = of H, fill=green!40] (I) {Postllamada};
+
+    \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
+    \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
+
+	\end{tikzpicture}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
 \frametitle{Postllamada}
 
 \begin{itemize}[<+->]
@@ -903,7 +1022,25 @@ dibujo de la memoria
 \begin{frame}[fragile]
 \frametitle{Resumen}
 
-repetir dibujo del manejo de la activacion y la desactivacion
+	\begin{tikzpicture}
+		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+
+		\node (A) {Subprograma};
+    \node[box, below = of A, fill=gray!20] (B) {Prólogo};
+    \node[box, below = of B] (C) {Cuerpo};
+    \node[box, below = of C, fill=gray!20] (D) {Epílogo};
+    \node[box, below = of D] (E) {ir-ind};
+
+    \node[below = of E] (F) {Main()};
+    \node[box, below = of F, fill=gray!20] (G) {Prellamada};
+    \node[box, below = of G] (H) {ir-a};
+    \node[box, below = of H, fill=gray!20] (I) {Postllamada};
+
+    \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
+    \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
+
+	\end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1731,7 +1868,7 @@ dibujo con a y b y los desplazamientos, y el cp apuntando a 17 y el display a 11
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Recapitulación}
+\section{Recap.}
 \begin{frame}[fragile]
 \frametitle{Recapitulación}
 	\scriptsize\tableofcontents
