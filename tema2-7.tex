@@ -10,13 +10,12 @@
 
 %\usetheme{Madrid}
 %\usetheme{Warsaw} %muestra las secciones, pero ocupa mucho espacio
-%\usetheme{Madrid}
 %\usetheme{Amsterdam}
 %\usetheme{Darmstadt}
 
 %\usetheme{CambridgeUS}
 %\usecolortheme{whale}
-%\usetheme{Frankfurt}
+\usetheme{Frankfurt}
 % lista de themes: http://www.hartwork.org/beamer-theme-matrix/
 
 
@@ -125,7 +124,7 @@
 \titlepage
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Organización de la memoria}
+\section{Memoria}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Organización de la memoria}
@@ -308,7 +307,9 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Nueva arquitectura para la MV}
+\section{Nueva arquitect.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Memoria}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Memoria de un programa I}
@@ -322,7 +323,7 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
         \node[box, right = of C, minimum width=11em] (D) {\ldots};
         \node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
         \node[box, right = of E] (F) {Code};
-        
+
         \draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
         \draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
 
@@ -348,12 +349,14 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Registros de activación}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Estructura de los Registros de activación}
     \begin{tikzpicture}
         [minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
         box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4.2em, align=center}]
-        
+
         \node[minibox, fill=red!40] at (0,1.5) (A) {\small{CP}};
         \node[minibox, right = of A, fill=green!40] (B) {\small{Displays}};
         \node[minibox, right = of B, text width=3.5em, align=center, fill=blue!40] (C) {\small{Datos estáticos}};
@@ -362,8 +365,8 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
         \node[minibox, right = of E, minimum width=4em] (F) {};
         \node[minibox, right = of F, fill=lime!40] (G) {\small{Heap}};
         \node[minibox, right = of G] (H) {\small{Code}};
-        
-        
+
+
         \draw[-latex, thick] (E.east) -- ( $(E.east)!0.5cm!(F)$);
         \draw[-latex, thick] (G.west) -- ( $(G.west)!0.5cm!(F)$);
 
@@ -405,7 +408,7 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
         \node[box, right = of C, minimum width=11em] (D) {\ldots};
         \node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
         \node[box, right = of E] (F) {Code};
-        
+
         \draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
         \draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
 
@@ -496,7 +499,7 @@ Dibujo del movimiento del cp
     \node[minibox, right = of E, minimum width=4em] (F) {};
     \node[minibox, right = of F, fill=lime!40] (G) {\small{Heap}};
     \node[minibox, right = of G] (H) {\small{Code}};
-    
+
     \draw[-latex, thick] (E.east) -- ( $(E.east)!0.5cm!(F)$);
     \draw[-latex, thick] (G.west) -- ( $(G.west)!0.5cm!(F)$);
 
@@ -525,7 +528,7 @@ Dibujo del movimiento del cp
     \node[box, below = of B] (C) {Cuerpo};
     \node[box, below = of C, fill=gray!20] (D) {Epílogo};
     \node[box, below = of D] (E) {ir-ind};
-    
+
     \node[below = of E] (F) {Main()};
     \node[box, below = of F, fill=gray!20] (G) {Prellamada};
     \node[box, below = of G] (H) {ir-a};
@@ -542,7 +545,27 @@ Dibujo del movimiento del cp
 \begin{frame}[fragile]
 \frametitle{Manejo de la activación y desactivación II}
 
-orden de la ejecución del código generado
+\begin{itemize}
+	\item Orden de la ejecución del código generado:
+\end{itemize}
+
+\Tree
+[.main()
+    [.{Prellamada}
+        [.{Ir-a}
+	        [.{Subprograma: Prólogo}
+	        	[.{Subprograma: Cuerpo}
+	        		[.{Subprograma: epílogo}
+		        		[.{Ir-ind}
+			        		[.{Postllamada}
+	        				]
+	        			]
+	        		]
+	        	]
+	        ]
+        ]
+    ]
+]
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1708,6 +1731,7 @@ dibujo con a y b y los desplazamientos, y el cp apuntando a 17 y el display a 11
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Recapitulación}
 \begin{frame}[fragile]
 \frametitle{Recapitulación}
 	\scriptsize\tableofcontents
