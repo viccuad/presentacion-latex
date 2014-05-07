@@ -1,6 +1,6 @@
 % TODO añadir resumen al principio de la segunda hora
 % TODO añadir resumen al final
-% TODO tildes dentro de lstlistings
+% TODO tildes dentro de lstlistings. dentro de lstlisting, y por culpa de beamer, solo se pueden usar espacios y no tabs para indentar :(
 
 \documentclass[hyperref={pdfpagelabels=false},tree-dvips]{beamer}
 % By  using hyperref={pdfpagelabels=false} you get rid off:
@@ -9,7 +9,7 @@
 %	Hyperref stopped early
 
 %\usetheme{Madrid}
-\usetheme{Warsaw} %muestra las secciones, pero ocupa mucho espacio
+%\usetheme{Warsaw} %muestra las secciones, pero ocupa mucho espacio
 %\usetheme{Madrid}
 %\usetheme{Amsterdam}
 %\usetheme{Darmstadt}
@@ -67,12 +67,13 @@
 	moredelim=**[is][\color{violet}]{@vio@}{@},
 	moredelim=**[is][\color{blue}]{@blue@}{@},
 	moredelim=**[is][\color{green}]{@green@}{@},
+	moredelim=**[is][\bfseries]{@bold@}{@},
 	tabsize=2,
 	showtabs
 }
 \lstdefinestyle{codigoMP}{
 	language=C,
-	morekeywords={fun,ffun,cons,devuelve},
+	morekeywords={fun,ffun,cons,devuelve,si,no,sino,entonces},
 	keywordstyle=\bfseries\color{black},
 	emptylines=1,
 	breaklines=true,
@@ -94,11 +95,18 @@
 	language=C,
 	emptylines=1,
 	breaklines=true,
-	basicstyle=\ttfamily\color{black},
+	columns=fullflexible,
+	keepspaces=true,
+	tabsize=3,
+	morekeywords={or,and,proc,iden,fproc,id,&,(,),if,then,while,do},
+	keywordstyle=\itshape,
+	basicstyle=\small\ttfamily,
 	moredelim=**[is][\color{red}]{@red@}{@},
 	moredelim=**[is][\color{magenta}]{@mag@}{@},
 	moredelim=**[is][\color{blue}]{@blue@}{@},
 	moredelim=**[is][\color{green}]{@green@}{@},
+	moredelim=**[is][\bfseries\color{blue}]{@b@}{@},
+	moredelim=**[is][\bfseries]{@bold@}{@}
 }
 
 \usepackage{tikz}
@@ -121,7 +129,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Organización de la memoria}
-\note{Talk no more than 1 minute.}
+\note{Talk no more than1minute.}
 
 \begin{itemize}[<+->]% [<+->] makes it uncoverable
 	\item Es posible acceder a los datos globales
@@ -804,6 +812,8 @@ dibujo del registro de activación con CP +3 y CP+4
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Por valor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Paso de parámetros por valor}
 
@@ -824,15 +834,799 @@ evaluación contendrá el valor de la expresión. Debemos desapilar el valor en 
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros por valor: Gramática}
 
-\subsection{Por valor}
-\subsection{Por referencia}
+\textbf{var} es sólo para Mem. Las reglas que tienen operadores su modo es \textbf{val} ya que devuelven un tipo fijo (\emph{true, false, number})
+
+\begin{columns}[T]
+\column{.5\textwidth}
+	\begin{lstlisting}[style=gramaticas,basicstyle=\footnotesize\ttfamily]
+	Fact ::= Mem
+	   Fact.modo = @green@var@
+	Fact ::= num
+	   Fact.modo = @b@val@
+	Fact ::= true
+	   Fact.modo = @b@val@
+	Fact ::= false
+	   Fact.modo = @b@val@
+	Fact ::= ( Exp )
+	   Fact.modo = Exp.modo
+	Term ::= Term OpMul Fact
+	   Term0.modo = @b@val@
+	\end{lstlisting}
+
+\column{.5\textwidth}
+	\begin{lstlisting}[style=gramaticas,basicstyle=\footnotesize\ttfamily]
+	Term ::= Fact
+	   Term . modo = Fact.modo
+	ExpS ::= ExpS OpAd Term
+	   ExpS.modo = @b@val@
+	ExpS ::= ExpS or Term
+	   ExpS.modo = @b@val@
+	ExpS ::= Term
+	   ExpS.modo = Term.modo
+	Exp ::= ExpS OpComp ExpS
+	   Exp.modo = @b@val@
+	Exp ::= ExpS
+	   Exp.modo = ExpS.modo
+	Term ::= Term and Fact
+	   Term0.modo = @b@val@
+	\end{lstlisting}
+
+\end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros por valor: var I}
+
+\begin{itemize}
+	\item modo \textbf{var}: se copia el valor en el
+registro de activación (instrucción mueve, que copia un trozo de código a otras posiciones de memoria)
+\end{itemize}
+
+\begin{lstlisting}[style=codigo,basicstyle=\footnotesize\ttfamily]
+@bold@par1:tpar; par2:tpar;@ & resultado:num;
+&
+par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
+@bold@distanciaEuclidea(par1,par2@,resultado);
+\end{lstlisting}
+
+dibujo de los parámetros
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros por valor: var II}
+
+\begin{itemize}
+	\item modo \textbf{var}: se copia el valor en el
+registro de activación (instrucción mueve, que copia un trozo de código a otras posiciones de memoria)
+\end{itemize}
+
+\begin{lstlisting}[style=codigo,basicstyle=\footnotesize\ttfamily]
+@bold@par1:tpar; par2:tpar;@ & resultado:num;
+&
+par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
+@bold@distanciaEuclidea(par1,par2@,resultado);
+\end{lstlisting}
+
+dibujo de los parámetros con los de distancia euclidea
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros por valor: val I}
+
+\begin{itemize}
+	\item modo \textbf{val}: la cima de la pila de
+evaluación contendrá el valor de la expresión. Debemos desapilar el valor en el registro de activación
+\end{itemize}
+
+\begin{lstlisting}[style=codigo,basicstyle=\footnotesize\ttfamily]
+@bold@proc distanciaEuclidea(p1:tpar, p2:tpar,@ & res:num)
+   ...
+   proc sumacuadrado(a:num, b:num, var r:num)
+   ...
+&
+sumacuadro(@blue@3*2@,@blue@7@,res);
+\end{lstlisting}
+
+dibujo de los parámetros con un 6 en la pila
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros por valor: val II}
+
+\begin{itemize}
+	\item modo \textbf{val}: la cima de la pila de
+evaluación contendrá el valor de la expresión. Debemos desapilar el valor en el registro de activación
+\end{itemize}
+
+\begin{lstlisting}[style=codigo,basicstyle=\footnotesize\ttfamily]
+@bold@proc distanciaEuclidea(p1:tpar, p2:tpar,@ & res:num)
+   ...
+   proc sumacuadrado(a:num, b:num, var r:num)
+   ...
+&
+sumacuadro(@blue@3*2@,@blue@7@,res);
+\end{lstlisting}
+
+dibujo de los parámetros con un 7 en la pila
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Por variable}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros por variable}
+
+\begin{itemize}[<+->]
+	\item En la cima de la pila debe estar la dirección de comienzo de la variable pasada como parámetro. Dicha dirección se copia en el registro de activación
+	\item En la evaluación de las expresiones debe retardarse el apilado de los valores de las direcciones para Mem
+\end{itemize}
+
+\uncover<+->{¿Cómo sabe el procemiento que ha sido por \textbf{variable (\&)}, y lo que hay en el registro de activación es una dirección de mem.?}
+\uncover<+->{Se accede con indirección: Display + dir. de la variable de la TS}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros por variable I}
+
+\begin{itemize}
+	\item En la cima de la pila debe estar la dirección de comienzo de la variable pasada como parámetro. Dicha dirección se copia en el registro de activación
+\end{itemize}
+
+\begin{lstlisting}[style=codigo,basicstyle=\footnotesize\ttfamily]
+par1:tpar; par2:tpar; @blue@& resultado:num;@
+&
+par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
+@bold@distanciaEuclidea@(par1,par2,@bold@resultado@);
+\end{lstlisting}
+
+dibujo de los parámetros con un 8 en la pila
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Amplicación de la TS}
-\subsection{Traducción}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros: ampliacion de la TS I}
+
+\begin{itemize}
+	\item Deben asignarse direcciones a los parámetros de los procedimientos:
+\end{itemize}
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+LFParams ::= LFParams, FParam
+   LFParams0.ts = aniadeID(LFParams1.ts,FParam.id,
+   FParam.props $\oplus$ @bold@<dir:LFParams1.dir>@)
+   LFParams0.dir = LFParams1.dir + FParam.tam
+   @bold@FParam.dirh = LFParams1.dir@
+LFParam ::= FParam
+   LFParam.ts = aniadeID(LFParam.tsph, FParam.id,FParam.props $\oplus$ @bold@<dir:0>@)
+   LFParam.dir = FParam.tam
+   @bold@FParam.dirh = 0@
+FParam ::= & iden: Tipo
+   FParam.tam = @bold@1@ // es una direccion: integer.tam = 1
+   Fparam.param = <modo: @blue@variable@, tipo: Tipo.tipo, @bold@dir: Fparam.dirh@>
+FParam ::= id: Tipo
+   FParam.tam = @bold@Tipo.tipo.tam@ // es por valor
+   Fparam.param = <modo: @blue@valor@, tipo: Tipo.tipo, @bold@dir: Fparam.dirh@>
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros: ampliacion de la TS II}
+
+\begin{itemize}
+	\item La dirección de comienzo de un bloque de declaraciones no tiene que ser ya necesariamente cero, sino la dirección de fin del bloque de arámetros: las declaraciones reciben una dirección de comienzo heredada
+\end{itemize}
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+Prog ::= Decs && Is
+   Decs.dirh = 0
+DecProc ::= proc iden FParams Bloque fproc
+   Bloque.dirh = FParams.dir
+FParams ::= ( LFParams )
+   FParams.dir = LFParams.dir
+FParams ::= $\lambda$
+   FParams.dir = 0
+Bloque ::= Decs && I
+   Decs.dirh = Bloque.dirh // las decs reciben dirheredada
+Decs ::= Decs ; Dec
+   Decs1.dirh = Decs0.dirh
+Decs ::= Dec
+   Decs.dir = Decs.dirh + Dec.tam
+   Dec.dirh = Decs.dirh
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Paso de parámetros: ampliacion de la TS III}
+
+\tiny
+\begin{tabular*}{0.80\textwidth}{|l|l|l|l|}
+\textbf{nivel} & \textbf{id}       & \textbf{clase}    & \textbf{otras}                                                                                                                                                                                                                                                        \\ \hline
+1              & p1                & var //valor       & $<tipo:<t:ref, id:tpar>, dir:0>$                                                                                                                                                                                                  \\ \hline
+1              & p2                & var //valor       & $<tipo:<t:ref, id:tpar>, dir:2>$                                                                                                                                                                                                  \\ \hline
+1              & res               & pvar //referencia & $<tipo:<t:num>, dir:4>$                                                                                                                                                                                                           \\ \hline
+1              & distanciaEuclidea & prodedimiento     & $<tipo:<t:proc, params: {[}modo:valor{]}, tipo:<tipo:<t:red, id:tpar>{]}{[}modo:valor, tipo:<t:ref, id:tpar>{]}{[}modo:variable, tipo:<t:num>{]}>>>$ \\ \hline
+1              & a                 & var //local       & $<tipo:<t:num>, dir:5>$                                                                                                                                                                                                           \\ \hline
+1              & b                 & var //local       & $<tipo:<t:num>, dir:6>$                                                                                                                                                                                                           \\ \hline
+               &                   & $\vdots$          &                                                                                                                                                                                                                                                                       \\ \hline
+1              & sumaCuadrado      & procedimiento     & $<tipo:<t:proc, params: {[}modo:valor{]}, tipo:<tipo:<t:num>{]}{[}modo:valor, tipo:<t:num>{]}{[}modo:variable, tipo:<t:num>{]}>>>$                    \\ \hline
+1              & raizCuadrada      & procedimiento     & $<tipo:<t:proc, params: {[}modo:valor{]}, tipo:<t:num>{]}>>$                                                                                                                                                   \\ \hline
+\end{tabular*}
 
 
+Dibujo con los parametros y sus desplazamientos
 
-% dentro de lstlisting, y por culpa de beamer, solo se pueden usar espacios y no tabs para indentar :(
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Acceso a las variables y parámetros desde el procedimiento}
+
+\begin{itemize}
+	\item Desplazamiento relativo al valor del display del bloque en el que reside la variable
+	\item Además, si el parámetro es por variable (tipo \emph{pvar}), debe realizarse un apilado indirecto para acceder al enlace en sí
+\end{itemize}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily,mathescape]
+fun accesoVar(id) devuelve
+   apila-dir(1+id.nivel) ||  // dir del display
+   apila(id.dir)         ||  // desplazamiento respecto al display
+   suma                      // traer dir0valor a Cima
+   // aqui nos falta un apila_ind !!!
+   ( si id.clase = pvar entonces apila-ind
+   si no $\lambda$ )
+ffun
+
+fun longAccesoVar(id)
+   si id.clase = pvar entonces 4
+   si no 3
+ffun
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Traducción}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Inicio}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Inicio I}
+
+\begin{itemize}
+	\item Al iniciar la traducción, necesitamos reservar espacio para los displays
+	\item Para ello, usamos la función \emph{inicio()}
+\end{itemize}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily,mathescape]
+fun inicio(numNiveles,tamDatos)
+   apila(numNiveles+2)
+   desapila-dir(1)
+   apila(1+numNiveles+tamDatos)
+   desapila-dir(0)
+ffun
+
+cons longInicio = 4
+\end{lstlisting}
+
+Ejemplo: inicio(2,5)
+
+dibujo de los displays con interrogación
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Inicio II}
+
+\begin{itemize}
+	\item Para reservar el espacio, es necesario conocer el nivel de anidamiento, que se sintetiza en las declaraciones:
+\end{itemize}
+
+\begin{columns}[T]
+\column{.5\textwidth}
+	\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+	Prog ::= Decs && Is
+	   Decs.nh = 0
+	Decs ::= Decs ; Dec
+	   Decs1.nh = Decs0.nh
+	   Decs0.n = @bold@max(Decs1.n,Dec.n)@
+	Decs ::= Dec
+	   Dec.nh = Decs.nh
+	   Decs.n = Dec.n
+	Dec ::= DecVar
+	   Dec.n = Dec.nh
+	Dec ::= DecTipo
+	   Dec.n = Dec.nh
+	Dec ::= DecProc
+	   DecProc.nh = Dec.nh
+	   Dec.n = DecProc.n
+	\end{lstlisting}
+
+\column{.5\textwidth}
+	\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+	DecProc ::= proc iden FParams Bloque fproc
+	   FParams.nh = Bloque.nh = @bold@DecProc.nh + 1@
+	   DecProc.n = Bloque.n
+	Bloque ::= Decs && I
+	   Decs.nh = Bloque.nh
+	   Bloque.n = Decs.n
+	Bloque ::= I
+	   Bloque.n = Bloque.nh
+	\end{lstlisting}
+\end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Inicio III}
+
+\begin{itemize}
+	\item Conocido el tamaño de los displays, la traducción del programa se especifica como:
+\end{itemize}
+
+\begin{columns}[T]
+\column{.5\textwidth}
+	\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+	Prog ::= Decs && Is
+	   Proc.cod = @bold@inicio(Decs.n,Decs.dir)@ || // Decs.dir: tam del main
+	   @bold@ir-a(Decs.etq)@                     ||
+	   Decs.cod                           || // aqui van los procs.
+	   Is.cod                             ||
+	   stop
+	   Decs.etqh = longInicio +1 // +1: ir-a
+	   Is.etqh = Decs.etq
+	\end{lstlisting}
+
+\column{.5\textwidth}
+	\uncover<+->{dibujo del ir-a para que se den cuenta de que hay q parchear}
+\end{columns}
+
+\uncover<+->{¿Hay que parchear?\\}
+\uncover<+->{Sí, para apuntar al main, del cual no sabemos su dirección todavía}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Declaraciones}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Declaraciones}
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+Prog ::= Decs && Is
+Decs ::= Decs ; Dec
+   Decs1.etqh = Decs0.etqh
+   Dec.etqh = Decs1.etq
+   Decso.etq = Dec.etq
+   Decs0.cod = Decs1.cod || Dec.cod
+Decs ::= Dec
+   Dec.etqh = Decs.etqh
+   Decs.etq = Dec.etq
+   Decs.cod = Dec.cod
+Dec ::= DecVar
+   Dec.cod = @bold@$\lambda$@ // solo afecta a la TS
+   Dec.etq = Dec.etqh
+Dec ::= DecTipo
+   Dec.cod = @bold@$\lambda$@ // solo afecta a la TS
+Dec.etq = Dec.etqh
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Procedimientos}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Procedimientos I}
+
+\begin{itemize}
+	\item Al traducir un procedimiento añadimos a la TS su dirección de inicio (para luego realizar el salto en la invocación)
+\end{itemize}
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+Dec ::= DecProc
+   DecProc.etqh = Dec.etqh
+   Dec.etq = DecProc.etq
+   Dec.cod = DecProc.cod
+   Dec.propsop = @bold@DecProc.propsop@ // hay que parchear
+
+DecProc ::= proc iden FParams Bloque fproc
+   DecProc.cod = Bloque.cod
+   DecProc.propsop = @bold@<inicio:Bloque.inicio>@ // Bloque.inicio: dir donde empieza el proc.
+   Bloque.etqh = DecProc.etqh
+   DecProc.etq = Bloque.etq
+   Bloque.tsph = aniadeID(FParams.ts, DecProp.id,
+   	             DecProc.props $\oplus$ {nivel:DecsProp.nh +1}
+                 $\oplus$ @bold@DecProc.propsop@)
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Procedimientos II}
+
+\begin{tabular*}{0.80\textwidth}{|l|l|l|l|}
+\textbf{nivel} & \textbf{id}       & \textbf{clase}    & \textbf{otras}                                                                                                                                                                                                                                                        \\ \hline
+0              & tpar              & tipo              & $<tipo:<t:rec, campos:[id:x,tipo:<t:num>,desp:0][id:y,tipo:<t:num>,desp:1]>, tam:2>$      \\ \hline
+0              & par1              & var //valor       & $<tipo:<t:ref, id:tpar>>$                                                                 \\ \hline
+0              & par2              & var //valor       & $<tipo:<t:ref, id:tpar>>$                                                                 \\ \hline
+1              & resultado         & pvar //referencia & $<tipo:<t:num>>$                                                                          \\ \hline
+1              & distanciaEuclidea & prodedimiento     & $<tipo:<t:proc, params: [modo:valor, tipo:<t:ref,id:tpar>][modo:valor,tipo:<t:ref,id:tpar>][modo:variable,tipo:<t:num>]>inicio:6>$ \\ \hline
+\end{tabular*}
 
 
+inicio: Dir de la 1ºa instrucción (despues de \emph{Decs})
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Bloque de código del proc.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Bloque de código del proc.}
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+Bloque ::= Decs && I
+   Decs.etqh = Bloque.etqh
+   @bold@Bloque.inicio@ = Decs.etq
+   I.etqh = Decs.etq + longPrologo
+   Bloque.etq = I.etq + longEpilogo + 1
+   @bold@Bloque.cod = Decs.cod || prologo(Bloque.nh, Decs.dir) ||
+                I.cod                                    ||
+                epilogo(Bloque.nh )                      ||
+                ir-ind@
+Bloque ::= I
+   @bold@Bloque.cod = prologo(Bloque.nh, Bloque.dirh ) ||
+                I.cod                            ||
+                epilogo(Bloque.nh )              ||
+                ir-ind@
+   I.etqh = Bloque.etqh + longPrologo
+   Bloque.inicio = Bloque.etqh
+   Bloque.etq = I.etq + longEpilogo + 1
+\end{lstlisting}
+
+	dibujo con punteros a inicio y etqh y etq
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Invocaciones}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Invocaciones I}
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+I ::= ICall
+   ICall.etqh = I.etqh
+   I.etq = ICall.etq
+   I.cod = ICall.cod
+ICall ::= iden AParams
+   @bold@ICall.cod = // Prellamada:
+               apila-ret(ICall.etq) || // parchear a despues de proc
+               AParams.cod          || // cod de '3+a'
+               ir-a(ICall.tsh [iden.lex].inicio)@
+   AParams.etqh = Icall.etqh + longApilaRet
+   ICall.etq = AParams.etq +1// +1: ir-a
+AParams ::= LAparams
+   AParams.cod = @bold@inicio-paso || LAParams.cod || fin-paso@
+   LAParams.etqh = AParams.etqh + longInicioPaso
+   AParams.etq = LAParams.etq + longFinPaso
+\end{lstlisting}
+
+	dibujo con punteros a inicio y etqh y etq
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Invocaciones II (paso parámetros)}
+
+\begin{itemize}
+	\item El inicio del paso de parámetros apila la dirección de comienzo de los parámetros en el display: \emph{CP} + 3
+\end{itemize}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily,mathescape]
+cons inicio-paso = apila-dir(0x0) || // apila el CP
+                   apila(3)       || // salta ret, display antiguo
+                   suma
+cons longInicioPaso = 3
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Invocaciones II (paso parámetros)}
+
+\begin{itemize}
+	\item El inicio del paso de parámetros apila la dirección de comienzo de los parámetros en el display: \emph{CP} + 3
+\end{itemize}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily,mathescape]
+cons inicio-paso = apila-dir(0x0) || // apila el CP
+                   apila(3)       || // salta ret, display antiguo
+                   suma
+cons longInicioPaso = 3
+\end{lstlisting}
+
+\begin{itemize}
+	\item Este valor permanece en la pila para ser utilizado por cada parámetro (que lo copiará)
+\end{itemize}
+
+\begin{itemize}
+	\item Por lo tanto, el fin del paso de parámetros simplemente desapila la dirección de comienzo de los parámetros
+\end{itemize}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily,mathescape]
+cons fin-paso = desapila
+cons longFinPaso = 1
+\end{lstlisting}
+
+dibujo de pilas
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Invocaciones III (paso parámetros, func. auxiliares)}
+
+\begin{itemize}
+	\item Función para obtener la dirección de un parámetro en el registro de activación
+\end{itemize}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily,mathescape]
+fun direccionParFormal(pformal) devuelve
+   apila(pformal.dir) || // dir relativa al procedimiento
+   suma
+ffun
+fun longdireccionParFormal(pformal) devuelve 2 ffun
+\end{lstlisting}
+
+dibujo de pilas
+
+\begin{itemize}
+	\item Función para realizar el paso de los parámetros
+\end{itemize}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily,mathescape]
+fun pasoParametro(tipoParamPorValor,pformal) devuelve
+   si pformal.modo = val $\wedge$ tipoParamPorValor = var
+       // hay que apilar dir de origen del parametro. Se hace mas adelante en accesoVar()
+       mueve(pformal.tipo.tam) // copia del valor en el caso de expr. mem
+   si no desapila-ind          // copia del valor,0bien de la direcc.
+ffun
+fun longPasoParametro(tipoParamPorValor,pformal) devuelve1ffun
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Invocaciones IV}
+
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+AParams ::= $\lambda$
+   AParams.cod = $\lambda$
+   AParams.etq = AParams.etqh
+LAParams ::= LAParams, Exp
+   @bold@LAParams0.cod = LAParams1.cod        ||
+                   copia                ||
+                   direccionParFormal(
+                   	    LAParams0.fparams[LAParams0.nparams]
+                   	    )               ||
+                   Exp.cod              ||
+                   pasoParametro(Exp.modo,
+                            LAParams0.fparams[LAParams0.nparams])@
+   LAParams1.etqh = LAParams0.etqh
+   Exp.etqh = LAParams1.etq+1
+   LAParams0.etq = Exp.etq +1+
+                   longDireccionParFormal(
+                   	        LAParams0.fparams[LAParams0.nparams])+
+                   longPasoParametro(Exp.modo, LAParams0.fparams[LAParams0.nparams])
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Invocaciones V}
+
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+LAParams ::= Exp
+   @bold@LAParams.cod = copia   ||
+                  Exp.cod ||
+                  pasoParametro(Exp.modo,LAParams.fparams[1])@
+   Exp.etqh = LAParams.etq+1
+   LAParams.etq = Exp.etq +1+
+                  longPasoParametro(Exp.modo, LAParams.fparams[1])
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Modificación en la traducción}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Modificación en la trad. de expresiones I}
+
+\begin{itemize}
+	\item Problema con el paso de parámetros por variable:
+		\begin{itemize}
+			\item En la cima de la pila debe de estar la dirección de comienzo de la variable pasada como parámetro. Dicha dirección se copia en el registro de activación
+		\end{itemize}
+	\item Sin embargo, en las expresiones \emph{Mem} hay un \emph{apila-ind} que deja su valor (no la dirección) en la cima
+\end{itemize}
+
+\begin{lstlisting}[style=codigo,basicstyle=\footnotesize\ttfamily]
+par1:tpar; par2:tpar; @bold@& resultado:num;@
+&
+par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
+@bold@distanciaEuclidea@(par1,par2,@bold@resultado@);
+\end{lstlisting}
+
+Dibujo pila 0x8 y como va a la direccion 11
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Modificación en la trad. de expresiones II}
+
+\textbf{Solución}:
+\begin{itemize}
+	\item Debe evitarse cargar adelantadamente el valor de las posiciones de memoria cuando éstas aparecen como parámetros reales
+	\item A fin de no modificar el esquema de generación de código de las expresiones y asignación, la solución menos intrusiva es determinar si el contexto de ocurrencia de un designador (derivado de \emph{Mem}) es como parámetro real: atributo heredado \emph{parh}
+\end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Modificación en la trad. de expresiones III}
+
+\begin{columns}[T]
+\column{.5\textwidth}
+	\begin{lstlisting}[style=gramaticas,basicstyle=\footnotesize\ttfamily]
+	Exp ::= ExpS OpComp ExpS
+	   ExpS0.parh = ExpS1.parh = false
+	Exp ::= ExpS
+	   ExpS.parh = Exp.parh
+	ExpS ::= ExpS OpAd Term
+	   ExpS1.parh = Term.parh = false
+	ExpS ::= ExpS or Term
+	   ExpS1.parh = Term.parh = false
+	\end{lstlisting}
+\column{.5\textwidth}
+	\begin{lstlisting}[style=gramaticas,basicstyle=\footnotesize\ttfamily]
+	ExpS ::= Term
+	   Term.parh = ExpS.parh
+	Term.parh = ExpS.parh
+	Term ::= Term OpMul Fact
+	   Term1.parh = Fact.parh = false
+	Term ::= Term and Fact
+	   Term1.parh = Fact.parh = false
+	Term ::= Fact
+	   Fact.parh = Term.parh
+	Fact ::= (Exp)
+	   Exp.parh	= Fact.parh
+	Fact ::= OpUn Fact
+	   Fact1.parh = false
+	\end{lstlisting}
+\end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Modificación en la trad. de expresiones IV}
+
+\begin{itemize}
+	\item Los valores iniciales deben fijarse allí donde pueda aparecer una expresión:
+\end{itemize}
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\footnotesize\ttfamily]
+IAsig ::= Mem := Exp
+   Exp.parh = false
+IIf ::= if Exp then I PElse
+   Exp.parh = false
+IWhile ::= while Exp do I PElse
+   Exp.parh = false
+LAParams ::= LAParams,Exp
+   Exp.parh = (LAParams0.fparamsh[LAParams0.nparams].modo == var)
+LAParams ::= Exp
+   Exp.parh = (LAParams0.fparamsh[1].modo == var)
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Modificación en la trad. de expresiones V}
+
+\begin{itemize}
+	\item Ahora la generación de código para \emph{Mem} puede modificarse como sigue:
+\end{itemize}
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\footnotesize\ttfamily,mathescape]
+Fact ::= Mem
+   Fact.cod = si compatible(Mem.tipo,<t:num>,Fact.tsh ) $\lor$
+                 compatible(Mem.tipo,<t:bool>,Fact.tsh ) $\land$
+                 @bold@$\neg$ Fact.parh@
+              entonces
+                  @bold@Mem.cod || apila-ind@ // Por valor
+              si no @bold@Mem.cod@            // Por variable
+Fact.etq = si compatible(Mem.tipo,<t:num>,Fact.tsh ) $\lor$
+              compatible(Mem.tipo,<t:bool>,Fact.tsh ) $\land$
+              $\neg$ Fact.parh
+           entonces
+              Mem.etq + 1
+           si no Mem.etq
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Modificación en la trad. de expresiones VI}
+
+\begin{itemize}
+	\item El otro aspecto a modificar es el acceso a los identificadores: ahora debe computarse adecuadamente el enlace a los mismos:
+\end{itemize}
+
+\begin{lstlisting}[style=gramaticas,basicstyle=\footnotesize\ttfamily,mathescape]
+Mem ::= id
+   Mem.cod = @bold@accesoVar@(Mem.tsh [id.lex])
+   Mem.etq = Mem.etqh + @bold@longAccesoVar@(Mem.tsh [id.lex])
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Acceso a variables y parámetros}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Acceso a las variables y parámetros desde el proc. I}
+
+\begin{itemize}
+	\item Desplazamiento relativo al valor del display del bloque en el que reside la variable
+	\item Además, si el parámetro es por variable (tipo \emph{pvar}), debe realizarse un apilado indirecto para acceder al enlace en sí
+\end{itemize}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\footnotesize\ttfamily,mathescape]
+fun accesoVar(id) devuelve
+   apila-dir(1+id.nivel) ||
+   apila(id.dir)         ||
+   suma
+   ( si id.clase = pvar entonces apila-ind
+   si no $\lambda$ )
+ffun
+
+fun longAccesoVar(id) devuelve
+   si id.clase = pvar entonces 4
+   si no 3
+ffun
+\end{lstlisting}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Traducción: Acceso a las variables y parámetros desde el proc. II}
+
+tabla
+
+dibujo con a y b y los desplazamientos, y el cp apuntando a 17 y el display a 11
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Recapitulación}
+	\scriptsize\tableofcontents
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Preguntas}
+	\begin{center}
+	\fontsize{100}{120}{\selectfont ?}
+	\end{center}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
