@@ -126,10 +126,10 @@
 	\item Es posible acceder a los datos globales
 	\item Desde cualquier registro de activación es necesario referir al registro de activación asociado con el bloque padre (que no tiene porque ser necesariamente el registro de activación anterior)
 	\item Dos Posibles organizaciones:
-		\begin{itemize}[<+->]
+		\begin{enumerate}[<+->]
 			\item Enlaces estáticos
 			\item Displays
-		\end{itemize}
+		\end{enumerate}
 \end{itemize}
 
 \end{frame}
@@ -165,38 +165,34 @@
 	}@
 	\end{lstlisting}
 \column{.3\textwidth}
-	\small{Mem. instrucciones}
-	\begin{center}
-		\begin{tikzpicture}
-		  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
-		    rectangle split parts=12,minimum width=2cm,
-		    rectangle split part fill={gray!20,red!60,red!60,red!60,red!60,
-		    blue!60,blue!60,blue!60,green!66,green!66,green!66,gray!20}}]
-		    \node (Inst) at (2,4){
-		    	\nodepart{one}...
-		    	\nodepart{two}def proc1()
-		    	\nodepart{three}x: num
-		    	\nodepart{four}y: num
-		    	\nodepart{five}proc1()
-		    	\nodepart{six}def proc2()
-		    	\nodepart{seven}w: bool
-		    	\nodepart{eight}proc1()
-		    	\nodepart{nine}def main()
-		    	\nodepart{ten}a: bool
-		    	\nodepart{eleven}proc2()
-		    	\nodepart{twelve}...
-		    };
-		  \end{scope}
-		\end{tikzpicture}
-	\end{center}
+	\begin{tikzpicture}
+	  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
+	    rectangle split parts=12,minimum width=2cm,
+	    rectangle split part fill={gray!20,red!40,red!40,red!40,red!40,
+	    blue!40,blue!40,blue!40,green!40,green!40,green!40,gray!20}}]
+	    \node (Inst) at (2,4){
+	    	\nodepart{one}...
+	    	\nodepart{two}\small{def proc1()}
+	    	\nodepart{three}\small{x: num}
+	    	\nodepart{four}\small{y: num}
+	    	\nodepart{five}\small{proc1()}
+	    	\nodepart{six}\small{def proc2()}
+	    	\nodepart{seven}\small{w: bool}
+	    	\nodepart{eight}\small{proc1()}
+	    	\nodepart{nine}\small{def main()}
+	    	\nodepart{ten}\small{a: bool}
+	    	\nodepart{eleven}\small{proc2()}
+	    	\nodepart{twelve}...
+	    };
+	  \end{scope}
+	\end{tikzpicture}
 \column{.3\textwidth}
-	\small{Regs. de activación}
 	\begin{center}
 		\begin{tikzpicture}
 		  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
 		    rectangle split parts=10,minimum width=2cm,
-		    rectangle split part fill={gray!20,red!60,red!60,red!60,red!60,red!60,red!60,
-		    blue!60,blue!60,green!66}}]
+		    rectangle split part fill={gray!20,red!40,red!40,red!40,red!40,red!40,red!40,
+		    blue!40,blue!40,green!40}}]
 		    \node (Reg) at (2,4){
 		    	\nodepart{one}...
 		    	\nodepart{two}y
@@ -268,15 +264,14 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 	}@
 	\end{lstlisting}
 \column{.6\textwidth}
-	\small{Displays y regs. de activación}
 	\begin{center}
 		\begin{tikzpicture}
 		  \begin{scope}
 			  	[every node/.style={rectangle split, draw, anchor=text,
 			    rectangle split parts=7,minimum width=2cm,
-			    rectangle split part fill={gray!20,red!60,red!60,red!60,red!60,
-			    blue!60,green!66}}]
-		    \node (Reg) at (2,-1){
+			    rectangle split part fill={gray!20,red!40,red!40,red!40,red!40,
+			    blue!40,green!40}}]
+		    \node (Reg) at (3,-1.5){
 		    	\nodepart{one}...
 		    	\nodepart{two}y
 		    	\nodepart{three}x
@@ -288,7 +283,7 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 		  \end{scope}
 
 		  \begin{scope}[every node/.style={draw, rectangle, node distance=0pt, outer sep=0pt}]
-			  \node (A) at (-2,-1) {0};
+			  \node (A) at (0,0) {0};
 			  \node [right = of A] (B) {1};
 			  \node [right = of B] (C) {2};
 			  \node [right = of C] (D) {3};
@@ -298,7 +293,6 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 		  \draw[-latex] (B.south) to [out=270,in=180] (Reg.six west);
 		  \draw[-latex] (C.south) to [out=270,in=180] (Reg.five west);
 		  \draw[-latex] (D.south) to [out=270,in=180] (Reg.three west);
-
 		\end{tikzpicture}
 	\end{center}
 \end{columns}
@@ -310,7 +304,26 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 \begin{frame}[fragile]
 \frametitle{Memoria de un programa I}
 
-dibujo resumen de toda la memoria del programa (instrucciones, estatico, reg. activacion, heap)
+	\begin{tikzpicture}
+		[box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
+		
+		\node[box, fill=red!40] at (0,0) (A) {CP};
+		\node[box, right = of A, fill=green!40, minimum width=4em] (B) {Displays};
+		\node[box, right = of B, text width=5em, align=center, fill=blue!40] (C) {Datos estáticos};
+		\node[box, right = of C, minimum width=12em] (D) {\ldots};
+		\node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
+		
+		\draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
+		\draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
+
+		\node[above = of A.north west, anchor=west, xshift=.5cm] (etqA) {0x0000000};
+		\draw[-latex] (etqA.west) to [out=180, in=90] (A.north west);
+		\node[above = of E.north east, anchor=east, xshift=-.5cm] (etqB) {0xFFFFFFFF};
+		\draw[-latex] (etqB.east) to [out=0, in=90] (E.north east);
+
+		\draw[-latex, dashed] (A.south) to [out=270,in=270] (C.south east);
+
+	\end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
