@@ -4,9 +4,9 @@
 
 \documentclass[hyperref={pdfpagelabels=false},tree-dvips]{beamer}
 % By  using hyperref={pdfpagelabels=false} you get rid off:
-%	Package hyperref Warning: Option `pdfpagelabels' is turned off
-%	(hyperref)                because \thepage is undefined.
-%	Hyperref stopped early
+%   Package hyperref Warning: Option `pdfpagelabels' is turned off
+%   (hyperref)                because \thepage is undefined.
+%   Hyperref stopped early
 
 %\usetheme{Madrid}
 \usetheme{Warsaw} %muestra las secciones, pero ocupa mucho espacio
@@ -44,61 +44,61 @@
 % para no perder los tabs en los listings:
 % https://tex.stackexchange.com/questions/8370/how-to-prevent-beamer-from-removing-the-tab-alignment-of-lstlisting
 \lstdefinestyle{procesos}{
-	language=C,
-	emptylines=1,
-	breaklines=true,
-	basicstyle=\ttfamily\bfseries\color{black},
-	moredelim=**[is][\color{red}]{@red@}{@},
-	moredelim=**[is][\color{violet}]{@vio@}{@},
-	moredelim=**[is][\color{blue}]{@blue@}{@},
-	moredelim=**[is][\color{green}]{@green@}{@},
+    language=C,
+    emptylines=1,
+    breaklines=true,
+    basicstyle=\ttfamily\bfseries\color{black},
+    moredelim=**[is][\color{red}]{@red@}{@},
+    moredelim=**[is][\color{violet}]{@vio@}{@},
+    moredelim=**[is][\color{blue}]{@blue@}{@},
+    moredelim=**[is][\color{green}]{@green@}{@},
 }
 \lstdefinestyle{codigo}{
-	language=C,
-	emptylines=1,
-	breaklines=true,
-	basicstyle=\tiny\ttfamily\color{black},
-	%numbers=left,
-	columns=fullflexible,
-	keepspaces=true,
-	tabsize=3,
-	morecomment=[l]{//},
-	moredelim=**[is][\color{red}]{@red@}{@},
-	moredelim=**[is][\color{violet}]{@vio@}{@},
-	moredelim=**[is][\color{blue}]{@blue@}{@},
-	moredelim=**[is][\color{green}]{@green@}{@},
-	tabsize=2,
-	showtabs
+    language=C,
+    emptylines=1,
+    breaklines=true,
+    basicstyle=\tiny\ttfamily\color{black},
+    %numbers=left,
+    columns=fullflexible,
+    keepspaces=true,
+    tabsize=3,
+    morecomment=[l]{//},
+    moredelim=**[is][\color{red}]{@red@}{@},
+    moredelim=**[is][\color{violet}]{@vio@}{@},
+    moredelim=**[is][\color{blue}]{@blue@}{@},
+    moredelim=**[is][\color{green}]{@green@}{@},
+    tabsize=2,
+    showtabs
 }
 \lstdefinestyle{codigoMP}{
-	language=C,
-	morekeywords={fun,ffun,cons,devuelve},
-	keywordstyle=\bfseries\color{black},
-	emptylines=1,
-	breaklines=true,
-	basicstyle=\small\ttfamily,
-	numbers=left,
-	columns=fullflexible,
-	keepspaces=true,
-	tabsize=3,
-	morecomment=[l]{//},
-	commentstyle=\color{gray},
-	moredelim=**[is][\color{red}]{@red@}{@},
-	moredelim=**[is][\color{violet}]{@vio@}{@},
-	moredelim=**[is][\color{green}]{@green@}{@},
-	moredelim=**[is][\bfseries\color{blue}]{@b@}{@},
-	tabsize=2,
-	showtabs
+    language=C,
+    morekeywords={fun,ffun,cons,devuelve},
+    keywordstyle=\bfseries\color{black},
+    emptylines=1,
+    breaklines=true,
+    basicstyle=\small\ttfamily,
+    numbers=left,
+    columns=fullflexible,
+    keepspaces=true,
+    tabsize=3,
+    morecomment=[l]{//},
+    commentstyle=\color{gray},
+    moredelim=**[is][\color{red}]{@red@}{@},
+    moredelim=**[is][\color{violet}]{@vio@}{@},
+    moredelim=**[is][\color{green}]{@green@}{@},
+    moredelim=**[is][\bfseries\color{blue}]{@b@}{@},
+    tabsize=2,
+    showtabs
 }
 \lstdefinestyle{gramaticas}{
-	language=C,
-	emptylines=1,
-	breaklines=true,
-	basicstyle=\ttfamily\color{black},
-	moredelim=**[is][\color{red}]{@red@}{@},
-	moredelim=**[is][\color{magenta}]{@mag@}{@},
-	moredelim=**[is][\color{blue}]{@blue@}{@},
-	moredelim=**[is][\color{green}]{@green@}{@},
+    language=C,
+    emptylines=1,
+    breaklines=true,
+    basicstyle=\ttfamily\color{black},
+    moredelim=**[is][\color{red}]{@red@}{@},
+    moredelim=**[is][\color{magenta}]{@mag@}{@},
+    moredelim=**[is][\color{blue}]{@blue@}{@},
+    moredelim=**[is][\color{green}]{@green@}{@},
 }
 
 \usepackage{tikz}
@@ -124,13 +124,13 @@
 \note{Talk no more than 1 minute.}
 
 \begin{itemize}[<+->]% [<+->] makes it uncoverable
-	\item Es posible acceder a los datos globales
-	\item Desde cualquier registro de activación es necesario referir al registro de activación asociado con el bloque padre (que no tiene porque ser necesariamente el registro de activación anterior)
-	\item Dos Posibles organizaciones:
-		\begin{enumerate}[<+->]
-			\item Enlaces estáticos
-			\item Displays
-		\end{enumerate}
+    \item Es posible acceder a los datos globales
+    \item Desde cualquier registro de activación es necesario referir al registro de activación asociado con el bloque padre (que no tiene porque ser necesariamente el registro de activación anterior)
+    \item Dos Posibles organizaciones:
+        \begin{enumerate}[<+->]
+            \item Enlaces estáticos
+            \item Displays
+        \end{enumerate}
 \end{itemize}
 
 \end{frame}
@@ -140,8 +140,8 @@
 \begin{frame}[fragile]
 \frametitle{Enlaces estáticos}
 \begin{itemize}%[<+->]% [<+->] makes it uncoverable
-	\item En el registro de activación se incluye un enlace al registro de activación del bloque padre (enlace estático)
-	\item La memoria se organiza en forma de pila de registros de activación, enlazados a través de los enlaces estáticos
+    \item En el registro de activación se incluye un enlace al registro de activación del bloque padre (enlace estático)
+    \item La memoria se organiza en forma de pila de registros de activación, enlazados a través de los enlaces estáticos
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -150,68 +150,68 @@
 
 \begin{columns}[T]
 \column{.4\textwidth}
-	\begin{lstlisting}[style=procesos]
-	@red@proc proc1(){
-	    x: num;
-	    y: num;@
-	    @vio@proc1();@
-	@red@}@
-	@blue@proc proc2(){
-	    w: bool;
-	    proc1();
-	}@
-	@green@main(){
-	    a: bool;
-	    proc2();
-	}@
-	\end{lstlisting}
+    \begin{lstlisting}[style=procesos]
+    @red@proc proc1(){
+        x: num;
+        y: num;@
+        @vio@proc1();@
+    @red@}@
+    @blue@proc proc2(){
+        w: bool;
+        proc1();
+    }@
+    @green@main(){
+        a: bool;
+        proc2();
+    }@
+    \end{lstlisting}
 \column{.3\textwidth}
-	\begin{tikzpicture}
-	  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
-	    rectangle split parts=12,minimum width=2cm,
-	    rectangle split part fill={gray!20,red!40,red!40,red!40,violet!40,
-	    blue!40,blue!40,blue!40,green!40,green!40,green!40,gray!20}}]
-	    \node (Inst) at (2,4){
-	    	\nodepart{one}...
-	    	\nodepart{two}\small{def proc1()}
-	    	\nodepart{three}\small{x: num}
-	    	\nodepart{four}\small{y: num}
-	    	\nodepart{five}\small{proc1()}
-	    	\nodepart{six}\small{def proc2()}
-	    	\nodepart{seven}\small{w: bool}
-	    	\nodepart{eight}\small{proc1()}
-	    	\nodepart{nine}\small{def main()}
-	    	\nodepart{ten}\small{a: bool}
-	    	\nodepart{eleven}\small{proc2()}
-	    	\nodepart{twelve}...
-	    };
-	  \end{scope}
-	\end{tikzpicture}
+    \begin{tikzpicture}
+      \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
+        rectangle split parts=12,minimum width=2cm,
+        rectangle split part fill={gray!20,red!40,red!40,red!40,violet!40,
+        blue!40,blue!40,blue!40,green!40,green!40,green!40,gray!20}}]
+        \node (Inst) at (2,4){
+            \nodepart{one}...
+            \nodepart{two}\small{def proc1()}
+            \nodepart{three}\small{x: num}
+            \nodepart{four}\small{y: num}
+            \nodepart{five}\small{proc1()}
+            \nodepart{six}\small{def proc2()}
+            \nodepart{seven}\small{w: bool}
+            \nodepart{eight}\small{proc1()}
+            \nodepart{nine}\small{def main()}
+            \nodepart{ten}\small{a: bool}
+            \nodepart{eleven}\small{proc2()}
+            \nodepart{twelve}...
+        };
+      \end{scope}
+    \end{tikzpicture}
 \column{.3\textwidth}
-	\begin{center}
-		\begin{tikzpicture}
-		  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
-		    rectangle split parts=10,minimum width=2cm,
-		    rectangle split part fill={gray!20,violet!40,violet!40,violet!40,red!40,red!40,red!40,
-		    blue!40,blue!40,green!40}}]
-		    \node (Reg) at (2,4){
-		    	\nodepart{one}...
-		    	\nodepart{two}y
-		    	\nodepart{three}x
-		    	\nodepart{four}padre
-		    	\nodepart{five}y
-		    	\nodepart{six}x
-		    	\nodepart{seven}padre
-		        \nodepart{eight}w
-		        \nodepart{nine}padre
-		        \nodepart{ten}a
-		    };
-		  \end{scope}
-		  \draw[-latex] (Reg.four west) to [out=225,in=135] (Reg.seven west);
-		  \draw[-latex] (Reg.seven west) to [out=225,in=135] (Reg.nine west);
-		  \draw[-latex] (Reg.nine west) to [out=225,in=135] (Reg.ten west);
-		\end{tikzpicture}
-	\end{center}
+    \begin{center}
+        \begin{tikzpicture}
+          \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
+            rectangle split parts=10,minimum width=2cm,
+            rectangle split part fill={gray!20,violet!40,violet!40,violet!40,red!40,red!40,red!40,
+            blue!40,blue!40,green!40}}]
+            \node (Reg) at (2,4){
+                \nodepart{one}...
+                \nodepart{two}y
+                \nodepart{three}x
+                \nodepart{four}padre
+                \nodepart{five}y
+                \nodepart{six}x
+                \nodepart{seven}padre
+                \nodepart{eight}w
+                \nodepart{nine}padre
+                \nodepart{ten}a
+            };
+          \end{scope}
+          \draw[-latex] (Reg.four west) to [out=225,in=135] (Reg.seven west);
+          \draw[-latex] (Reg.seven west) to [out=225,in=135] (Reg.nine west);
+          \draw[-latex] (Reg.nine west) to [out=225,in=135] (Reg.ten west);
+        \end{tikzpicture}
+    \end{center}
 \end{columns}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -221,8 +221,8 @@
 \uncover<1->{¿Qué problemas hay?}
 
 \begin{enumerate}%[<+->]% [<+->] makes it uncoverable
-	\item<2-> La recuperación del enlace de un identificador global supone seguir toda la cadena de enlaces estáticos. Si el identificador ha sido declarado \emph{k} niveles por encima, es necesario realizar \emph{k} indirecciones hasta llegar al correspondiente registro de activación
-	\item<3-> Hay que considerar la complejidad de generar código que gestione de manera adecuada los enlaces estáticos
+    \item<2-> La recuperación del enlace de un identificador global supone seguir toda la cadena de enlaces estáticos. Si el identificador ha sido declarado \emph{k} niveles por encima, es necesario realizar \emph{k} indirecciones hasta llegar al correspondiente registro de activación
+    \item<3-> Hay que considerar la complejidad de generar código que gestione de manera adecuada los enlaces estáticos
 \end{enumerate}
 
 \uncover<4->{Solución:\\
@@ -236,10 +236,10 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 \frametitle{Display}
 
 \begin{itemize}[<+->]% [<+->] makes it uncoverable
-	\item Secuencia de celdas consecutivas que apuntan a registros de activación
-	\item La celda \emph{i} apunta al registro de activación que está siendo utilizado en el nivel de anidamiento \emph{i}
-	\item Esta estructura facilita el acceso a los datos globales:\\
-		el enlace para un identificador declarado en un bloque que se encuentra a profunidad \emph{i} estará en el registro de activación referido por la celda \emph{i} del display (el \emph{display i} a partir de ahora)
+    \item Secuencia de celdas consecutivas que apuntan a registros de activación
+    \item La celda \emph{i} apunta al registro de activación que está siendo utilizado en el nivel de anidamiento \emph{i}
+    \item Esta estructura facilita el acceso a los datos globales:\\
+        el enlace para un identificador declarado en un bloque que se encuentra a profunidad \emph{i} estará en el registro de activación referido por la celda \emph{i} del display (el \emph{display i} a partir de ahora)
 \end{itemize}
 
 \end{frame}
@@ -249,53 +249,53 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 
 \begin{columns}[T]
 \column{.4\textwidth}
-	\begin{lstlisting}[style=procesos]
-	@red@proc proc1(){
-	    x: num;
-	    y: num;@
-	    @vio@proc1();@
-	@red@}@
-	@blue@proc proc2(){
-	    w: bool;
-	    proc1();
-	}@
-	@green@main(){
-	    a: bool;
-	    proc2();
-	}@
-	\end{lstlisting}
+    \begin{lstlisting}[style=procesos]
+    @red@proc proc1(){
+        x: num;
+        y: num;@
+        @vio@proc1();@
+    @red@}@
+    @blue@proc proc2(){
+        w: bool;
+        proc1();
+    }@
+    @green@main(){
+        a: bool;
+        proc2();
+    }@
+    \end{lstlisting}
 \column{.6\textwidth}
-	\begin{center}
-		\begin{tikzpicture}
-		  \begin{scope}
-			  	[every node/.style={rectangle split, draw, anchor=text,
-			    rectangle split parts=7,minimum width=2cm,
-			    rectangle split part fill={gray!20,violet!40,violet!40,red!40,red!40,
-			    blue!40,green!40}}]
-		    \node (Reg) at (3,-1.5){
-		    	\nodepart{one}...
-		    	\nodepart{two}y
-		    	\nodepart{three}x
-		    	\nodepart{four}y
-		    	\nodepart{five}x
-		        \nodepart{six}w
-		        \nodepart{seven}a
-		    };
-		  \end{scope}
+    \begin{center}
+        \begin{tikzpicture}
+          \begin{scope}
+                [every node/.style={rectangle split, draw, anchor=text,
+                rectangle split parts=7,minimum width=2cm,
+                rectangle split part fill={gray!20,violet!40,violet!40,red!40,red!40,
+                blue!40,green!40}}]
+            \node (Reg) at (3,-1.5){
+                \nodepart{one}...
+                \nodepart{two}y
+                \nodepart{three}x
+                \nodepart{four}y
+                \nodepart{five}x
+                \nodepart{six}w
+                \nodepart{seven}a
+            };
+          \end{scope}
 
-		  \begin{scope}[every node/.style={draw, rectangle, node distance=0pt, outer sep=0pt}]
-			  \node (A) at (0,0) {0};
-			  \node [right = of A] (B) {1};
-			  \node [right = of B] (C) {2};
-			  \node [right = of C] (D) {3};
-		  \end{scope}
+          \begin{scope}[every node/.style={draw, rectangle, node distance=0pt, outer sep=0pt}]
+              \node (A) at (0,0) {0};
+              \node [right = of A] (B) {1};
+              \node [right = of B] (C) {2};
+              \node [right = of C] (D) {3};
+          \end{scope}
 
-		  \draw[-latex] (A.south) to [out=270,in=180] (Reg.seven west);
-		  \draw[-latex] (B.south) to [out=270,in=180] (Reg.six west);
-		  \draw[-latex] (C.south) to [out=270,in=180] (Reg.five west);
-		  \draw[-latex] (D.south) to [out=270,in=180] (Reg.three west);
-		\end{tikzpicture}
-	\end{center}
+          \draw[-latex] (A.south) to [out=270,in=180] (Reg.seven west);
+          \draw[-latex] (B.south) to [out=270,in=180] (Reg.six west);
+          \draw[-latex] (C.south) to [out=270,in=180] (Reg.five west);
+          \draw[-latex] (D.south) to [out=270,in=180] (Reg.three west);
+        \end{tikzpicture}
+    \end{center}
 \end{columns}
 
 \end{frame}
@@ -334,8 +334,8 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 
 Las primeras celdas de la memoria se destinarán a mantener la información de estado necesaria para gestionar adecuadamente la pila de registros de activación:
 \begin{itemize}[<+->]% [<+->] makes it uncoverable
-	\item Registro \emph{CP}: Contendrá siempre la dirección de la \textbf{última celda ocupada} por la pila de registros de activación (cuando la pila esté vacía, el valor de \emph{CP} será la dirección de la celda anterior -la última celda ocupada por el display-)
-	\item \emph{Display}: Secuencia de celdas ocupadas por los displays.
+    \item Registro \emph{CP}: Contendrá siempre la dirección de la \textbf{última celda ocupada} por la pila de registros de activación (cuando la pila esté vacía, el valor de \emph{CP} será la dirección de la celda anterior -la última celda ocupada por el display-)
+    \item \emph{Display}
 \end{itemize}
 
 \end{frame}
@@ -382,30 +382,13 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 \begin{frame}[fragile]
 \frametitle{Inicio}
 
-\begin{itemize}
-	\uncover<1->{\item Se fija el \emph{display 0} a la primera celda de datos estáticos}
-	\uncover<2->{\item Se fija el \emph{CP} a la posición de la última celda ocupada por los datos estáticos.}
-	\uncover<3->{\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación}
+\begin{itemize}[<+->]% [<+->] makes it uncoverable
+    \item Se fija el \emph{display 0} a la primera celda de datos estáticos
+    \item Se fija el \emph{CP} a la posición de la última celda del display (la última celda ocupada)
+    \item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación
 \end{itemize}
 
-\begin{tikzpicture}
-        [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
-
-        \node[box, fill=red!40] at (0,0) (A) {CP};
-        \node[box, right = of A, fill=green!40, minimum width=4em] (B) {Displays};
-        \node[box, right = of B, text width=5em, align=center, fill=blue!40] (C) {Datos estáticos};
-        \node[box, right = of C, minimum width=11em] (D) {\ldots};
-        \node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
-        \node[box, right = of E] (F) {Code};
-        
-        \draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
-        \draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
-
-        \uncover<1->{\draw[-latex, dashed] ($(B.south west)+(0.2,0)$) |- ($(C.south west)+(0.2,0)-(0,0.5)$) -- ($(C.south west)+(0.2,0)$);}
-        \uncover<2->{\draw[-latex, dashed] (A.south) |- ($(C.south east)-(0.2,1)$) -- ($(C.south east)-(0.2,0)$);}
-
-    \end{tikzpicture}
-
+dibujo
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -435,36 +418,36 @@ Dibujo del movimiento del cp
 \begin{columns}[T]
 \column{.5\textwidth}
 \begin{lstlisting}[style=codigo]
-	tipo tpar= rec x:num; y:num;
-	@red@proc distanciaEuclidea(p1:tpar, p2:tpar, var res:num)
-	    a: num; b: num;@
-	    @blue@proc sumacuadrado(a:num, b:num, var r:num)
+    tipo tpar= rec x:num; y:num;
+    @red@proc distanciaEuclidea(p1:tpar, p2:tpar, var res:num)
+        a: num; b: num;@
+        @blue@proc sumacuadrado(a:num, b:num, var r:num)
             a:=a*a;
-	        b:=b*b
-	        r:=a+b;@
-	    @green@proc raizcuadrada(var n:num)
-	        ...@
-	    @red@&
-	    a:=p1.x-p2.x;
-	    b:=p1.y-p2.y;
-	    sumacuadrado(a, b, res);
-	    raizcuadrada(res);@
-	par1:tpar; par2:tpar; resultado:num;
-	&
-	par1.x:=1; par1.y:=5;
-	par2.x:=8; par2.y:=12;
-	distanciaEuclidea(par1,par2,resultado);
+            b:=b*b
+            r:=a+b;@
+        @green@proc raizcuadrada(var n:num)
+            ...@
+        @red@&
+        a:=p1.x-p2.x;
+        b:=p1.y-p2.y;
+        sumacuadrado(a, b, res);
+        raizcuadrada(res);@
+    par1:tpar; par2:tpar; resultado:num;
+    &
+    par1.x:=1; par1.y:=5;
+    par2.x:=8; par2.y:=12;
+    distanciaEuclidea(par1,par2,resultado);
 \end{lstlisting}
 \column{.5\textwidth}
-	\uncover<2->{
-			\Tree
-			[.main()
-			    [.{\color{red}distanciaEuclidea()}
-			        [.{\color{blue}sumaCuadrado()}  ]
-			        [.{\color{green}raizCuadrada()} ]
-			    ]
-			]
-	}
+    \uncover<2->{
+            \Tree
+            [.main()
+                [.{\color{red}distanciaEuclidea()}
+                    [.{\color{blue}sumaCuadrado()}  ]
+                    [.{\color{green}raizCuadrada()} ]
+                ]
+            ]
+    }
 \end{columns}
 \uncover<1->{¿Cual es el máximo nivel de anidamiento para éste programa?}
 \uncover<2->{2}
@@ -476,58 +459,14 @@ Dibujo del movimiento del cp
 \begin{frame}[fragile]
 \frametitle{Esquema de la traducción}
 
-	\begin{tikzpicture}
-	[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
-	box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
-
-		\node[minibox, fill=red!40] at (0,0) (A) {\small{CP}};
-    \node[minibox, right = of A, fill=green!40] (B) {\small{Displays}};
-    \node[minibox, right = of B, text width=3.5em, align=center, fill=blue!40] (C) {\small{Datos estáticos}};
-    \node[minibox, right = of C, text width=4em, align=center, fill=cyan!40] (D) {\small{Reg. activación}};
-    \node[minibox, right = of D, text width=4em, align=center, fill=cyan!40] (E) {\small{Reg. activación}};
-    \node[minibox, right = of E, minimum width=4em] (F) {};
-    \node[minibox, right = of F, fill=lime!40] (G) {\small{Heap}};
-    \node[minibox, right = of G] (H) {\small{Code}};
-    
-    \draw[-latex, thick] (E.east) -- ( $(E.east)!0.5cm!(F)$);
-    \draw[-latex, thick] (G.west) -- ( $(G.west)!0.5cm!(F)$);
-
-  	\node[box, fill=gray!20, anchor=west] at (2,-1.5) (tA) {Inicio};
-  	\node[box, below = of tA, minimum height=2em] (tB) {ir-a};
-  	\node[box, below = of tB, minimum height=4em] (tC) {Traducción de subprogramas};
-  	\node[box, below = of tC, minimum height=4em, fill=gray!20] (tD) {Traducción bloque principal};
-
-  	\draw[-latex,dashed] (tB.east) -- ($(tB.east)+(0.5,0)$) -- ($(tD.north east)+(0.5,0)-(0,0.2)$) -- ($(tD.north east)-(0,0.2)$);
-
-  	\draw (H.south west) to [out=270,in=0] (tA.north east);
-  	\draw (H.south east) to [out=270,in=0] (tD.south east);
-	\end{tikzpicture}
+Dibujo de cómo queda la traducción de subprogramas y el main, y el salto con ir-a.
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Manejo de la activación y desactivación I}
 
-	\begin{tikzpicture}
-		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
-		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
-
-		\node (A) {Subprograma};
-    \node[box, below = of A, fill=gray!20] (B) {Prólogo};
-    \node[box, below = of B] (C) {Cuerpo};
-    \node[box, below = of C, fill=gray!20] (D) {Epílogo};
-    \node[box, below = of D] (E) {ir-ind};
-    
-    \node[below = of E] (F) {Main()};
-    \node[box, below = of F, fill=gray!20] (G) {Prellamada};
-    \node[box, below = of G] (H) {ir-a};
-    \node[box, below = of H, fill=gray!20] (I) {Postllamada};
-
-    \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
-    \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
-
-    \node[text width = 8em] at (6,-2.5) (explicacion) {ir-ind salta a la dirección indicada en la cima de la pila de evaluación, consumiendo dicha cima.\\PC $\leftarrow$ Pila[cima]\\cima $\leftarrow$ cima - 1};
-	\end{tikzpicture}
+dibujo con la explicación de ir-ind
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -545,7 +484,7 @@ orden de la ejecución del código generado
 
 Asociada con la invocación $p(e_1,...,e_k)$:
 \begin{enumerate}[<+->]
-	\item Guardar en memoria la direccion de retorno
+    \item Guardar en memoria la direccion de retorno
     \item Evaluar y almacenar parámetros de ejecución del procedimiento
     \item Saltar a la dirección de inicio del procedimiento
 \end{enumerate}
@@ -584,7 +523,7 @@ Dibujo
 
 Asociado con el prodecimiento $proc \ p(...)$:
 \begin{enumerate}[<+->]
-	\item Guardar el antiguo valor del display
+    \item Guardar el antiguo valor del display
     \item Actualizar el valor nuevo del display
     \item Reservar espacio para las variables locales
 \end{enumerate}
@@ -718,7 +657,7 @@ Dibujo
 
 Asociado con el prodecimiento $proc \ p(...)$:
 \begin{itemize}[<+->]
-	\item Almacenar el valor devuelto por la función (en nuestro caso no se hace, no tenemos funciones)
+    \item Almacenar el valor devuelto por la función (en nuestro caso no se hace, no tenemos funciones)
 \end{itemize}
 \begin{enumerate}[<+->]
     \item Liberar el espacio utilizado por las variables locales (mover hacia atrás el CP)
@@ -854,13 +793,13 @@ Dibujo
 \frametitle{Postllamada}
 
 \begin{itemize}[<+->]
-	\item No es necesaria en nuestra implementación, ya que el epílogo recupera el estado anterior a la invocación
-	\item Hemos terminado con la dirección (indirecta) de retorno en la cima de la pila
+    \item No es necesaria en nuestra implementación, ya que el epílogo recupera el estado anterior a la invocación
+    \item Hemos terminado con la dirección (indirecta) de retorno en la cima de la pila
 \end{itemize}
 \uncover<+->{En otras arquitecturas:}
 \begin{itemize}[<+->]
-	\item Soportan funciones con retorno de valor: copiar el valor devuelto por la función donde sea necesario
-	\item $x86,x86\_64,ARM$ \ldots: restaurar el estado (registros, diferentes punteros)\ldots
+    \item Soportan funciones con retorno de valor: copiar el valor devuelto por la función donde sea necesario
+    \item $x86,x86\_64,ARM$ \ldots: restaurar el estado (registros, diferentes punteros)\ldots
 \end{itemize}
 
 dibujo de la cima de la pila
@@ -882,10 +821,10 @@ repetir dibujo del manejo de la activacion y la desactivacion
 \frametitle{Paso de parámetros}
 
 \begin{itemize}[<+->]
-	\item Las posiciones de los parámetros en el reg. de activación son relativas al \emph{CP}
-	\item Durante la prellamada, el \emph{CP} apunta a la celda anterior a la primera del reg. de activación
-	\item Por lo tanto, los parámetros y variables locales empezarán a partir de \emph{CP} + 3
-	\item Sus direcciones deben precalcularse en ejecución (antes de ejecutar el método) y guardarse en la TS
+    \item Las posiciones de los parámetros en el reg. de activación son relativas al \emph{CP}
+    \item Durante la prellamada, el \emph{CP} apunta a la celda anterior a la primera del reg. de activación
+    \item Por lo tanto, los parámetros y variables locales empezarán a partir de \emph{CP} + 3
+    \item Sus direcciones deben precalcularse en ejecución (antes de ejecutar el método) y guardarse en la TS
 \end{itemize}
 
 \uncover<+->{¿Por qué deben precalcularse en ejecución?}
@@ -900,16 +839,16 @@ dibujo del registro de activación con CP +3 y CP+4
 
 Dos formas:
 \begin{enumerate}[<+->]
-	\item modo \textbf{var}: proc1(\textbf{x});
-	\item modo \textbf{val}: proc1(\textbf{3}); ó proc1(\textbf{x+1}); ó proc1(\textbf{3+4});\\
-	Es decir, si pasa por la pila de evaluación, es de tipo \textbf{val}
+    \item modo \textbf{var}: proc1(\textbf{x});
+    \item modo \textbf{val}: proc1(\textbf{3}); ó proc1(\textbf{x+1}); ó proc1(\textbf{3+4});\\
+    Es decir, si pasa por la pila de evaluación, es de tipo \textbf{val}
 \end{enumerate}
 
 \uncover<+->{¿Que se hace en nuestra arquitectura?}
 \begin{enumerate}[<+->]
-	\item modo \textbf{var}: se copia el valor en el
+    \item modo \textbf{var}: se copia el valor en el
 registro de activación (instrucción mueve)
-	\item modo \textbf{val}: la cima de la pila de
+    \item modo \textbf{val}: la cima de la pila de
 evaluación contendrá el valor de la expresión. Debemos desapilar el valor en el registro de activación
 \end{enumerate}
 
