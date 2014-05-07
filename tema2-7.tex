@@ -252,7 +252,7 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Display: Ejemplo}
+\frametitle{Display: Ejemplo I}
 
 \begin{columns}[T]
 \column{.4\textwidth}
@@ -291,10 +291,10 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 		  \end{scope}
 
 		  \begin{scope}[every node/.style={draw, rectangle, node distance=0pt, outer sep=0pt}]
-			  \node (A) at (0,0) {0};
-			  \node [right = of A] (B) {1};
-			  \node [right = of B] (C) {2};
-			  \node [right = of C] (D) {3};
+			  \node (A) at (0,0) {0x2};
+			  \node [right = of A] (B) {0x13};
+			  \node [right = of B] (C) {0x24};
+			  \node [right = of C] (D) {0x65};
 		  \end{scope}
 
 		  \draw[-latex] (A.south) to [out=270,in=180] (Reg.seven west);
@@ -304,6 +304,65 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 		\end{tikzpicture}
 	\end{center}
 \end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Display: Ejemplo II}
+
+% \begin{columns}[T]
+% \column{.4\textwidth}
+% 	\begin{lstlisting}[style=procesos]
+% 	@red@proc proc1(){
+% 	    x: num;
+% 	    y: num;@
+% 	    @vio@proc1();@
+% 	@red@}@
+% 	@blue@proc proc2(){
+% 	    w: bool;
+% 	    proc1();
+% 	}@
+% 	@green@main(){
+% 	    a: bool;
+% 	    proc2();
+% 	}@
+% 	\end{lstlisting}
+% \column{.6\textwidth}
+% 	\begin{center}
+% 		\begin{tikzpicture}
+% 		  \begin{scope}
+% 			  	[every node/.style={rectangle split, draw, anchor=text,
+% 			    rectangle split parts=7,minimum width=2cm,
+% 			    rectangle split part fill={gray!20,violet!40,violet!40,red!40,red!40,
+% 			    blue!40,green!40}}]
+% 		    \node (Reg) at (3,-1.5){
+% 		    	\nodepart{one}...
+% 		    	\nodepart{two}y
+% 		    	\nodepart{three}x
+% 		    	\nodepart{four}y
+% 		    	\nodepart{five}x
+% 		        \nodepart{six}w
+% 		        \nodepart{seven}a
+% 		    };
+% 		  \end{scope}
+
+% 		  \begin{scope}[every node/.style={draw, rectangle, node distance=0pt, outer sep=0pt}]
+% 			  \node (A) at (0,0) {0x2};
+% 			  \node [right = of A] (B) {0x13};
+% 			  \node [right = of B] (C) {0x24};
+% 			  \node [right = of C] (D) {0x65};
+% 		  \end{scope}
+
+% 		  \draw[-latex] (A.south) to [out=270,in=180] (Reg.seven west);
+% 		  \draw[-latex] (B.south) to [out=270,in=180] (Reg.six west);
+% 		  \draw[-latex] (C.south) to [out=270,in=180] (Reg.five west);
+% 		  \draw[-latex] (D.south) to [out=270,in=180] (Reg.three west);
+% 		\end{tikzpicture}
+% 	\end{center}
+% \end{columns}
+
+por hacer. hay que hacer unas cuantas traspas moviendo los displays.
+molaria tener los displays etiquetados con nivel 1 etc
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
