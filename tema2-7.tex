@@ -17,7 +17,7 @@
 
 %\usetheme{CambridgeUS}
 %\usecolortheme{whale}
-\usetheme{Frankfurt}
+%\usetheme{Frankfurt}
 % lista de themes: http://www.hartwork.org/beamer-theme-matrix/
 
 %\usetheme{Madrid}
@@ -302,40 +302,43 @@
       ]
 
 	   	\node [minimum width=2cm, node distance=0pt, outer sep=0pt, minimum height=1.5em] at (4.5, -1.5) (regA) {};
-      
+
       \uncover<-3>{\node [stack, below = of regA] (regB) {};}
-      \uncover<4->{\node [stack, below = of regA, fill=violet!40] (regB) {y};}
-    	
+      \uncover<4-4>{\node [stack, below = of regA, fill=violet!40] (regB) {y};}
+
       \uncover<-3>{\node [stack, below = of regB] (regC) {};}
-      \uncover<4->{\node [stack, below = of regB, fill=violet!40] (regC) {x};}
-    	
+      \uncover<4-4>{\node [stack, below = of regB, fill=violet!40] (regC) {x};}
+
       \uncover<-2>{\node [stack, below = of regC] (regD) {};}
-      \uncover<3->{\node [stack, below = of regC, fill=red!40] (regD) {y};}
-    	
+      \uncover<3-5>{\node [stack, below = of regC, fill=red!40] (regD) {y};}
+
       \uncover<-2>{\node [stack, below = of regD] (regE) {};}
-      \uncover<3->{\node [stack, below = of regD, fill=red!40] (regE) {x};}
-      
+      \uncover<3-5>{\node [stack, below = of regD, fill=red!40] (regE) {x};}
+
       \uncover<-1>{\node [stack, below = of regE] (regF) {};}
-      \uncover<2->{\node [stack, below = of regE, fill=blue!40] (regF) {w};}
-      
+      \uncover<2-6>{\node [stack, below = of regE, fill=blue!40] (regF) {w};}
+
       \node [stack, below = of regF, fill=green!40] (regG) {a};
 
 		  \node [disp] (A) {0x09};
       \node [etq, above = of A] {\small{Disp0}};
 		  \uncover<-1>{\node [disp, right = of A] (B) {null};}
-      \uncover<2->{\node [disp, right = of A] (B) {0x13};}
+      \uncover<2-6>{\node [disp, right = of A] (B) {0x13};}
+      	  \uncover<7->{\node [disp, right = of A] (B) {null};}
       \node [etq, above = of B] {\small{Disp1}};
 		  \uncover<-2>{\node [disp, right = of B] (C) {null};}
-      \uncover<3->{\node [disp, right = of B] (C) {0x24};}
+      \uncover<3-5>{\node [disp, right = of B] (C) {0x24};}
+      	  \uncover<6->{\node [disp, right = of B] (C) {null};}
       \node [etq, above = of C] {\small{Disp2}};
-      \uncover<-3>{\node [disp, right = of C] (D) {null};}
-      \uncover<4->{\node [disp, right = of C] (D) {0x65};}
+      	  \uncover<-3>{\node [disp, right = of C] (D) {null};}
+      \uncover<4-4>{\node [disp, right = of C] (D) {0x65};}
+          \uncover<5->{\node [disp, right = of C] (D) {null};}
       \node [etq, above = of D] {\small{Disp3}};
 
 		  \draw[-latex, dashed] ($(A.south)-(0.2,0)$) |- (regG.west);
-		  \uncover<2->{\draw[-latex, dashed] ($(B.south)-(0.2,0)$) |- (regF.west);}
-		  \uncover<3->{\draw[-latex, dashed] ($(C.south)-(0.2,0)$) |- (regE.west);}
-		  \uncover<4->{\draw[-latex, dashed] ($(D.south)-(0.2,0)$) |- (regC.west);}
+		  \uncover<2-6>{\draw[-latex, dashed] ($(B.south)-(0.2,0)$) |- (regF.west);}
+		  \uncover<3-5>{\draw[-latex, dashed] ($(C.south)-(0.2,0)$) |- (regE.west);}
+		  \uncover<4-4>{\draw[-latex, dashed] ($(D.south)-(0.2,0)$) |- (regC.west);}
 		\end{tikzpicture}
 	\end{center}
 \end{columns}
@@ -525,6 +528,48 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Ejemplo de invocación}
+
+\begin{columns}[T]
+\column{.5\textwidth}
+\begin{lstlisting}[style=codigo]
+	tipo tpar= rec x:num; y:num;
+	@red@proc distanciaEuclidea(p1:tpar, p2:tpar, var res:num)
+	    a: num; b: num;@
+	    @blue@proc sumacuadrado(a:num, b:num, var r:num)
+            a:=a*a;
+	        b:=b*b
+	        r:=a+b;@
+	    @green@proc raizcuadrada(var n:num)
+	        ...@
+	    @red@&
+	    a:=p1.x-p2.x;
+	    b:=p1.y-p2.y;
+	    sumacuadrado(a, b, res);
+	    raizcuadrada(res);@
+	par1:tpar; par2:tpar; resultado:num;
+	&
+	par1.x:=1; par1.y:=5;
+	par2.x:=8; par2.y:=12;
+	distanciaEuclidea(par1,par2,resultado);
+\end{lstlisting}
+\column{.5\textwidth}
+	\uncover<2->{
+			\Tree
+			[.main()
+			    [.{\color{red}distanciaEuclidea()}
+			        [.{\color{blue}sumaCuadrado()}  ]
+			        [.{\color{green}raizCuadrada()} ]
+			    ]
+			]
+	}
+\end{columns}
+\uncover<1->{¿Cual es el máximo nivel de anidamiento para éste programa?}
+\uncover<2->{2}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Inicio}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -640,48 +685,6 @@ Ejemplo: inicio(2,5)
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
-\frametitle{Ejemplo de invocación}
-
-\begin{columns}[T]
-\column{.5\textwidth}
-\begin{lstlisting}[style=codigo]
-	tipo tpar= rec x:num; y:num;
-	@red@proc distanciaEuclidea(p1:tpar, p2:tpar, var res:num)
-	    a: num; b: num;@
-	    @blue@proc sumacuadrado(a:num, b:num, var r:num)
-            a:=a*a;
-	        b:=b*b
-	        r:=a+b;@
-	    @green@proc raizcuadrada(var n:num)
-	        ...@
-	    @red@&
-	    a:=p1.x-p2.x;
-	    b:=p1.y-p2.y;
-	    sumacuadrado(a, b, res);
-	    raizcuadrada(res);@
-	par1:tpar; par2:tpar; resultado:num;
-	&
-	par1.x:=1; par1.y:=5;
-	par2.x:=8; par2.y:=12;
-	distanciaEuclidea(par1,par2,resultado);
-\end{lstlisting}
-\column{.5\textwidth}
-	\uncover<2->{
-			\Tree
-			[.main()
-			    [.{\color{red}distanciaEuclidea()}
-			        [.{\color{blue}sumaCuadrado()}  ]
-			        [.{\color{green}raizCuadrada()} ]
-			    ]
-			]
-	}
-\end{columns}
-\uncover<1->{¿Cual es el máximo nivel de anidamiento para éste programa?}
-\uncover<2->{2}
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Prellamada}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -731,7 +734,7 @@ Ejemplo: inicio(2,5)
 Asociada con la invocación $p(e_1,...,e_k)$:
 \begin{enumerate}[<+->]
 	\item Guardar en memoria la direccion de retorno
-    \item Evaluar y almacenar parámetros de ejecución del procedimiento
+    \item Evaluar y almacenar parámetros de ejecución del procedimiento (por ahora nos olvidamos)
     \item Saltar a la dirección de inicio del procedimiento (\emph{ir-a})
 \end{enumerate}
 
@@ -842,8 +845,6 @@ Asociado con el prodecimiento $proc \ p(...)$:
     \item Actualizar el valor nuevo del display
     \item Reservar espacio para las variables locales
 \end{enumerate}
-
-dibujo de lo que aparece al hacer los pasos
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1195,7 +1196,7 @@ Ejemplo: epilogo(1)
 
     \node[box, right = of x8, fill=pink!40] (x9) {0x87};
     \node[box, right = of x9, fill=pink!40] (x10) {¿?};
-    
+
     \node[box, short, right = of x10, fill=cyan!40] (x11) {};
     \node[box, short, right = of x11, fill=cyan!40] (x12) {};
     \node[box, short, right = of x12, fill=cyan!40] (x13) {};
@@ -1216,7 +1217,7 @@ Ejemplo: epilogo(1)
       \draw[-latex] (x9.south) -- ($(x9.south)-(0,0.45)$) -- ($(x11.south)-(0,0.45)$);
       \node[box, draw=none, below =0.1 of x14] {Pila de evaluación};
     };
-  
+
   \end{tikzpicture}
 
 \end{frame}
@@ -1284,24 +1285,29 @@ Ejemplo: epilogo(1)
 
     \node[box, right = of x0, fill=green!40] (x3) {\ldots};
 
-    \node[box, right = of x3, fill=blue!40, minimum width=4em] (x8) {\ldots};
+    \node[box, right = of x3, fill=blue!40, minimum width=1em] (x4) {\tiny{?}};
+    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{?}};
+    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{?}};
+    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{?}};
+    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{?}};
+
 
     \node[box, right = of x8, fill=pink!40] (x9) {0x87};
     \node[box, right = of x9, fill=pink!40] (x10) {¿?};
-    
-    \node[box, short, right = of x10, fill=cyan!40] (x11) {};
-    \node[box, short, right = of x11, fill=cyan!40] (x12) {};
-    \node[box, short, right = of x12, fill=cyan!40] (x13) {};
-    \node[box, short, right = of x13, fill=cyan!40] (x14) {};
-    \node[box, short, right = of x14, fill=cyan!40] (x15) {};
-    \node[box, short, right = of x15, fill=cyan!40] (x16) {};
-    
+
+    \node[box, short, right = of x10, fill=cyan!40] (x11) {\tiny{?}};
+    \node[box, short, right = of x11, fill=cyan!40] (x12) {\tiny{?}};
+    \node[box, short, right = of x12, fill=cyan!40] (x13) {\tiny{?}};
+    \node[box, short, right = of x13, fill=cyan!40] (x14) {\tiny{?}};
+    \node[box, short, right = of x14, fill=cyan!40] (x15) {\tiny{?}};
+    \node[box, short, right = of x15, fill=cyan!40] (x16) {\tiny{?}};
+
     \node[box, short, right = of x16] (x17) {};
     \node[box, short, right = of x17] (x18) {\ldots};
 
     \node[box, draw=none, above = of x0] {\small{0}};
-    \node[box, draw=none, above = of x8.north west] {\small{4}};
-    \node[box, draw=none, above = of x8.north east] {\small{8}};
+    \node[box, draw=none, above = of x4] {\small{4}};
+    \node[box, draw=none, above = of x8] {\small{8}};
     \node[box, draw=none, above = of x12] {\small{12}};
     \node[box, draw=none, above = of x16] {\small{16}};
 
@@ -1347,22 +1353,26 @@ Ejemplo: epilogo(1)
 
     \node[box, fill=red!40] at (0,0) (x0) {0x8};
 
-    \node[box, right = of x0, fill=green!40] (x1) {0x4};
-    \uncover<-1>{\node[box, right = of x1, fill=green!40] (x2) {0x11};}
-    \uncover<2->{\node[box, right = of x1, fill=green!40] (x2) {¿?};}
+    \node[box, right = of x0, fill=green!40] (x1) {\small{0x4}};
+    \uncover<-1>{\node[box, right = of x1, fill=green!40] (x2) {\small{0x11}};}
+    \uncover<2->{\node[box, right = of x1, fill=green!40] (x2) {\small{¿?}};}
     \node[box, right = of x2, fill=green!40] (x3) {};
 
-    \node[box, right = of x3, fill=blue!40, minimum width=4em] (x8) {\ldots};
+    \node[box, right = of x3, fill=blue!40, minimum width=1em] (x4) {\tiny{?}};
+    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{?}};
+    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{?}};
+    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{?}};
+    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{?}};
 
     \node[box, right = of x8, fill=pink!40] (x9) {0x87};
-    \node[box, right = of x9, fill=pink!40] (x10) {¿?};
-    \node[box, right = of x10, fill=cyan!40] (x11) {};
-    \node[box, right = of x11, fill=cyan!40] (x12) {};
+    \node[box, right = of x9, fill=pink!40] (x10) {\small{¿?}};
+    \node[box, right = of x10, fill=cyan!40] (x11) {\tiny{?}};
+    \node[box, right = of x11, fill=cyan!40] (x12) {\tiny{?}};
     \node[box, right = of x12, fill=cyan!40] (x13) {\ldots};
 
     \node[box, draw=none, above = of x0] {\small{0}};
-    \node[box, draw=none, above = of x8.north west] {\small{4}};
-    \node[box, draw=none, above = of x8.north east] {\small{8}};
+    \node[box, draw=none, above = of x4] {\small{4}};
+    \node[box, draw=none, above = of x8] {\small{8}};
     \node[box, draw=none, above = of x12] {\small{12}};
 
     \uncover<2->{\draw[-latex] (x10.south) -- ($(x10.south)-(0,0.4)$) -- ($(x2.south)-(0,0.4)$) -- (x2.south);};
@@ -1719,7 +1729,7 @@ Decs ::= Dec
 \frametitle{Paso de parámetros: ampliacion de la TS III}
 
 \tiny
-\begin{tabular*}{0.80\textwidth}{|l|l|l|l|}
+\begin{tabular*}{\textwidth}{|l|l|l|p{0.5\textwidth}|}
 \textbf{nivel} & \textbf{id}       & \textbf{clase}    & \textbf{otras}                                                                                                                                                                                                                                                        \\ \hline
 1              & p1                & var //valor       & $<tipo:<t:ref, id:tpar>, dir:0>$                                                                                                                                                                                                  \\ \hline
 1              & p2                & var //valor       & $<tipo:<t:ref, id:tpar>, dir:2>$                                                                                                                                                                                                  \\ \hline
@@ -1920,7 +1930,8 @@ DecProc ::= proc iden FParams Bloque fproc
 \begin{frame}[fragile]
 \frametitle{Traducción: Procedimientos II}
 
-\begin{tabular*}{0.80\textwidth}{|l|l|l|l|}
+\tiny
+\begin{tabular*}{\textwidth}{|l|l|l|p{0.5\textwidth}|}
 \textbf{nivel} & \textbf{id}       & \textbf{clase}    & \textbf{otras}                                                                                                                                                                                                                                                        \\ \hline
 0              & tpar              & tipo              & $<tipo:<t:rec, campos:[id:x,tipo:<t:num>,desp:0][id:y,tipo:<t:num>,desp:1]>, tam:2>$      \\ \hline
 0              & par1              & var //valor       & $<tipo:<t:ref, id:tpar>>$                                                                 \\ \hline
@@ -1928,7 +1939,6 @@ DecProc ::= proc iden FParams Bloque fproc
 1              & resultado         & pvar //referencia & $<tipo:<t:num>>$                                                                          \\ \hline
 1              & distanciaEuclidea & prodedimiento     & $<tipo:<t:proc, params: [modo:valor, tipo:<t:ref,id:tpar>][modo:valor,tipo:<t:ref,id:tpar>][modo:variable,tipo:<t:num>]>inicio:6>$ \\ \hline
 \end{tabular*}
-
 
 inicio: Dir de la 1ºa instrucción (despues de \emph{Decs})
 
@@ -2278,7 +2288,19 @@ ffun
 \begin{frame}[fragile]
 \frametitle{Traducción: Acceso a las variables y parámetros desde el proc. II}
 
-tabla
+\tiny
+\begin{tabular*}{\textwidth}{|l|l|l|p{0.5\textwidth}|}
+\textbf{nivel} & \textbf{id}       & \textbf{clase}    & \textbf{otras}                                                                                                                                                                                                                                                        \\ \hline
+
+0              & par1              & var //valor       & $<tipo:<t:ref, id:tpar>>$                                                                 \\ \hline
+0              & par2              & var //valor       & $<tipo:<t:ref, id:tpar>>$                                                                 \\ \hline
+1              & resultado         & pvar //referencia & $<tipo:<t:num>>$                                                                          \\ \hline
+1              & distanciaEuclidea & prodedimiento     & $<tipo:<t:proc, params: [modo:valor, tipo:<t:ref,id:tpar>][modo:valor,tipo:<t:ref,id:tpar>][modo:variable,tipo:<t:num>]>inicio:6>$ \\ \hline
+1              & a                 & pvar //referencia & $<tipo:<t:num>>$                                                                          \\ \hline
+1              & b                 & pvar //referencia & $<tipo:<t:num>>$                                                                          \\ \hline
+1              & sumaCuadrado      & prodedimiento     & $<tipo:<t:proc, params: [modo:valor, tipo:<t:num>][modo:valor,tipo:<t:numr>][modo:variable,tipo:<t:num>]>>$ \\ \hline
+1              & raizCuadrada      & prodedimiento     & $<tipo:<t:proc, params: [modo:variable,tipo:<t:num>]>>$ \\ \hline
+\end{tabular*}
 
 dibujo con a y b y los desplazamientos, y el cp apuntando a 17 y el display a 11
 
