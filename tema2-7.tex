@@ -1,6 +1,4 @@
-% TODO añadir resumen al principio de la segunda hora
-% TODO añadir resumen al final
-% TODO tildes dentro de lstlistings. dentro de lstlisting, y por culpa de beamer, solo se pueden usar espacios y no tabs para indentar :(
+% TODO problemas en lstlistings: dentro de lstlisting, y por culpa de beamer, solo se pueden usar espacios y no tabs para indentar :(
 
 \documentclass[hyperref={pdfpagelabels=false},tree-dvips,compress]{beamer}
 % By  using hyperref={pdfpagelabels=false} you get rid off:
@@ -8,6 +6,15 @@
 %	(hyperref)                because \thepage is undefined.
 %	Hyperref stopped early
 
+% para imprimir las transparencias sin los pasos (\uncover), etc
+%\documentclass[handout,hyperref={pdfpagelabels=false},tree-dvips,compress]{beamer}
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{2 on 1}[a4paper,border shrink=5mm] % for instance
+
+% para imprimir las transparencias pero con los pasos (\uncover), etc
+%\documentclass[hyperref={pdfpagelabels=false},tree-dvips,compress]{beamer}
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{2 on 1}[a4paper,border shrink=5mm] % for instance
 
 % lista de themes: http://www.hartwork.org/beamer-theme-matrix/
 
@@ -18,7 +25,6 @@
 %\usetheme{CambridgeUS}
 %\usecolortheme{whale}
 %\usetheme{Frankfurt}
-% lista de themes: http://www.hartwork.org/beamer-theme-matrix/
 
 %\usetheme{Madrid}
 %\usetheme{Boadilla}
@@ -26,6 +32,7 @@
 %\usetheme{Berlin}
 %\usetheme{Dresden}
 
+% theme customizada por nosotros:
 \usecolortheme{whale}
 \useinnertheme{default}
 \useoutertheme[subsection=false,footline=authorinstitute]{miniframes}
@@ -41,6 +48,8 @@
 \def\beamer@subsectionentry#1#2#3#4#5{\advance\beamer@xpos by1\relax\let\beamer@link=\beamer@linkorig}
 \makeatother
 
+% Añadir notas para el presentador:
+% se añaden con \note{}
 %\setbeameroption{show notes}
 %\setbeameroption{hide notes} % default
 %\setbeameroption{show notes on second screen=left}
@@ -54,8 +63,7 @@
 \usepackage{graphicx}
 
 \usepackage{qtree}
-%\usepackage{tree-dvips}
-% para que funcionen las anotaciones en los arboles de tree-dvips hay que compilar a dvi, no usar pdflatex. Y luego de dvi, pasar a pdf.
+%\usepackage{tree-dvips} % para que funcionen las anotaciones de tree-dvips: compilar a dvi, no usar pdflatex. Y luego de dvi, pasar a pdf.
 
 \usepackage{xcolor}
 \definecolor{green}{RGB}{0,170,0} % redefine green for visibility
@@ -150,9 +158,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Organización de la memoria}
-\note{Talk no more than1minute.}
 
-\begin{itemize}[<+->]% [<+->] makes it uncoverable
+\begin{itemize}[<+->]% makes it uncoverable
 	\item Es posible acceder a los datos globales
 	\item Desde cualquier registro de activación es necesario referir al registro de activación asociado con el bloque padre (que no tiene porque ser necesariamente el registro de activación anterior)
 	\item Dos Posibles organizaciones:
@@ -168,7 +175,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Enlaces estáticos}
-\begin{itemize}%[<+->]% [<+->] makes it uncoverable
+\begin{itemize}
 	\item En el registro de activación se incluye un enlace al registro de activación del bloque padre (enlace estático)
 	\item La memoria se organiza en forma de pila de registros de activación, enlazados a través de los enlaces estáticos
 \end{itemize}
@@ -249,7 +256,7 @@
 
 \uncover<1->{¿Qué problemas hay?}
 
-\begin{enumerate}%[<+->]% [<+->] makes it uncoverable
+\begin{enumerate}
 	\item<2-> La recuperación del enlace de un identificador global supone seguir toda la cadena de enlaces estáticos. Si el identificador ha sido declarado \emph{k} niveles por encima, es necesario realizar \emph{k} indirecciones hasta llegar al correspondiente registro de activación
 	\item<3-> Hay que considerar la complejidad de generar código que gestione de manera adecuada los enlaces estáticos
 \end{enumerate}
@@ -264,7 +271,7 @@
 \begin{frame}[fragile]
 \frametitle{Display}
 
-\begin{itemize}[<+->]% [<+->] makes it uncoverable
+\begin{itemize}[<+->]
 	\item Secuencia de celdas consecutivas que apuntan a registros de activación
 	\item La celda \emph{i} apunta al registro de activación que está siendo utilizado en el nivel de anidamiento \emph{i}
 	\item Esta estructura facilita el acceso a los datos globales:\\
@@ -380,7 +387,7 @@
 \frametitle{Memoria de un programa II}
 
 Las primeras celdas de la memoria se destinarán a mantener la información de estado necesaria para gestionar adecuadamente la pila de registros de activación:
-\begin{itemize}[<+->]% [<+->] makes it uncoverable
+\begin{itemize}[<+->]
 	\item Registro \emph{CP}: Contendrá siempre la dirección de la \textbf{última celda ocupada} por la pila de registros de activación (cuando la pila esté vacía, el valor de \emph{CP} será la dirección de la celda anterior: la última celda ocupada por los datos estáticos)
 	\item \emph{Display}: Secuencia de celdas ocupadas por los displays.
 \end{itemize}
@@ -403,7 +410,6 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
         \node[minibox, right = of E, minimum width=4em] (F) {};
         \node[minibox, right = of F, fill=lime!40] (G) {\small{Heap}};
         \node[minibox, right = of G] (H) {\small{Code}};
-
 
         \draw[-latex, thick] (E.east) -- ( $(E.east)!0.5cm!(F)$);
         \draw[-latex, thick] (G.west) -- ( $(G.west)!0.5cm!(F)$);
@@ -633,7 +639,7 @@ ffun
 cons longInicio = 4
 \end{lstlisting}
 
-Ejemplo: inicio(2,5)
+Ejemplo: \textbf{inicio(2,5)}
 
   \begin{tikzpicture}
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.2em, align=center}]
@@ -756,7 +762,7 @@ ffun
 cons longApilaRet = 5
 \end{lstlisting}
 
-Ejemplo: apila-ret(0x87) , siendo 0x87 el nº de instrucción.
+Ejemplo: \textbf{apila-ret(0x87)} , siendo 0x87 el nº de instrucción.
 
   \begin{tikzpicture}
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2em, align=center}]
@@ -873,7 +879,6 @@ ffun
 cons longPrologo = 13
 \end{lstlisting}
 
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -900,7 +905,7 @@ fun prologo(nivel,tamlocales) devuelve
 ffun
 \end{lstlisting}
 
-Ejemplo: prologo(1,7)
+Ejemplo: \textbf{prologo(1,7)}
 
   \begin{tikzpicture}
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2em, align=center}]
@@ -959,7 +964,7 @@ fun prologo(nivel,tamlocales) devuelve
 ffun
 \end{lstlisting}
 
-Ejemplo: prologo(1,7)
+Ejemplo: \textbf{prologo(1,7)}
 
   \begin{tikzpicture}
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2em, align=center}]
@@ -989,7 +994,7 @@ Ejemplo: prologo(1,7)
     \node[box, draw=none, above = of x11] (etq11) {\small{11}};
     \node[box, draw=none, above = of x12] {\small{12}};
 
-    \uncover<2->{\draw[-latex, dashed] ($(etq11.south)+(0,0.2)$) -- ($(x11.south)-(0,0.4)$) -- ($(x2.south)-(0,0.4)$) -- (x2.south);};
+    \uncover<2->{\draw[-latex] ($(etq11.south)+(0,0.2)$) -- ($(x11.south)-(0,0.4)$) -- ($(x2.south)-(0,0.4)$) -- (x2.south);};
 
   \end{tikzpicture}
 
@@ -1019,58 +1024,57 @@ fun prologo(nivel,tamlocales) devuelve
 ffun
 \end{lstlisting}
 
-Ejemplo: prologo(1,7)
+Ejemplo: \textbf{prologo(1,7)}
 
-  \begin{tikzpicture}
-      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2em, align=center},
-      short/.style={minimum width = 1.8em}]
+	\begin{tikzpicture}[box/.style={draw, node distance=0pt, outer sep=0pt,
+	minimum height=2em, minimum width=2em, align=center},short/.style={minimum width = 1.8em}]
 
-    \uncover<-1>{\node[box, fill=red!40, minimum width=2.49em] at (0,0) (x0) {\small{0x8}};};
-    \uncover<2->{\node[box, fill=red!40] at (0,0) (x0) {\small{0x16}};};
+		\uncover<-1>{\node[box, fill=red!40, minimum width=2.49em] at (0,0) (x0) {\small{0x8}};};
+		\uncover<2->{\node[box, fill=red!40] at (0,0) (x0) {\small{0x16}};};
 
-    \node[box, right = of x0, fill=green!40] (x3) {\ldots};
+		\node[box, right = of x0, fill=green!40] (x3) {\ldots};
 
-    \node[box, right = of x3, fill=blue!40, minimum width=1em] (x4) {\tiny{?}};
-    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{?}};
-    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{?}};
-    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{?}};
-    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{?}};
+		\node[box, right = of x3, fill=blue!40, minimum width=1em] (x4) {\tiny{?}};
+		\node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{?}};
+		\node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{?}};
+		\node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{?}};
+		\node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{?}};
 
 
-    \node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
-    \node[box, right = of x9, fill=pink!40] (x10) {\small{¿?}};
-    
-    \uncover<-1>{
-      \node[box, short, right = of x10] (x11) {\tiny{?}};
-      \node[box, short, right = of x11] (x12) {\tiny{?}};
-      \node[box, short, right = of x12] (x13) {\tiny{?}};
-      \node[box, short, right = of x13] (x14) {\tiny{?}};
-      \node[box, short, right = of x14] (x15) {\tiny{?}};
-      \node[box, short, right = of x15] (x16) {\tiny{?}};
-      };
-    \uncover<2->{
-      \node[box, short, right = of x10, fill=cyan!40] (x11) {\tiny{?}};
-      \node[box, short, right = of x11, fill=cyan!40] (x12) {\tiny{?}};
-      \node[box, short, right = of x12, fill=cyan!40] (x13) {\tiny{?}};
-      \node[box, short, right = of x13, fill=cyan!40] (x14) {\tiny{?}};
-      \node[box, short, right = of x14, fill=cyan!40] (x15) {\tiny{?}};
-      \node[box, short, right = of x15, fill=cyan!40] (x16) {\tiny{?}};
-      };
+		\node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
+		\node[box, right = of x9, fill=pink!40] (x10) {\small{¿?}};
 
-    \node[box, short, right = of x16] (x17) {\tiny{?}};
-    \node[box, short, right = of x17] (x18) {\ldots};
+		\uncover<-1>{
+		  \node[box, short, right = of x10] (x11) {\tiny{?}};
+		  \node[box, short, right = of x11] (x12) {\tiny{?}};
+		  \node[box, short, right = of x12] (x13) {\tiny{?}};
+		  \node[box, short, right = of x13] (x14) {\tiny{?}};
+		  \node[box, short, right = of x14] (x15) {\tiny{?}};
+		  \node[box, short, right = of x15] (x16) {\tiny{?}};
+		  };
+		\uncover<2->{
+		  \node[box, short, right = of x10, fill=cyan!40] (x11) {\tiny{?}};
+		  \node[box, short, right = of x11, fill=cyan!40] (x12) {\tiny{?}};
+		  \node[box, short, right = of x12, fill=cyan!40] (x13) {\tiny{?}};
+		  \node[box, short, right = of x13, fill=cyan!40] (x14) {\tiny{?}};
+		  \node[box, short, right = of x14, fill=cyan!40] (x15) {\tiny{?}};
+		  \node[box, short, right = of x15, fill=cyan!40] (x16) {\tiny{?}};
+		  };
 
-    \node[box, draw=none, above = of x0] {\small{0}};
-    \node[box, draw=none, above = of x4.north] {\small{4}};
-    \node[box, draw=none, above = of x8.north] {\small{8}};
-    \node[box, draw=none, above = of x12] {\small{12}};
-    \node[box, draw=none, above = of x16] {\small{16}};
+		\node[box, short, right = of x16] (x17) {\tiny{?}};
+		\node[box, short, right = of x17] (x18) {\ldots};
 
-    \uncover<2->{
-      \draw[-latex, dashed] (x0.south) -- ($(x0.south)-(0,0.4)$) -- ($(x16.south)-(0,0.4)$) -- (x16.south);
-    };
+		\node[box, draw=none, above = of x0] {\small{0}};
+		\node[box, draw=none, above = of x4.north] {\small{4}};
+		\node[box, draw=none, above = of x8.north] {\small{8}};
+		\node[box, draw=none, above = of x12] {\small{12}};
+		\node[box, draw=none, above = of x16] {\small{16}};
 
-  \end{tikzpicture}
+		\uncover<2->{
+		  \draw[-latex, dashed] (x0.south) -- ($(x0.south)-(0,0.4)$) -- ($(x16.south)-(0,0.4)$) -- (x16.south);
+		};
+
+	\end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1182,7 +1186,7 @@ fun epilogo(nivel) devuelve
 ffun
 \end{lstlisting}
 
-Ejemplo: epilogo(1)
+Ejemplo: \textbf{epilogo(1)}
 
 \begin{tikzpicture}
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
@@ -1221,6 +1225,7 @@ Ejemplo: epilogo(1)
   \end{tikzpicture}
 
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Epílogo: Ejemplo II}
 
@@ -1249,7 +1254,6 @@ ffun
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Epílogo: Ejemplo II}
 
@@ -1274,7 +1278,7 @@ fun epilogo(nivel) devuelve
 ffun
 \end{lstlisting}
 
-Ejemplo: epilogo(1)
+Ejemplo: \textbf{epilogo(1)}
 
 \begin{tikzpicture}
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
@@ -1346,7 +1350,7 @@ fun epilogo(nivel) devuelve
 ffun
 \end{lstlisting}
 
-Ejemplo: epilogo(1)
+Ejemplo: \textbf{epilogo(1)}
 
   \begin{tikzpicture}
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center}]
@@ -1427,9 +1431,10 @@ Ejemplo: epilogo(1)
 \begin{frame}[fragile]
 \frametitle{Postllamada}
 
+No es necesaria en nuestra implementación:
 \begin{itemize}[<+->]
-	\item No es necesaria en nuestra implementación, ya que el epílogo recupera el estado anterior a la invocación
-	\item Hemos terminado con la dirección (indirecta) de retorno en la cima de la pila
+	\item El epílogo recupera el estado anterior a la invocación
+	\item El epílogo termina y deja la dirección (indirecta) de retorno en la cima de la pila
 \end{itemize}
 \uncover<+->{En otras arquitecturas:}
 \begin{itemize}[<+->]
@@ -1468,7 +1473,7 @@ Ejemplo: epilogo(1)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Recapitulación}
-	\scriptsize\tableofcontents
+	\tiny\tableofcontents
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Paso de parámetros}
@@ -1742,7 +1747,6 @@ Decs ::= Dec
 1              & raizCuadrada      & procedimiento     & $<tipo:<t:proc, params: {[}modo:valor{]}, tipo:<t:num>{]}>>$                                                                                                                                                   \\ \hline
 \end{tabular*}
 
-
 Dibujo con los parametros y sus desplazamientos
 
 \end{frame}
@@ -1796,7 +1800,7 @@ ffun
 cons longInicio = 4
 \end{lstlisting}
 
-Ejemplo: inicio(2,5)
+Ejemplo: \textbf{inicio(2,5)}
 
 dibujo de los displays con interrogación
 
@@ -1971,7 +1975,6 @@ Bloque ::= I
 
 	dibujo con punteros a inicio y etqh y etq
 
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Invocaciones}
@@ -1998,7 +2001,6 @@ AParams ::= LAparams
 \end{lstlisting}
 
 	dibujo con punteros a inicio y etqh y etq
-
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2085,7 +2087,6 @@ fun longPasoParametro(tipoParamPorValor,pformal) devuelve1ffun
 \begin{frame}[fragile]
 \frametitle{Traducción: Invocaciones IV}
 
-
 \begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
 AParams ::= $\lambda$
    AParams.cod = $\lambda$
@@ -2146,7 +2147,6 @@ par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
 \end{lstlisting}
 
 Dibujo pila 0x8 y como va a la direccion 11
-
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
