@@ -688,13 +688,12 @@ Ejemplo: inicio(2,5)
 \begin{frame}[fragile]
 \frametitle{Prellamada: Recapitulación}
 
-\begin{columns}[T]
-\column{.5\textwidth}
-	\begin{tikzpicture}
-		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
-		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+  \begin{tikzpicture}
+    [minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+    box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center},
+    tt/.style={node distance=7pt, outer sep=0pt, text width=10em, align=center}]
 
-		\node (A) {Subprograma};
+    \node (A) {Subprograma};
     \node[box, below = of A, fill=gray!20] (B) {Prólogo};
     \node[box, below = of B] (C) {Cuerpo};
     \node[box, below = of C, fill=gray!20] (D) {Epílogo};
@@ -708,31 +707,22 @@ Ejemplo: inicio(2,5)
     \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
     \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
 
-	\end{tikzpicture}
+    \node[tt] at (6,-0.5) (tt1) {\color{green}{main: Prellamada}};
+    \node[tt, below = of tt1] (tt2) {ir-a};
+    \node[tt, below = of tt2] (tt3) {Subprograma: Prólogo};
+    \node[tt, below = of tt3] (tt4) {Subprograma: Cuerpo};
+    \node[tt, below = of tt4] (tt5) {Subprograma: Epílogo};
+    \node[tt, below = of tt5] (tt6) {ir-ind};
+    \node[tt, below = of tt6] (tt7) {main: Postllamada};
 
-\column{.5\textwidth}
-	\begin{itemize}
-		\item Orden de ejecución:
-	\end{itemize}
+    \draw[-latex] (tt1.south) -- (tt2.north);
+    \draw[-latex] (tt2.south) -- (tt3.north);
+    \draw[-latex] (tt3.south) -- (tt4.north);
+    \draw[-latex] (tt4.south) -- (tt5.north);
+    \draw[-latex] (tt5.south) -- (tt6.north);
+    \draw[-latex] (tt6.south) -- (tt7.north);
 
-	\Tree
-	[.main()
-	    [.{main: \color{green}{Prellamada}}
-	        [.{Ir-a}
-		        [.{subprograma: Prólogo}
-		        	[.{subprograma: Cuerpo}
-		        		[.{subprograma: epílogo}
-			        		[.{Ir-ind}
-				        		[.{main: Postllamada}
-		        				]
-		        			]
-		        		]
-		        	]
-		        ]
-	        ]
-	    ]
-	]
-\end{columns}
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -778,13 +768,12 @@ Dibujo
 \begin{frame}[fragile]
 \frametitle{Prólogo: Recapitulación}
 
-\begin{columns}[T]
-\column{.5\textwidth}
-	\begin{tikzpicture}
-		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
-		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+\begin{tikzpicture}
+    [minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+    box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center},
+    tt/.style={node distance=7pt, outer sep=0pt, text width=10em, align=center}]
 
-		\node (A) {Subprograma};
+    \node (A) {Subprograma};
     \node[box, below = of A, fill=green!40] (B) {Prólogo};
     \node[box, below = of B] (C) {Cuerpo};
     \node[box, below = of C, fill=gray!20] (D) {Epílogo};
@@ -798,31 +787,22 @@ Dibujo
     \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
     \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
 
-	\end{tikzpicture}
+    \node[tt] at (6,-0.5) (tt1) {main: Prellamada};
+    \node[tt, below = of tt1] (tt2) {ir-a};
+    \node[tt, below = of tt2] (tt3) {\color{green}{Subprograma: Prólogo}};
+    \node[tt, below = of tt3] (tt4) {Subprograma: Cuerpo};
+    \node[tt, below = of tt4] (tt5) {Subprograma: Epílogo};
+    \node[tt, below = of tt5] (tt6) {ir-ind};
+    \node[tt, below = of tt6] (tt7) {main: Postllamada};
 
-\column{.5\textwidth}
-	\begin{itemize}
-		\item Orden de ejecución:
-	\end{itemize}
+    \draw[-latex] (tt1.south) -- (tt2.north);
+    \draw[-latex] (tt2.south) -- (tt3.north);
+    \draw[-latex] (tt3.south) -- (tt4.north);
+    \draw[-latex] (tt4.south) -- (tt5.north);
+    \draw[-latex] (tt5.south) -- (tt6.north);
+    \draw[-latex] (tt6.south) -- (tt7.north);
 
-	\Tree
-	[.main()
-	    [.{main: Prellamada}
-	        [.{Ir-a}
-		        [.{subprograma: \color{green}{Prólogo}}
-		        	[.{subprograma: Cuerpo}
-		        		[.{subprograma: epílogo}
-			        		[.{Ir-ind}
-				        		[.{main: Postllamada}
-		        				]
-		        			]
-		        		]
-		        	]
-		        ]
-	        ]
-	    ]
-	]
-\end{columns}
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -963,13 +943,12 @@ Dibujo
 \begin{frame}[fragile]
 \frametitle{Epílogo: Recapitulación}
 
-\begin{columns}[T]
-\column{.5\textwidth}
-	\begin{tikzpicture}
-		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
-		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+\begin{tikzpicture}
+    [minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+    box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center},
+    tt/.style={node distance=7pt, outer sep=0pt, text width=10em, align=center}]
 
-		\node (A) {Subprograma};
+    \node (A) {Subprograma};
     \node[box, below = of A, fill=gray!20] (B) {Prólogo};
     \node[box, below = of B] (C) {Cuerpo};
     \node[box, below = of C, fill=green!40] (D) {Epílogo};
@@ -983,31 +962,22 @@ Dibujo
     \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
     \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
 
-	\end{tikzpicture}
+    \node[tt] at (6,-0.5) (tt1) {main: Prellamada};
+    \node[tt, below = of tt1] (tt2) {ir-a};
+    \node[tt, below = of tt2] (tt3) {Subprograma: Prólogo};
+    \node[tt, below = of tt3] (tt4) {Subprograma: Cuerpo};
+    \node[tt, below = of tt4] (tt5) {\color{green}{Subprograma: Epílogo}};
+    \node[tt, below = of tt5] (tt6) {ir-ind};
+    \node[tt, below = of tt6] (tt7) {main: Postllamada};
 
-\column{.5\textwidth}
-	\begin{itemize}
-		\item Orden de ejecución:
-	\end{itemize}
+    \draw[-latex] (tt1.south) -- (tt2.north);
+    \draw[-latex] (tt2.south) -- (tt3.north);
+    \draw[-latex] (tt3.south) -- (tt4.north);
+    \draw[-latex] (tt4.south) -- (tt5.north);
+    \draw[-latex] (tt5.south) -- (tt6.north);
+    \draw[-latex] (tt6.south) -- (tt7.north);
 
-	\Tree
-	[.main()
-	    [.{main: Prellamada}
-	        [.{Ir-a}
-		        [.{subprograma: Prólogo}
-		        	[.{subprograma: Cuerpo}
-		        		[.{subprograma: \color{green}{epílogo}}
-			        		[.{Ir-ind}
-				        		[.{main: Postllamada}
-		        				]
-		        			]
-		        		]
-		        	]
-		        ]
-	        ]
-	    ]
-	]
-\end{columns}
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1151,13 +1121,12 @@ Dibujo
 \begin{frame}[fragile]
 \frametitle{Postllamada: Recapitulación}
 
-\begin{columns}[T]
-\column{.5\textwidth}
-	\begin{tikzpicture}
-		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
-		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+\begin{tikzpicture}
+    [minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+    box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center},
+    tt/.style={node distance=7pt, outer sep=0pt, text width=10em, align=center}]
 
-		\node (A) {Subprograma};
+    \node (A) {Subprograma};
     \node[box, below = of A, fill=gray!20] (B) {Prólogo};
     \node[box, below = of B] (C) {Cuerpo};
     \node[box, below = of C, fill=gray!20] (D) {Epílogo};
@@ -1171,31 +1140,22 @@ Dibujo
     \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
     \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
 
-	\end{tikzpicture}
+    \node[tt] at (6,-0.5) (tt1) {main: Prellamada};
+    \node[tt, below = of tt1] (tt2) {ir-a};
+    \node[tt, below = of tt2] (tt3) {Subprograma: Prólogo};
+    \node[tt, below = of tt3] (tt4) {Subprograma: Cuerpo};
+    \node[tt, below = of tt4] (tt5) {Subprograma: Epílogo};
+    \node[tt, below = of tt5] (tt6) {ir-ind};
+    \node[tt, below = of tt6] (tt7) {\color{green}{main: Postllamada}};
 
-\column{.5\textwidth}
-	\begin{itemize}
-		\item Orden de ejecución:
-	\end{itemize}
+    \draw[-latex] (tt1.south) -- (tt2.north);
+    \draw[-latex] (tt2.south) -- (tt3.north);
+    \draw[-latex] (tt3.south) -- (tt4.north);
+    \draw[-latex] (tt4.south) -- (tt5.north);
+    \draw[-latex] (tt5.south) -- (tt6.north);
+    \draw[-latex] (tt6.south) -- (tt7.north);
 
-	\Tree
-	[.main()
-	    [.{main: Prellamada}
-	        [.{Ir-a}
-		        [.{subprograma: Prólogo}
-		        	[.{subprograma: Cuerpo}
-		        		[.{subprograma: epílogo}
-			        		[.{Ir-ind}
-				        		[.{main: \color{green}{Postllamada}}
-		        				]
-		        			]
-		        		]
-		        	]
-		        ]
-	        ]
-	    ]
-	]
-\end{columns}
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
