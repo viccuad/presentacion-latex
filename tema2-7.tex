@@ -252,7 +252,7 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Display: Ejemplo I}
+\frametitle{Display: Ejemplo}
 
 \begin{columns}[T]
 \column{.4\textwidth}
@@ -274,95 +274,49 @@ Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. L
 \column{.6\textwidth}
 	\begin{center}
 		\begin{tikzpicture}
-		  \begin{scope}
-			  	[every node/.style={rectangle split, draw, anchor=text,
-			    rectangle split parts=7,minimum width=2cm,
-			    rectangle split part fill={gray!20,violet!40,violet!40,red!40,red!40,
-			    blue!40,green!40}}]
-		    \node (Reg) at (3,-1.5){
-		    	\nodepart{one}...
-		    	\nodepart{two}y
-		    	\nodepart{three}x
-		    	\nodepart{four}y
-		    	\nodepart{five}x
-		        \nodepart{six}w
-		        \nodepart{seven}a
-		    };
-		  \end{scope}
+      [disp/.style={draw, rectangle, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.8em},
+      etq/.style={node distance=0pt, outer sep=0pt},
+      stack/.style={draw, anchor=text, minimum width=2cm, node distance=0pt, outer sep=0pt, minimum height=1.5em}
+      ]
 
-		  \begin{scope}[every node/.style={draw, rectangle, node distance=0pt, outer sep=0pt}]
-			  \node (A) at (0,0) {0x09};
-			  \node [right = of A] (B) {0x13};
-			  \node [right = of B] (C) {0x24};
-			  \node [right = of C] (D) {0x65};
-		  \end{scope}
+	   	\node [minimum width=2cm, node distance=0pt, outer sep=0pt, minimum height=1.5em] at (4.5, -1.5) (regA) {};
+      
+      \uncover<-3>{\node [stack, below = of regA] (regB) {};}
+      \uncover<4->{\node [stack, below = of regA, fill=violet!40] (regB) {y};}
+    	
+      \uncover<-3>{\node [stack, below = of regB] (regC) {};}
+      \uncover<4->{\node [stack, below = of regB, fill=violet!40] (regC) {x};}
+    	
+      \uncover<-2>{\node [stack, below = of regC] (regD) {};}
+      \uncover<3->{\node [stack, below = of regC, fill=red!40] (regD) {y};}
+    	
+      \uncover<-2>{\node [stack, below = of regD] (regE) {};}
+      \uncover<3->{\node [stack, below = of regD, fill=red!40] (regE) {x};}
+      
+      \uncover<-1>{\node [stack, below = of regE] (regF) {};}
+      \uncover<2->{\node [stack, below = of regE, fill=blue!40] (regF) {w};}
+      
+      \node [stack, below = of regF, fill=green!40] (regG) {a};
 
-		  \draw[-latex] (A.south) to [out=270,in=180] (Reg.seven west);
-		  \draw[-latex] (B.south) to [out=270,in=180] (Reg.six west);
-		  \draw[-latex] (C.south) to [out=270,in=180] (Reg.five west);
-		  \draw[-latex] (D.south) to [out=270,in=180] (Reg.three west);
+		  \node [disp] (A) {0x09};
+      \node [etq, above = of A] {\small{Disp0}};
+		  \uncover<-1>{\node [disp, right = of A] (B) {null};}
+      \uncover<2->{\node [disp, right = of A] (B) {0x13};}
+      \node [etq, above = of B] {\small{Disp1}};
+		  \uncover<-2>{\node [disp, right = of B] (C) {null};}
+      \uncover<3->{\node [disp, right = of B] (C) {0x24};}
+      \node [etq, above = of C] {\small{Disp2}};
+      \uncover<-3>{\node [disp, right = of C] (D) {null};}
+      \uncover<4->{\node [disp, right = of C] (D) {0x65};}
+      \node [etq, above = of D] {\small{Disp3}};
+
+		  \draw[-latex, dashed] ($(A.south)-(0.2,0)$) |- (regG.west);
+		  \uncover<2->{\draw[-latex, dashed] ($(B.south)-(0.2,0)$) |- (regF.west);}
+		  \uncover<3->{\draw[-latex, dashed] ($(C.south)-(0.2,0)$) |- (regE.west);}
+		  \uncover<4->{\draw[-latex, dashed] ($(D.south)-(0.2,0)$) |- (regC.west);}
 		\end{tikzpicture}
 	\end{center}
 \end{columns}
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
-\frametitle{Display: Ejemplo II}
-
-% \begin{columns}[T]
-% \column{.4\textwidth}
-% 	\begin{lstlisting}[style=procesos]
-% 	@red@proc proc1(){
-% 	    x: num;
-% 	    y: num;@
-% 	    @vio@proc1();@
-% 	@red@}@
-% 	@blue@proc proc2(){
-% 	    w: bool;
-% 	    proc1();
-% 	}@
-% 	@green@main(){
-% 	    a: bool;
-% 	    proc2();
-% 	}@
-% 	\end{lstlisting}
-% \column{.6\textwidth}
-% 	\begin{center}
-% 		\begin{tikzpicture}
-% 		  \begin{scope}
-% 			  	[every node/.style={rectangle split, draw, anchor=text,
-% 			    rectangle split parts=7,minimum width=2cm,
-% 			    rectangle split part fill={gray!20,violet!40,violet!40,red!40,red!40,
-% 			    blue!40,green!40}}]
-% 		    \node (Reg) at (3,-1.5){
-% 		    	\nodepart{one}...
-% 		    	\nodepart{two}y
-% 		    	\nodepart{three}x
-% 		    	\nodepart{four}y
-% 		    	\nodepart{five}x
-% 		        \nodepart{six}w
-% 		        \nodepart{seven}a
-% 		    };
-% 		  \end{scope}
-
-% 		  \begin{scope}[every node/.style={draw, rectangle, node distance=0pt, outer sep=0pt}]
-% 			  \node (A) at (0,0) {0x09};
-% 			  \node [right = of A] (B) {0x13};
-% 			  \node [right = of B] (C) {0x24};
-% 			  \node [right = of C] (D) {0x65};
-% 		  \end{scope}
-
-% 		  \draw[-latex] (A.south) to [out=270,in=180] (Reg.seven west);
-% 		  \draw[-latex] (B.south) to [out=270,in=180] (Reg.six west);
-% 		  \draw[-latex] (C.south) to [out=270,in=180] (Reg.five west);
-% 		  \draw[-latex] (D.south) to [out=270,in=180] (Reg.three west);
-% 		\end{tikzpicture}
-% 	\end{center}
-% \end{columns}
-
-por hacer. hay que hacer unas cuantas traspas moviendo los displays.
-molaria tener los displays etiquetados con nivel 1 etc
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -416,11 +370,11 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
         [minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
         box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4.2em, align=center}]
 
-        \node[minibox, fill=red!40] at (0,1.5) (A) {\small{CP}};
+        \node[minibox, anchor=west, fill=red!40] at (0,1.5) (A) {\small{CP}};
         \node[minibox, right = of A, fill=green!40] (B) {\small{Displays}};
         \node[minibox, right = of B, text width=3.5em, align=center, fill=blue!40] (C) {\small{Datos estáticos}};
-        \node[minibox, right = of C, text width=4em, align=center, fill=cyan!40] (D) {\small{Reg. activación}};
-        \node[minibox, right = of D, text width=4em, align=center, fill=cyan!40] (E) {\small{Reg. activación}};
+        \node[minibox, right = of C, text width=4em, align=center, fill=teal!40] (D) {\small{Reg. activación}};
+        \node[minibox, right = of D, text width=4em, align=center, fill=teal!40] (E) {\small{Reg. activación}};
         \node[minibox, right = of E, minimum width=4em] (F) {};
         \node[minibox, right = of F, fill=lime!40] (G) {\small{Heap}};
         \node[minibox, right = of G] (H) {\small{Code}};
@@ -431,17 +385,17 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 
         \draw[-latex, dashed] (A.north) |- ($(E.north east)+(0,0.5)-(0.2,0)$) -- ($(E.north east)-(0.2,0)$);
 
-        \node[box, text width=3em, fill=pink!40] at (0,-1.5) (rA) {Dir. retorno};
+        \node[box, anchor=west, text width=3em, fill=pink!40] at (0,-1.5) (rA) {Dir. retorno};
         \node[box, right = of rA, text width=3.3em, fill=pink!40] (rB) {Valor display antiguo};
         \node[box, right = of rB, fill=cyan!40] (rC) {Parám. 1};
         \node[box, right = of rC, text width=1em, fill=cyan!40] (rD) {\ldots};
         \node[box, right = of rD, fill=cyan!40] (rE) {Parám. $k$};
-        \node[box, right = of rE, text width=3.3em, fill=cyan!40] (rF) {Variable 1};
+        \node[box, right = of rE, text width=3.3em, fill=cyan!40] (rF) {Variable local 1};
         \node[box, right = of rF, text width=1em, fill=cyan!40] (rG) {\ldots};
-        \node[box, right = of rG, text width=3.3em, fill=cyan!40] (rH) {Variable $q$};
+        \node[box, right = of rG, text width=3.3em, fill=cyan!40] (rH) {Variable local $q$};
 
-        \draw (D.south west) -- (rA.north west);
-        \draw (D.south east) -- (rH.north east);
+        \draw (D.south west) -- ($(D.south west)-(0,0.2)$) -- (rA.north west);
+        \draw (D.south east) -- ($(D.south east)-(0,0.2)$) -- (rH.north east);
     \end{tikzpicture}
 
 \end{frame}
@@ -460,8 +414,8 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 		\node[minibox, fill=red!40] at (0,0) (A) {\small{CP}};
     \node[minibox, right = of A, fill=green!40] (B) {\small{Displays}};
     \node[minibox, right = of B, text width=3.5em, align=center, fill=blue!40] (C) {\small{Datos estáticos}};
-    \node[minibox, right = of C, text width=4em, align=center, fill=cyan!40] (D) {\small{Reg. activación}};
-    \node[minibox, right = of D, text width=4em, align=center, fill=cyan!40] (E) {\small{Reg. activación}};
+    \node[minibox, right = of C, text width=4em, align=center, fill=teal!40] (D) {\small{Reg. activación}};
+    \node[minibox, right = of D, text width=4em, align=center, fill=teal!40] (E) {\small{Reg. activación}};
     \node[minibox, right = of E, minimum width=4em] (F) {};
     \node[minibox, right = of F, fill=lime!40] (G) {\small{Heap}};
     \node[minibox, right = of G] (H) {\small{Code}};
@@ -511,50 +465,41 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 \begin{frame}[fragile]
 \frametitle{Manejo de la activación y desactivación II}
 
-\begin{columns}[T]
-\column{.5\textwidth}
-	\begin{tikzpicture}
-			[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
-			box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+  \begin{tikzpicture}
+    [minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+    box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center},
+    tt/.style={node distance=7pt, outer sep=0pt, text width=10em, align=center}]
 
-			\node (A) {Subprograma};
-	    \node[box, below = of A, fill=gray!20] (B) {Prólogo};
-	    \node[box, below = of B] (C) {Cuerpo};
-	    \node[box, below = of C, fill=gray!20] (D) {Epílogo};
-	    \node[box, below = of D] (E) {ir-ind};
+    \node (A) {Subprograma};
+    \node[box, below = of A, fill=gray!20] (B) {Prólogo};
+    \node[box, below = of B] (C) {Cuerpo};
+    \node[box, below = of C, fill=gray!20] (D) {Epílogo};
+    \node[box, below = of D] (E) {ir-ind};
 
-	    \node[below = of E] (F) {Main()};
-	    \node[box, below = of F, fill=gray!20] (G) {Prellamada};
-	    \node[box, below = of G] (H) {ir-a};
-	    \node[box, below = of H, fill=gray!20] (I) {Postllamada};
+    \node[below = of E] (F) {Main()};
+    \node[box, below = of F, fill=gray!20] (G) {Prellamada};
+    \node[box, below = of G] (H) {ir-a};
+    \node[box, below = of H, fill=gray!20] (I) {Postllamada};
 
-	    \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
-	    \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
-	\end{tikzpicture}
+    \draw[-latex, dashed] (E.east) -- ($(E.east)+(0.5,0)$) -- ($(I.north east)+(0.5,0)-(0,0.1)$) -- ($(I.north east)-(0,0.1)$);
+    \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
 
-\column{.5\textwidth}
-	\begin{itemize}
-		\item Orden de ejecución:
-	\end{itemize}
+    \node[tt] at (6,-0.5) (tt1) {main: Prellamada};
+    \node[tt, below = of tt1] (tt2) {ir-a};
+    \node[tt, below = of tt2] (tt3) {Subprograma: Prólogo};
+    \node[tt, below = of tt3] (tt4) {Subprograma: Cuerpo};
+    \node[tt, below = of tt4] (tt5) {Subprograma: Epílogo};
+    \node[tt, below = of tt5] (tt6) {ir-ind};
+    \node[tt, below = of tt6] (tt7) {main: Postllamada};
 
-	\Tree
-	[.main()
-	    [.{main: Prellamada}
-	        [.{Ir-a}
-		        [.{subprograma: Prólogo}
-		        	[.{subprograma: Cuerpo}
-		        		[.{subprograma: epílogo}
-			        		[.{Ir-ind}
-				        		[.{main: Postllamada}
-		        				]
-		        			]
-		        		]
-		        	]
-		        ]
-	        ]
-	    ]
-	]
-\end{columns}
+    \draw[-latex] (tt1.south) -- (tt2.north);
+    \draw[-latex] (tt2.south) -- (tt3.north);
+    \draw[-latex] (tt3.south) -- (tt4.north);
+    \draw[-latex] (tt4.south) -- (tt5.north);
+    \draw[-latex] (tt5.south) -- (tt6.north);
+    \draw[-latex] (tt6.south) -- (tt7.north);
+
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -581,29 +526,29 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 \begin{frame}[fragile]
 \frametitle{Inicio I}
 
-\begin{itemize}
-	\uncover<1->{\item Se fija el \emph{display 0} a la primera celda de datos estáticos}
-	\uncover<2->{\item Se fija el \emph{CP} a la posición de la última celda ocupada por los datos estáticos.}
-	\uncover<3->{\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación}
-\end{itemize}
+  \begin{itemize}
+  	\uncover<1->{\item Se fija el \emph{display 0} a la primera celda de datos estáticos}
+  	\uncover<2->{\item Se fija el \emph{CP} a la posición de la última celda ocupada por los datos estáticos.}
+  	\uncover<3->{\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación}
+  \end{itemize}
 
-\begin{tikzpicture}
-        [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
+  \begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
 
-        \node[box, fill=red!40] at (0,0) (A) {CP};
-        \node[box, right = of A, fill=green!40, minimum width=4em] (B) {Displays};
-        \node[box, right = of B, text width=5em, align=center, fill=blue!40] (C) {Datos estáticos};
-        \node[box, right = of C, minimum width=11em] (D) {\ldots};
-        \node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
-        \node[box, right = of E] (F) {Code};
+      \node[box, fill=red!40] at (0,0) (A) {CP};
+      \node[box, right = of A, fill=green!40, minimum width=4em] (B) {Displays};
+      \node[box, right = of B, text width=5em, align=center, fill=blue!40] (C) {Datos estáticos};
+      \node[box, right = of C, minimum width=11em] (D) {\ldots};
+      \node[box, right = of D, minimum width=3em, fill=lime!40] (E) {Heap};
+      \node[box, right = of E] (F) {Code};
 
-        \draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
-        \draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
+      \draw[-latex, thick] (C.east) -- ( $(C.east)!0.7cm!(D)$);
+      \draw[-latex, thick] (E.west) -- ( $(E.west)!0.7cm!(D)$);
 
-        \uncover<1->{\draw[-latex, dashed] ($(B.south west)+(0.2,0)$) |- ($(C.south west)+(0.2,0)-(0,0.5)$) -- ($(C.south west)+(0.2,0)$);}
-        \uncover<2->{\draw[-latex, dashed] (A.south) |- ($(C.south east)-(0.2,1)$) -- ($(C.south east)-(0.2,0)$);}
+      \uncover<1->{\draw[-latex, dashed] ($(B.south west)+(0.2,0)$) |- ($(C.south west)+(0.2,0)-(0,0.5)$) -- ($(C.south west)+(0.2,0)$);}
+      \uncover<2->{\draw[-latex, dashed] (A.south) |- ($(C.south east)-(0.2,1)$) -- ($(C.south east)-(0.2,0)$);}
 
-    \end{tikzpicture}
+  \end{tikzpicture}
 
 
 \end{frame}
@@ -624,7 +569,53 @@ cons longInicio = 4
 
 Ejemplo: inicio(2,5)
 
-Dibujo del movimiento del cp
+  \begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.2em, align=center}]
+
+    \uncover<-2>{\node[box] at (0,0) (x0) {};}
+    \uncover<3->{\node[box, fill=red!40] at (0,0) (x0) {0x8};}
+
+    \uncover<-1>{
+      \node[box, right = of x0] (x1) {};
+      \node[box, right = of x1] (x2) {};
+      \node[box, right = of x2] (x3) {};
+      };
+    \uncover<2->{
+      \node[box, right = of x0, fill=green!40] (x1) {0x4};
+      \node[box, right = of x1, fill=green!40] (x2) {};
+      \node[box, right = of x2, fill=green!40] (x3) {};
+      };
+
+    \uncover<-2>{
+      \node[box, right = of x3] (x4) {};
+      \node[box, right = of x4] (x5) {};
+      \node[box, right = of x5] (x6) {};
+      \node[box, right = of x6] (x7) {};
+      \node[box, right = of x7] (x8) {};
+      };
+    \uncover<3->{
+      \node[box, right = of x3, fill=blue!40] (x4) {};
+      \node[box, right = of x4, fill=blue!40] (x5) {};
+      \node[box, right = of x5, fill=blue!40] (x6) {};
+      \node[box, right = of x6, fill=blue!40] (x7) {};
+      \node[box, right = of x7, fill=blue!40] (x8) {};
+      };
+
+    \node[box, right = of x8] (x9) {};
+    \node[box, right = of x9] (x10) {};
+    \node[box, right = of x10] (x11) {};
+    \node[box, right = of x11] (x12) {\ldots};
+
+    \node[box, draw=none, above = of x0] {\small{0x0}};
+    \node[box, draw=none, above = of x4] {\small{0x4}};
+    \node[box, draw=none, above = of x8] {\small{0x8}};
+    \node[box, draw=none, above = of x12] {\small{0x12}};
+
+
+    \uncover<2->{\draw[-latex, dashed] (x1.south) -- ($(x1.south)-(0,0.2)$) -- ($(x4.south)-(0,0.2)$) -- (x4.south);};
+    \uncover<3->{\draw[-latex, dashed] (x0.south) -- ($(x0.south)-(0,0.5)$) -- ($(x8.south)-(0,0.5)$) -- (x8.south);};
+
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
