@@ -2,13 +2,15 @@
 % TODO añadir resumen al final
 % TODO tildes dentro de lstlistings. dentro de lstlisting, y por culpa de beamer, solo se pueden usar espacios y no tabs para indentar :(
 
-\documentclass[hyperref={pdfpagelabels=false},tree-dvips]{beamer}
+\documentclass[hyperref={pdfpagelabels=false},tree-dvips,compress]{beamer}
 % By  using hyperref={pdfpagelabels=false} you get rid off:
 %	Package hyperref Warning: Option `pdfpagelabels' is turned off
 %	(hyperref)                because \thepage is undefined.
 %	Hyperref stopped early
 
-%\usetheme{Madrid}
+
+% lista de themes: http://www.hartwork.org/beamer-theme-matrix/
+
 %\usetheme{Warsaw} %muestra las secciones, pero ocupa mucho espacio
 %\usetheme{Amsterdam}
 %\usetheme{Darmstadt}
@@ -18,6 +20,26 @@
 \usetheme{Frankfurt}
 % lista de themes: http://www.hartwork.org/beamer-theme-matrix/
 
+%\usetheme{Madrid}
+%\usetheme{Boadilla}
+%\usetheme{Frankfurt}
+%\usetheme{Berlin}
+%\usetheme{Dresden}
+
+\usecolortheme{whale}
+\useinnertheme{default}
+\useoutertheme[subsection=false,footline=authorinstitute]{miniframes}
+\setbeamertemplate{navigation symbols}{}%remove navigation symbols
+
+% Solo subsections en los circulos:
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\slideentry}{\advance\beamer@xpos by1\relax}{}{}{}
+\newcommand*{\nofurther@beamer@link}{\gdef\beamer@link(##1/##2){}}
+\pretocmd{\beamer@link}{\nofurther@beamer@link}{}{}
+\let\beamer@linkorig=\beamer@link
+\def\beamer@subsectionentry#1#2#3#4#5{\advance\beamer@xpos by1\relax\let\beamer@link=\beamer@linkorig}
+\makeatother
 
 %\setbeameroption{show notes}
 %\setbeameroption{hide notes} % default
@@ -232,8 +254,8 @@
 	\item<3-> Hay que considerar la complejidad de generar código que gestione de manera adecuada los enlaces estáticos
 \end{enumerate}
 
-\uncover<4->{Solución:\\
-Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. La estructura que los almacena se llama \textbf{display}.}
+\uncover<4->{Solución:\\}
+\uncover<5->{Almacenar los enlaces estáticos \emph{fuera} de los registros de activación. La estructura que los almacena se llama \textbf{display}.}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -526,11 +548,11 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 \begin{frame}[fragile]
 \frametitle{Inicio I}
 
-  \begin{itemize}
-  	\uncover<1->{\item Se fija el \emph{display 0} a la primera celda de datos estáticos}
-  	\uncover<2->{\item Se fija el \emph{CP} a la posición de la última celda ocupada por los datos estáticos.}
-  	\uncover<3->{\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación}
-  \end{itemize}
+\begin{itemize}
+	\uncover<1->{\item Se fija el \emph{display 0} a la primera celda de datos estáticos}
+	\uncover<2->{\item Se fija el \emph{CP} a la posición de la última celda ocupada por los datos estáticos.}
+	\uncover<3->{\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación}
+\end{itemize}
 
   \begin{tikzpicture}
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=4em}]
@@ -666,6 +688,8 @@ Ejemplo: inicio(2,5)
 \begin{frame}[fragile]
 \frametitle{Prellamada: Recapitulación}
 
+\begin{columns}[T]
+\column{.5\textwidth}
 	\begin{tikzpicture}
 		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
 		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
@@ -685,6 +709,30 @@ Ejemplo: inicio(2,5)
     \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
 
 	\end{tikzpicture}
+
+\column{.5\textwidth}
+	\begin{itemize}
+		\item Orden de ejecución:
+	\end{itemize}
+
+	\Tree
+	[.main()
+	    [.{main: \color{green}{Prellamada}}
+	        [.{Ir-a}
+		        [.{subprograma: Prólogo}
+		        	[.{subprograma: Cuerpo}
+		        		[.{subprograma: epílogo}
+			        		[.{Ir-ind}
+				        		[.{main: Postllamada}
+		        				]
+		        			]
+		        		]
+		        	]
+		        ]
+	        ]
+	    ]
+	]
+\end{columns}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -730,6 +778,8 @@ Dibujo
 \begin{frame}[fragile]
 \frametitle{Prólogo: Recapitulación}
 
+\begin{columns}[T]
+\column{.5\textwidth}
 	\begin{tikzpicture}
 		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
 		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
@@ -749,6 +799,30 @@ Dibujo
     \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
 
 	\end{tikzpicture}
+
+\column{.5\textwidth}
+	\begin{itemize}
+		\item Orden de ejecución:
+	\end{itemize}
+
+	\Tree
+	[.main()
+	    [.{main: Prellamada}
+	        [.{Ir-a}
+		        [.{subprograma: \color{green}{Prólogo}}
+		        	[.{subprograma: Cuerpo}
+		        		[.{subprograma: epílogo}
+			        		[.{Ir-ind}
+				        		[.{main: Postllamada}
+		        				]
+		        			]
+		        		]
+		        	]
+		        ]
+	        ]
+	    ]
+	]
+\end{columns}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -889,6 +963,8 @@ Dibujo
 \begin{frame}[fragile]
 \frametitle{Epílogo: Recapitulación}
 
+\begin{columns}[T]
+\column{.5\textwidth}
 	\begin{tikzpicture}
 		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
 		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
@@ -908,6 +984,30 @@ Dibujo
     \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
 
 	\end{tikzpicture}
+
+\column{.5\textwidth}
+	\begin{itemize}
+		\item Orden de ejecución:
+	\end{itemize}
+
+	\Tree
+	[.main()
+	    [.{main: Prellamada}
+	        [.{Ir-a}
+		        [.{subprograma: Prólogo}
+		        	[.{subprograma: Cuerpo}
+		        		[.{subprograma: \color{green}{epílogo}}
+			        		[.{Ir-ind}
+				        		[.{main: Postllamada}
+		        				]
+		        			]
+		        		]
+		        	]
+		        ]
+	        ]
+	    ]
+	]
+\end{columns}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1051,6 +1151,8 @@ Dibujo
 \begin{frame}[fragile]
 \frametitle{Postllamada: Recapitulación}
 
+\begin{columns}[T]
+\column{.5\textwidth}
 	\begin{tikzpicture}
 		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
 		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
@@ -1070,6 +1172,30 @@ Dibujo
     \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
 
 	\end{tikzpicture}
+
+\column{.5\textwidth}
+	\begin{itemize}
+		\item Orden de ejecución:
+	\end{itemize}
+
+	\Tree
+	[.main()
+	    [.{main: Prellamada}
+	        [.{Ir-a}
+		        [.{subprograma: Prólogo}
+		        	[.{subprograma: Cuerpo}
+		        		[.{subprograma: epílogo}
+			        		[.{Ir-ind}
+				        		[.{main: \color{green}{Postllamada}}
+		        				]
+		        			]
+		        		]
+		        	]
+		        ]
+	        ]
+	    ]
+	]
+\end{columns}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
