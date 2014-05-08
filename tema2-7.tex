@@ -154,6 +154,13 @@
 \titlepage
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Índ.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{Índice}
+	\tiny\tableofcontents
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Memoria}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -1534,13 +1541,6 @@ No es necesaria en nuestra implementación:
   \end{center}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Recap.}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
-\frametitle{Recapitulación}
-	\tiny\tableofcontents
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Paso de parámetros}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -1761,14 +1761,77 @@ proc distanciaEuclidea(p1:tpar, p2:tpar, & res:num)
 sumacuadrado(@blue@3*2@,@blue@7@,& res);
 \end{lstlisting}
 
-dibujo de los parámetros con un 6 en la pila y luego un 7
+\begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
+      short/.style={minimum width = 1.8em}]
+
+    \node[box, fill=red!40] at (0,0) (x0) {\small{0x17}};
+
+    \node[box, right = of x0, fill=green!40, minimum width=1.5em] (x1) {display};
+
+    % main
+    \node[box, right = of x1, fill=blue!40, minimum width=1em] (x4) {main};
+
+    % distEuclidea
+    \node[box, right = of x4, fill=pink!40] (x9) {\small{0x87}};
+    \node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
+    \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
+    \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
+    \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
+    \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
+    \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{?}};
+    \node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{?}};
+    \node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{?}};
+
+    % sumaCuadrado
+    \node[box, short, right = of x17, fill=cyan!40, minimum width=1.2em] (x18) {\tiny{217}};
+    \node[box, short, right = of x18, fill=cyan!40, minimum width=1.2em] (x19) {\tiny{?}};
+
+    \uncover<1-1>{
+      \node[box, short, right = of x19, fill=cyan!40, minimum width=1.2em] (x20) {\tiny{?}};
+      \node[box, short, right = of x20, fill=cyan!40, minimum width=1.2em] (x21) {\tiny{?}};
+    }
+    % 6
+    \uncover<2->{
+      \node[box, short, right = of x19, fill=cyan!40, minimum width=1.2em] (x20) {\tiny{6}};
+      \node[box, short, right = of x20, fill=cyan!40, minimum width=1.2em] (x21) {\tiny{?}};
+    };
+    \uncover<2-2>{
+      \draw[-latex]  ($(x9.south)-(0,0.45)$) -- node[fill=white]{Pila de Eval.} ($(x20.south)-(0,0.45)$) -- (x20.south);
+    }
+    % 7
+    \uncover<3->{
+      \node[box, short, right = of x19, fill=cyan!40, minimum width=1.2em] (x20) {\tiny{6}};
+      \node[box, short, right = of x20, fill=cyan!40, minimum width=1.2em] (x21) {\tiny{7}};
+    };
+    \uncover<3-3>{
+      \draw[-latex]  ($(x9.south)-(0,0.45)$) -- node[fill=white]{Pila de Eval.} ($(x21.south)-(0,0.45)$) -- (x21.south);
+    }
+
+    \node[box, short, right = of x21, fill=cyan!40, minimum width=1.2em] (x22) {\tiny{?}};
+    \node[box, short, right = of x22] (x23) {\ldots};
+
+    \node[box, draw=none, above = of x10] {\small{10}};
+    \node[box, draw=none, above = of x12] {\small{12}};
+    \node[box, draw=none, above = of x14] {\small{14}};
+    \node[box, draw=none, above = of x16] {\small{16}};
+    \node[box, draw=none, above = of x18] {\small{18}};
+    \node[box, draw=none, above = of x20] {\small{20}};
+    \node[box, draw=none, above = of x22] {\small{22}};
+
+    \uncover<2->{
+      \draw[|<->|] ($(x9.south west)+(0,1.7)$ ) -- node[fill=white]{distEuclidea} ($(x17.south east)+(0,1.7)$);
+      \draw[|<->|] ($(x18.south west)+(0,1.7)$ ) -- node[fill=white]{sumC} ($(x22.south east)+(0,1.7)$);
+    };
+
+\end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Por variable}
+\subsection{Por variable(referencia)}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Paso de parámetros por variable}
+\frametitle{Paso de parámetros por variable(referencia) I}
 
 \begin{itemize}[<+->]
 	\item En la cima de la pila debe estar la dirección de comienzo de la variable pasada como parámetro. Dicha dirección se copia en el registro de activación
@@ -1781,7 +1844,7 @@ dibujo de los parámetros con un 6 en la pila y luego un 7
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Paso de parámetros por variable I}
+\frametitle{Paso de parámetros por variable(referencia) II}
 
 \begin{itemize}
 	\item En la cima de la pila debe estar la dirección de comienzo de la variable pasada como parámetro. Dicha dirección se copia en el registro de activación
@@ -1794,7 +1857,52 @@ par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
 @bold@distanciaEuclidea@(par1,par2,@bold@& resultado@);
 \end{lstlisting}
 
-dibujo de los parámetros con un 8 en la pila
+\begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
+      short/.style={minimum width = 1.8em}]
+
+    \node[box, fill=red!40] at (0,0) (x0) {\small{0x17}};
+
+    \node[box, right = of x0, fill=green!40, minimum width=1.5em] (x1) {display};
+
+    % main
+    \node[box, right = of x1, fill=blue!40, minimum width=1em] (x4) {\tiny{1}};
+    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{5}};
+    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{8}};
+    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{12}};
+    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{res}};
+
+    % distEuclidea
+    \node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
+    \node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
+    \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
+    \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
+    \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
+    \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
+
+    \node[box, draw=none, above = of x6] {\small{6}};
+    \node[box, draw=none, above = of x8] (etq8) {\small{\textbf{8}}};
+    \node[box, draw=none, above = of x10] {\small{10}};
+    \node[box, draw=none, above = of x12] {\small{12}};
+
+    \uncover<1-1>{
+      \node[box, short, right = of x14, fill=cyan!40, minimum width=1.7em] (x15) {\tiny{?}};
+    }
+    \uncover<2->{
+      \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{0x8}};
+    };
+    \uncover<2-2>{
+      \uncover<2->{\draw[-latex] ($(etq8.south)+(0,0.2)$) -- ($(x8.south)-(0,0.4)$) -- ($(x15.south)-(0,0.4)$) -- (x15.south);};
+    }
+
+    \node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{?}};
+    \node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{?}};
+    \node[box, short, right = of x17] (x18) {\ldots};
+
+    \node[box, draw=none, above = of x14] {\small{14}};
+    \node[box, draw=none, above = of x16] {\small{16}};
+
+\end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1817,11 +1925,11 @@ LFParam ::= FParam
    LFParam.ts = aniadeID(LFParam.tsph, FParam.id,FParam.props $\oplus$ @bold@<dir:0>@)
    LFParam.dir = FParam.tam
    @bold@FParam.dirh = 0@
-FParam ::= & iden: Tipo
+FParam ::= & iden: Tipo // por referencia
    FParam.tam = @bold@1@ // es una direccion: integer.tam = 1
    Fparam.param = <modo: @blue@variable@, tipo: Tipo.tipo, @bold@dir: Fparam.dirh@>
-FParam ::= id: Tipo
-   FParam.tam = @bold@Tipo.tipo.tam@ // es por valor
+FParam ::= id: Tipo // por valor
+   FParam.tam = @bold@Tipo.tipo.tam@
    Fparam.param = <modo: @blue@valor@, tipo: Tipo.tipo, @bold@dir: Fparam.dirh@>
 \end{lstlisting}
 
@@ -1880,7 +1988,7 @@ Dibujo con los parametros y sus desplazamientos
 
 \begin{itemize}
 	\item Desplazamiento relativo al valor del display del bloque en el que reside la variable
-	\item Además, si el parámetro es por variable (tipo \emph{pvar}), debe realizarse un apilado indirecto para acceder al enlace en sí
+	\item Además, si el parámetro es por variable(referencia) (tipo \emph{pvar}), debe realizarse un apilado indirecto para acceder al enlace en sí
 \end{itemize}
 
 \begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily,mathescape]
@@ -2097,7 +2205,7 @@ Bloque ::= I
    Bloque.etq = I.etq + longEpilogo + 1
 \end{lstlisting}
 
-	dibujo con punteros a inicio y etqh y etq
+dibujo prologo cuerpo epilogo
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2176,7 +2284,7 @@ dibujo de pilas
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Traducción: Invocaciones III (paso parámetros, func. auxiliares)}
+\frametitle{Traducción: Invocaciones III (paso parám., func. auxiliares)}
 
 \begin{itemize}
 	\item Función para obtener la dirección de un parámetro en el registro de activación
@@ -2256,7 +2364,7 @@ LAParams ::= Exp
 \frametitle{Traducción: Modificación en la trad. de expresiones I}
 
 \begin{itemize}
-	\item Problema con el paso de parámetros por variable:
+	\item Problema con el paso de parámetros por variable(referencia):
 		\begin{itemize}
 			\item En la cima de la pila debe de estar la dirección de comienzo de la variable pasada como parámetro. Dicha dirección se copia en el registro de activación
 		\end{itemize}
@@ -2270,7 +2378,44 @@ par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
 @bold@distanciaEuclidea@(par1,par2,@bold@resultado@);
 \end{lstlisting}
 
-Dibujo pila 0x8 y como va a la direccion 11
+\begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
+      short/.style={minimum width = 1.8em}]
+
+    \node[box, fill=red!40] at (0,0) (x0) {\small{0x17}};
+
+    \node[box, right = of x0, fill=green!40, minimum width=1.5em] (x1) {display};
+
+    % main
+    \node[box, right = of x1, fill=blue!40, minimum width=1em] (x4) {\tiny{1}};
+    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{5}};
+    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{8}};
+    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{12}};
+    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{res}};
+
+    % distEuclidea
+    \node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
+    \node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
+    \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
+    \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
+    \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
+    \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
+
+    \node[box, draw=none, above = of x6] {\small{6}};
+    \node[box, draw=none, above = of x8] (etq8) {\small{\textbf{8}}};
+    \node[box, draw=none, above = of x10] {\small{10}};
+    \node[box, draw=none, above = of x12] {\small{12}};
+    \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{0x8}};
+    \uncover<2->{\draw[-latex] ($(etq8.south)+(0,0.2)$) -- ($(x8.south)-(0,0.4)$) -- ($(x15.south)-(0,0.4)$) -- (x15.south);};
+
+    \node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{?}};
+    \node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{?}};
+    \node[box, short, right = of x17] (x18) {\ldots};
+
+    \node[box, draw=none, above = of x14] {\small{14}};
+    \node[box, draw=none, above = of x16] {\small{16}};
+
+\end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2389,7 +2534,7 @@ Mem ::= id
 
 \begin{itemize}
 	\item Desplazamiento relativo al valor del display del bloque en el que reside la variable
-	\item Además, si el parámetro es por variable (tipo \emph{pvar}), debe realizarse un apilado indirecto para acceder al enlace en sí
+	\item Además, si el parámetro es por variable(referencia) (tipo \emph{pvar}), debe realizarse un apilado indirecto para acceder al enlace en sí
 \end{itemize}
 
 \begin{lstlisting}[style=codigoMP,basicstyle=\footnotesize\ttfamily,mathescape]
