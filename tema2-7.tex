@@ -529,7 +529,7 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Inicio: Recapitulación}
-
+  \begin{center}
 	\begin{tikzpicture}
 	[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
 	box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
@@ -542,7 +542,7 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
   	\draw[-latex,dashed] (tB.east) -- ($(tB.east)+(0.5,0)$) -- ($(tD.north east)+(0.5,0)-(0,0.2)$) -- ($(tD.north east)-(0,0.2)$);
 
 	\end{tikzpicture}
-
+  \end{center}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -572,7 +572,6 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 
   \end{tikzpicture}
 
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -581,10 +580,10 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 fun inicio(numNiveles,tamDatos) devuelve
    // fijamos display 0 a la 1a celda de datos estaticos:
    apila(numNiveles+2)           ||// +2: CP, display 0
-   desapila-dir(1)               ||
+   desapila-dir(0x1)             ||
    // fijamos CP a la ultima celda de datos estaticos:
    apila(1+numNiveles+tamDatos)  ||// +1: display 0
-   desapila-dir(0)
+   desapila-dir(0x0)
 ffun
 cons longInicio = 4
 \end{lstlisting}
@@ -736,9 +735,6 @@ Asociada con la invocación $p(e_1,...,e_k)$:
     \item Saltar a la dirección de inicio del procedimiento (\emph{ir-a})
 \end{enumerate}
 
-dibujo de lo que aparece al hacer los pasos
-
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -747,7 +743,7 @@ dibujo de lo que aparece al hacer los pasos
 \begin{lstlisting}[style=codigoMP]
 fun apila-ret(ret) devuelve
    // calcular CP+1:
-   apila-dir(0)          ||
+   apila-dir(0x0)        ||
    apila(1)              ||
    suma                  ||
    // guardar dir retorno:
@@ -757,9 +753,37 @@ ffun
 cons longApilaRet = 5
 \end{lstlisting}
 
-Ejemplo: apila-ret(0x527) , siendo 0x527 el nº de instrucción.
+Ejemplo: apila-ret(0x87) , siendo 0x87 el nº de instrucción.
 
-Dibujo
+  \begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.6em, align=center}]
+
+    \uncover<1->{\node[box, fill=red!40] at (0,0) (x0) {0x8};}
+
+    \uncover<1->{\node[box, right = of x0, fill=green!40] (x1) {0x4};};
+    \node[box, right = of x1, fill=green!40] (x2) {};
+    \node[box, right = of x2, fill=green!40] (x3) {};
+
+    \node[box, right = of x3, fill=blue!40, minimum width=4em] (x8) {\ldots};
+
+    \uncover<-1>{\node[box, right = of x8] (x9) {};};
+    \uncover<2->{\node[box, right = of x8, fill=pink!40] (x9) {0x87};};
+    \node[box, right = of x9] (x10) {};
+    \node[box, right = of x10] (x11) {};
+    \node[box, right = of x11] (x12) {};
+    \node[box, right = of x12] (x13) {};
+    \node[box, right = of x13] (x14) {\ldots};
+
+    \node[box, draw=none, above = of x0] {\small{0x0}};
+    \node[box, draw=none, above = of x8.north west] {\small{0x4}};
+    \node[box, draw=none, above = of x8.north east] {\small{0x8}};
+    \node[box, draw=none, above = of x12] {\small{0x12}};
+
+
+    \uncover<1->{\draw[-latex, dashed] (x1.south) -- ($(x1.south)-(0,0.2)$) -- ($(x8.south west)-(0,0.2)+(0.1,0)$) -- ($(x8.south west)+(0.1,0)$);};
+    \uncover<1->{\draw[-latex, dashed] (x0.south) -- ($(x0.south)-(0,0.5)$) -- ($(x9.south west)-(0.1,0.5)$) -- ($(x9.south west)-(0.1,0)$);};
+
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -826,21 +850,21 @@ dibujo de lo que aparece al hacer los pasos
 \begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily]
 fun prologo(nivel,tamlocales) devuelve
    // salvar display antiguo:
-   apila-dir(0)          ||
-   apila(2)              ||
-   suma                  ||
-   apila-dir(1+nivel)    ||
-   desapila-ind          ||
+   apila-dir(0x0)          ||
+   apila(2)                ||
+   suma                    ||
+   apila-dir(0x1+nivel)    ||
+   desapila-ind            ||
    // fijar el display actual:
-   apila-dir(0)          ||
-   apila(3)              ||
-   suma                  ||
-   desapila-dir(1+nivel) ||
+   apila-dir(0x0)          ||
+   apila(3)                ||
+   suma                    ||
+   desapila-dir(0x1+nivel) ||
    // reservar espacio para datos locales:
-   apila-dir(0)          ||
-   apila(tamlocales+2)   ||
-   suma                  ||
-   desapila-dir(0)
+   apila-dir(0x0)          ||
+   apila(tamlocales+2)     ||
+   suma                    ||
+   desapila-dir(0x0)
 ffun
 cons longPrologo = 13
 \end{lstlisting}
@@ -854,21 +878,21 @@ cons longPrologo = 13
 \begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
 fun prologo(nivel,tamlocales) devuelve
    // salvar display antiguo:
-   @b@apila-dir(0)          ||@
-   @b@apila(2)              ||@ // dir. retorno, antiguo display
-   @b@suma                  ||@
-   @b@apila-dir(1+nivel)    ||@ // +1: saltar al display 0
-   @b@desapila-ind          ||@
+   @b@apila-dir(0x0)          ||@
+   @b@apila(2)                ||@ // dir. retorno, antiguo display
+   @b@suma                    ||@
+   @b@apila-dir(0x1+nivel)    ||@ // +1: saltar al display 0
+   @b@desapila-ind            ||@
    // fijar el display actual:
-   apila-dir(0)          ||
-   apila(3)              ||
-   suma                  ||
-   desapila-dir(1+nivel) ||
+   apila-dir(0x0)             ||
+   apila(3)                   ||
+   suma                       ||
+   desapila-dir(0x1+nivel)    ||
    // reservar espacio para datos locales:
-   apila-dir(0)          ||
-   apila(tamlocales+2)   ||
-   suma                  ||
-   desapila-dir(0)
+   apila-dir(0x0)             ||
+   apila(tamlocales+2)        ||
+   suma                       ||
+   desapila-dir(0x0)
 ffun
 \end{lstlisting}
 
@@ -884,21 +908,21 @@ Dibujo
 \begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
 fun prologo(nivel,tamlocales) devuelve
    // salvar display antiguo:
-   apila-dir(0)          ||
-   apila(2)              ||
-   suma                  ||
-   apila-dir(1+nivel)    ||
-   desapila-ind          ||
+   apila-dir(0x0)             ||
+   apila(2)                   ||
+   suma                       ||
+   apila-dir(0x1+nivel)       ||
+   desapila-ind               ||
    // fijar el display actual:
-   @b@apila-dir(0)          ||@
-   @b@apila(3)              ||@
-   @b@suma                  ||@
-   @b@desapila-dir(1+nivel) ||@
+   @b@apila-dir(0x0)          ||@
+   @b@apila(3)                ||@
+   @b@suma                    ||@
+   @b@desapila-dir(0x1+nivel) ||@
    // reservar espacio para datos locales:
-   apila-dir(0)          ||
-   apila(tamlocales+2)   ||
-   suma                  ||
-   desapila-dir(0)
+   apila-dir(0x0)             ||
+   apila(tamlocales+2)        ||
+   suma                       ||
+   desapila-dir(0x0)
 ffun
 \end{lstlisting}
 
@@ -914,21 +938,21 @@ Dibujo
 \begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
 fun prologo(nivel,tamlocales) devuelve
    // salvar display antiguo:
-   apila-dir(0)          ||
-   apila(2)              ||
-   suma                  ||
-   apila-dir(1+nivel)    ||
-   desapila-ind          ||
+   apila-dir(0x0)          ||
+   apila(2)                ||
+   suma                    ||
+   apila-dir(0x1+nivel)    ||
+   desapila-ind            ||
    // fijar el display actual:
-   apila-dir(0)          ||
-   apila(3)              ||
-   suma                  ||
-   desapila-dir(1+nivel) ||
+   apila-dir(0x0)          ||
+   apila(3)                ||
+   suma                    ||
+   desapila-dir(0x1+nivel) ||
    // reservar espacio para datos locales:
-   @b@apila-dir(0)          ||@ // Mem[1+nivel] = Pila[Cima]
-   @b@apila(tamlocales+2)   ||@ // +2: dir. retorno, antiguo display
-   @b@suma                  ||@
-   @b@desapila-dir(0)         @
+   @b@apila-dir(0x0)       ||@ // Mem[1+nivel] = Pila[Cima]
+   @b@apila(tamlocales+2)  ||@ // +2: dir. retorno, antiguo display
+   @b@suma                 ||@
+   @b@desapila-dir(0x0)      @
 ffun
 \end{lstlisting}
 
@@ -1003,21 +1027,21 @@ dibujo de lo que aparece al hacer los pasos
 \begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily]
 fun epilogo(nivel) devuelve
    // apilar la dir. retorno:
-   apila-dir(1+nivel)    ||
-   apila(2)              ||
-   resta                 ||
-   apila-ind             ||
+   apila-dir(0X1+nivel)    ||
+   apila(2)                ||
+   resta                   ||
+   apila-ind               ||
    // liberar espacio (mover CP):
-   apila-dir(1+nivel)    ||
-   apila(3)              ||
-   resta                 ||
-   copia                 ||
-   desapila-dir(0)       ||
+   apila-dir(0x1+nivel)    ||
+   apila(3)                ||
+   resta                   ||
+   copia                   ||
+   desapila-dir(0x0)       ||
    // recupear antiguo display:
-   apila(2)              ||
-   suma                  ||
-   apila-ind             ||
-   desapila-dir(1+nivel)
+   apila(2)                ||
+   suma                    ||
+   apila-ind               ||
+   desapila-dir(0x1+nivel)
 ffun
 cons longEpilogo = 13
 \end{lstlisting}
@@ -1030,21 +1054,21 @@ cons longEpilogo = 13
 \begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
 fun epilogo(nivel) devuelve
    // apilar la dir. retorno:
-   @b@apila-dir(1+nivel)    ||@
-   @b@apila(2)              ||@
-   @b@resta                 ||@
-   @b@apila-ind             ||@
+   @b@apila-dir(0x1+nivel)    ||@
+   @b@apila(2)                ||@
+   @b@resta                   ||@
+   @b@apila-ind               ||@
    // liberar espacio (mover CP):
-   apila-dir(1+nivel)    ||
-   apila(3)              ||
-   resta                 ||
-   copia                 ||
-   desapila-dir(0)       ||
+   apila-dir(0x1+nivel)      ||
+   apila(3)                  ||
+   resta                     ||
+   copia                     ||
+   desapila-dir(0x0)         ||
    // recupear antiguo display:
-   apila(2)              ||
-   suma                  ||
-   apila-ind             ||
-   desapila-dir(1+nivel)
+   apila(2)                  ||
+   suma                      ||
+   apila-ind                 ||
+   desapila-dir(0x1+nivel)
 ffun
 \end{lstlisting}
 
@@ -1060,21 +1084,21 @@ Dibujo
 \begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
 fun epilogo(nivel) devuelve
    // apilar la dir. retorno:
-   apila-dir(1+nivel)    ||
-   apila(2)              ||
-   resta                 ||
-   apila-ind             ||
+   apila-dir(0x1+nivel)      ||
+   apila(2)                  ||
+   resta                     ||
+   apila-ind                 ||
    // liberar espacio (mover CP):
-   @b@apila-dir(1+nivel)    ||@
-   @b@apila(3)              ||@
-   @b@resta                 ||@
-   @b@copia                 ||@ // si no se usa copia, hay que mover CP lo ultimo
-   @b@desapila-dir(0)       ||@
+   @b@apila-dir(0x1+nivel)   ||@
+   @b@apila(3)               ||@
+   @b@resta                  ||@
+   @b@copia                  ||@ // si no se usa copia, hay que mover CP lo ultimo
+   @b@desapila-dir(0x0)      ||@
    // recupear antiguo display:
-   apila(2)              ||
-   suma                  ||
-   apila-ind             ||
-   desapila-dir(1+nivel)
+   apila(2)                  ||
+   suma                      ||
+   apila-ind                 ||
+   desapila-dir(0x1+nivel)
 ffun
 \end{lstlisting}
 
@@ -1092,21 +1116,21 @@ Dibujo
 \begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
 fun epilogo(nivel) devuelve
    // apilar la dir. retorno:
-   apila-dir(1+nivel)    ||
-   apila(2)              ||
-   resta                 ||
-   apila-ind             ||
+   apila-dir0x1+nivel)        ||
+   apila(2)                   ||
+   resta                      ||
+   apila-ind                  ||
    // liberar espacio (mover CP):
-   apila-dir(1+nivel)    ||
-   apila(3)              ||
-   resta                 ||
-   copia                 ||
-   desapila-dir(0)       ||
+   apila-dir(0x1+nivel)       ||
+   apila(3)                   ||
+   resta                      ||
+   copia                      ||
+   desapila-dir(0x0)          ||
    // recupear antiguo display:
-   @b@apila(2)              ||@
-   @b@suma                  ||@
-   @b@apila-ind             ||@
-   @b@desapila-dir(1+nivel)   @
+   @b@apila(2)                ||@
+   @b@suma                    ||@
+   @b@apila-ind               ||@
+   @b@desapila-dir(0x1+nivel)   @
 ffun
 \end{lstlisting}
 
@@ -1496,9 +1520,9 @@ Dibujo con los parametros y sus desplazamientos
 
 \begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily,mathescape]
 fun accesoVar(id) devuelve
-   apila-dir(1+id.nivel) ||  // dir del display
-   apila(id.dir)         ||  // desplazamiento respecto al display
-   suma                      // traer dir0valor a Cima
+   apila-dir(0x1+id.nivel)    ||  // dir del display
+   apila(id.dir)              ||  // desplazamiento respecto al display
+   suma                           // traer dir0valor a Cima
    // aqui nos falta un apila_ind !!!
    ( si id.clase = pvar entonces apila-ind
    si no $\lambda$ )
@@ -1527,9 +1551,9 @@ ffun
 \begin{lstlisting}[style=codigoMP,basicstyle=\scriptsize\ttfamily,mathescape]
 fun inicio(numNiveles,tamDatos)
    apila(numNiveles+2)
-   desapila-dir(1)
+   desapila-dir(0x1)
    apila(1+numNiveles+tamDatos)
-   desapila-dir(0)
+   desapila-dir(0x0)
 ffun
 
 cons longInicio = 4
@@ -2009,8 +2033,8 @@ Mem ::= id
 
 \begin{lstlisting}[style=codigoMP,basicstyle=\footnotesize\ttfamily,mathescape]
 fun accesoVar(id) devuelve
-   apila-dir(1+id.nivel) ||
-   apila(id.dir)         ||
+   apila-dir(0x1+id.nivel) ||
+   apila(id.dir)           ||
    suma
    ( si id.clase = pvar entonces apila-ind
    si no $\lambda$ )
