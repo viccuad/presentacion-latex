@@ -202,6 +202,7 @@
 	}@
 	\end{lstlisting}
 \column{.3\textwidth}
+	\tiny{Mem de instrucc.}
 	\begin{tikzpicture}
 	  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
 	    rectangle split parts=12,minimum width=2cm,
@@ -225,6 +226,7 @@
 	\end{tikzpicture}
 \column{.3\textwidth}
 	\begin{center}
+		\tiny{Pila de reg. de act.}
 		\begin{tikzpicture}
 		  \begin{scope}[every node/.style={draw, anchor=text, rectangle split,
 		    rectangle split parts=10,minimum width=2cm,
@@ -1553,9 +1555,38 @@ No es necesaria en nuestra implementación:
 
 \uncover<+->{¿Por qué deben precalcularse en ejecución?}
 \uncover<+->{Por que el \emph{CP} se va moviendo y dejan de ser accesibles}
+\uncover<+->{
+\begin{columns}[T]
+\column{.4\textwidth}
+	Ejemplo: \textbf{proc suma(x:num, y:num);}
+\column{.6\textwidth}
+	\begin{tikzpicture}
+	      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2em, align=center},
+	      short/.style={minimum width = 1.8em}]
 
-dibujo del registro de activación con CP +3 y CP+4
+	    \node[box, fill=red!40] at (0,0) (x0) {\small{CP}};
 
+	    \node[box, right = of x0, fill=green!40, minimum width=1.5em] (x1) {\tiny{Displays}};
+
+	    \node[box, right = of x1, fill=blue!40, minimum width=1em] (x5) {\tiny{?}};
+	    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x7) {\scriptsize{\ldots}};
+	    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{?}};
+
+	    \node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
+	    \node[box, right = of x9, fill=pink!40] (x10) {\small{¿?}};
+	    \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {x};
+	    \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {y};
+
+	    \node[box, short, right = of x12] (x18) {\scriptsize{\ldots}};
+
+	    \node[box, draw=none, above = of x11,rotate=45, xshift=1.5em,yshift=-0.5em] {\scriptsize{CP+3}};
+	    \node[box, draw=none, above = of x12,rotate=45, xshift=1.5em,,yshift=-0.5em] {\scriptsize{CP+4}};
+
+	    \draw[-latex, dashed] (x0.south) -- ($(x0.south)-(0,0.4)$) -- ($(x8.south)-(0,0.4)$) -- (x8.south);
+
+	\end{tikzpicture}
+\end{columns}
+}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Por valor}
@@ -1625,7 +1656,7 @@ evaluación contendrá el valor de la expresión. Debemos desapilar el valor en 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Paso de parámetros por valor: var I}
+\frametitle{Paso de parámetros por valor: var}
 
 \begin{itemize}
 	\item modo \textbf{var}: se copia el valor en el
@@ -1633,37 +1664,88 @@ registro de activación (instrucción mueve, que copia un trozo de código a otr
 \end{itemize}
 
 \begin{lstlisting}[style=codigo,basicstyle=\footnotesize\ttfamily]
-@bold@par1:tpar; par2:tpar;@ & resultado:num;
+par1:tpar; par2:tpar; & resultado:num;
 &
 par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
-@bold@distanciaEuclidea(par1,par2@,resultado);
+distanciaEuclidea(@bold@par1,par2,& resultado@);
 \end{lstlisting}
 
-dibujo de los parámetros
+\begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
+      short/.style={minimum width = 1.8em}]
+
+    \node[box, fill=red!40] at (0,0) (x0) {\small{0x17}};
+
+    \node[box, right = of x0, fill=green!40, minimum width=1.5em] (x1) {\small{0x4}};
+    \node[box, right = of x1, fill=green!40, minimum width=1.5em] (x2) {\small{0x11}};
+    \node[box, right = of x2, fill=green!40, minimum width=1.5em] (x3) {\tiny{?}};
+
+
+    \node[box, right = of x3, fill=blue!40, minimum width=1em] (x4) {\tiny{1}};
+    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{5}};
+    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{8}};
+    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{12}};
+    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{res}};
+
+
+    \node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
+    \node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
+
+    \uncover<-1>{
+      \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{?}};
+      \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{?}};
+      \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{?}};
+      \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{?}};
+      \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{?}};
+      \node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{?}};
+      \node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{?}};
+      \node[box, short, right = of x17] (x18) {\ldots};
+    };
+    \uncover<2->{
+      \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
+      \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
+    };
+    \uncover<2>{
+      \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{?}};
+      \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{?}};
+      \draw[-latex] (x6.south) -- ($(x6.south)-(0,0.4)$) -- ($(x12.south west)-(0,0.4)$) -- (x12.south west);
+    };
+    \uncover<3->{
+      \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
+      \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
+      \draw[-latex] (x6.south) -- ($(x6.south)-(0,0.4)$) -- ($(x14.south west)-(0,0.4)$) -- (x14.south west);
+    };
+    \uncover<2->{
+      \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{?}};
+      \node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{?}};
+      \node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{?}};
+      \node[box, short, right = of x17] (x18) {\ldots};
+    }
+
+    \node[box, draw=none, above = of x0] {\small{0}};
+    \node[box, draw=none, above = of x2] {\small{2}};
+    \node[box, draw=none, above = of x4] {\small{4}};
+    \node[box, draw=none, above = of x6] {\small{6}};
+    \node[box, draw=none, above = of x8] {\small{8}};
+    \node[box, draw=none, above = of x10] {\small{10}};
+    \node[box, draw=none, above = of x12] {\small{12}};
+    \node[box, draw=none, above = of x14] {\small{14}};
+    \node[box, draw=none, above = of x16] {\small{16}};
+    \node[box, draw=none, above = of x18] {\small{18}};
+
+    \uncover<2->{
+      \draw[|<->|] ($(x4.south west)+(0,1.7)$ ) -- node[fill=white]{main} ($(x8.south east)+(0,1.7)$);
+      \draw[|<->|] ($(x9.south west)+(0,2.3)$ ) -- node[fill=white]{distEuclidea} ($(x17.south east)+(0,2.3)$);
+      \draw[|<->|] ($(x11.south west)+(0,1.7)$ ) -- node[fill=white]{params} ($(x15.south east)+(0,1.7)$);
+      \draw[|<->|] ($(x16.south west)+(0.06,1.7)$ ) -- node[fill=white]{loc} ($(x17.south east)+(0,1.7)$);
+    };
+
+\end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Paso de parámetros por valor: var II}
-
-\begin{itemize}
-	\item modo \textbf{var}: se copia el valor en el
-registro de activación (instrucción mueve, que copia un trozo de código a otras posiciones de memoria)
-\end{itemize}
-
-\begin{lstlisting}[style=codigo,basicstyle=\footnotesize\ttfamily]
-@bold@par1:tpar; par2:tpar;@ & resultado:num;
-&
-par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
-@bold@distanciaEuclidea(par1,par2@,resultado);
-\end{lstlisting}
-
-dibujo de los parámetros con los de distancia euclidea
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
-\frametitle{Paso de parámetros por valor: val I}
+\frametitle{Paso de parámetros por valor: val}
 
 \begin{itemize}
 	\item modo \textbf{val}: la cima de la pila de
@@ -1671,36 +1753,15 @@ evaluación contendrá el valor de la expresión. Debemos desapilar el valor en 
 \end{itemize}
 
 \begin{lstlisting}[style=codigo,basicstyle=\footnotesize\ttfamily]
-@bold@proc distanciaEuclidea(p1:tpar, p2:tpar,@ & res:num)
+proc distanciaEuclidea(p1:tpar, p2:tpar, & res:num)
    ...
-   proc sumacuadrado(a:num, b:num, var r:num)
-   ...
-&
-sumacuadro(@blue@3*2@,@blue@7@,res);
-\end{lstlisting}
-
-dibujo de los parámetros con un 6 en la pila
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
-\frametitle{Paso de parámetros por valor: val II}
-
-\begin{itemize}
-	\item modo \textbf{val}: la cima de la pila de
-evaluación contendrá el valor de la expresión. Debemos desapilar el valor en el registro de activación
-\end{itemize}
-
-\begin{lstlisting}[style=codigo,basicstyle=\footnotesize\ttfamily]
-@bold@proc distanciaEuclidea(p1:tpar, p2:tpar,@ & res:num)
-   ...
-   proc sumacuadrado(a:num, b:num, var r:num)
+   proc sumacuadrado(a:num, b:num, & r:num)
    ...
 &
-sumacuadro(@blue@3*2@,@blue@7@,res);
+sumacuadrado(@blue@3*2@,@blue@7@,& res);
 \end{lstlisting}
 
-dibujo de los parámetros con un 7 en la pila
+dibujo de los parámetros con un 6 en la pila y luego un 7
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1730,7 +1791,7 @@ dibujo de los parámetros con un 7 en la pila
 par1:tpar; par2:tpar; @blue@& resultado:num;@
 &
 par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
-@bold@distanciaEuclidea@(par1,par2,@bold@resultado@);
+@bold@distanciaEuclidea@(par1,par2,@bold@& resultado@);
 \end{lstlisting}
 
 dibujo de los parámetros con un 8 en la pila
