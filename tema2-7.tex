@@ -756,7 +756,7 @@ cons longApilaRet = 5
 Ejemplo: apila-ret(0x87) , siendo 0x87 el nº de instrucción.
 
   \begin{tikzpicture}
-      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.6em, align=center}]
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center}]
 
     \node[box, fill=red!40] at (0,0) (x0) {0x8};
 
@@ -1129,7 +1129,7 @@ fun epilogo(nivel) devuelve
    resta                   ||
    copia                   ||
    desapila-dir(0x0)       ||
-   // recupear antiguo display:
+   // recuperar antiguo display:
    apila(2)                ||
    suma                    ||
    apila-ind               ||
@@ -1156,7 +1156,7 @@ fun epilogo(nivel) devuelve
    resta                     ||
    copia                     ||
    desapila-dir(0x0)         ||
-   // recupear antiguo display:
+   // recuperar antiguo display:
    apila(2)                  ||
    suma                      ||
    apila-ind                 ||
@@ -1219,7 +1219,7 @@ fun epilogo(nivel) devuelve
    @b@resta                  ||@
    @b@copia                  ||@ // si no se usa copia, hay que mover CP lo ultimo
    @b@desapila-dir(0x0)      ||@
-   // recupear antiguo display:
+   // recuperar antiguo display:
    apila(2)                  ||
    suma                      ||
    apila-ind                 ||
@@ -1227,7 +1227,7 @@ fun epilogo(nivel) devuelve
 ffun
 \end{lstlisting}
 
-¿Es la mejor forma de implementar el epílogo, con mover el CP en 2º lugar?
+¿Es esta la mejor forma de implementar el epílogo? ¿Moviendo el CP en 2º lugar?
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1248,7 +1248,7 @@ fun epilogo(nivel) devuelve
    @b@resta                  ||@
    @b@copia                  ||@ // si no se usa copia, hay que mover CP lo ultimo
    @b@desapila-dir(0x0)      ||@
-   // recupear antiguo display:
+   // recuperar antiguo display:
    apila(2)                  ||
    suma                      ||
    apila-ind                 ||
@@ -1315,7 +1315,7 @@ fun epilogo(nivel) devuelve
    resta                      ||
    copia                      ||
    desapila-dir(0x0)          ||
-   // recupear antiguo display:
+   // recuperar antiguo display:
    @b@apila(2)                ||@
    @b@suma                    ||@
    @b@apila-ind               ||@
@@ -1409,10 +1409,6 @@ Ejemplo: epilogo(1)
 	\item Soportan funciones con retorno de valor: copiar el valor devuelto por la función donde sea necesario
 	\item $x86,x86\_64,ARM$ \ldots: restaurar el estado (registros, diferentes punteros)\ldots
 \end{itemize}
-
-dibujo de la cima de la pila
-
-dibujo de la memoria
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
