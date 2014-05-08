@@ -1705,7 +1705,7 @@ Decs ::= Dec
 \frametitle{Paso de parámetros: ampliacion de la TS III}
 
 \tiny
-\begin{tabular*}{0.80\textwidth}{|l|l|l|l|}
+\begin{tabular*}{\textwidth}{|l|l|l|p{0.5\textwidth}|}
 \textbf{nivel} & \textbf{id}       & \textbf{clase}    & \textbf{otras}                                                                                                                                                                                                                                                        \\ \hline
 1              & p1                & var //valor       & $<tipo:<t:ref, id:tpar>, dir:0>$                                                                                                                                                                                                  \\ \hline
 1              & p2                & var //valor       & $<tipo:<t:ref, id:tpar>, dir:2>$                                                                                                                                                                                                  \\ \hline
@@ -1906,7 +1906,8 @@ DecProc ::= proc iden FParams Bloque fproc
 \begin{frame}[fragile]
 \frametitle{Traducción: Procedimientos II}
 
-\begin{tabular*}{0.80\textwidth}{|l|l|l|l|}
+\tiny
+\begin{tabular*}{\textwidth}{|l|l|l|p{0.5\textwidth}|}
 \textbf{nivel} & \textbf{id}       & \textbf{clase}    & \textbf{otras}                                                                                                                                                                                                                                                        \\ \hline
 0              & tpar              & tipo              & $<tipo:<t:rec, campos:[id:x,tipo:<t:num>,desp:0][id:y,tipo:<t:num>,desp:1]>, tam:2>$      \\ \hline
 0              & par1              & var //valor       & $<tipo:<t:ref, id:tpar>>$                                                                 \\ \hline
@@ -1914,7 +1915,6 @@ DecProc ::= proc iden FParams Bloque fproc
 1              & resultado         & pvar //referencia & $<tipo:<t:num>>$                                                                          \\ \hline
 1              & distanciaEuclidea & prodedimiento     & $<tipo:<t:proc, params: [modo:valor, tipo:<t:ref,id:tpar>][modo:valor,tipo:<t:ref,id:tpar>][modo:variable,tipo:<t:num>]>inicio:6>$ \\ \hline
 \end{tabular*}
-
 
 inicio: Dir de la 1ºa instrucción (despues de \emph{Decs})
 
@@ -2264,7 +2264,19 @@ ffun
 \begin{frame}[fragile]
 \frametitle{Traducción: Acceso a las variables y parámetros desde el proc. II}
 
-tabla
+\tiny
+\begin{tabular*}{\textwidth}{|l|l|l|p{0.5\textwidth}|}
+\textbf{nivel} & \textbf{id}       & \textbf{clase}    & \textbf{otras}                                                                                                                                                                                                                                                        \\ \hline
+
+0              & par1              & var //valor       & $<tipo:<t:ref, id:tpar>>$                                                                 \\ \hline
+0              & par2              & var //valor       & $<tipo:<t:ref, id:tpar>>$                                                                 \\ \hline
+1              & resultado         & pvar //referencia & $<tipo:<t:num>>$                                                                          \\ \hline
+1              & distanciaEuclidea & prodedimiento     & $<tipo:<t:proc, params: [modo:valor, tipo:<t:ref,id:tpar>][modo:valor,tipo:<t:ref,id:tpar>][modo:variable,tipo:<t:num>]>inicio:6>$ \\ \hline
+1              & a                 & pvar //referencia & $<tipo:<t:num>>$                                                                          \\ \hline
+1              & b                 & pvar //referencia & $<tipo:<t:num>>$                                                                          \\ \hline
+1              & sumaCuadrado      & prodedimiento     & $<tipo:<t:proc, params: [modo:valor, tipo:<t:num>][modo:valor,tipo:<t:numr>][modo:variable,tipo:<t:num>]>>$ \\ \hline
+1              & raizCuadrada      & prodedimiento     & $<tipo:<t:proc, params: [modo:variable,tipo:<t:num>]>>$ \\ \hline
+\end{tabular*}
 
 dibujo con a y b y los desplazamientos, y el cp apuntando a 17 y el display a 11
 
