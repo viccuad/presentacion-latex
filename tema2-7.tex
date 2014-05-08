@@ -378,7 +378,7 @@
 
 Las primeras celdas de la memoria se destinarán a mantener la información de estado necesaria para gestionar adecuadamente la pila de registros de activación:
 \begin{itemize}[<+->]% [<+->] makes it uncoverable
-	\item Registro \emph{CP}: Contendrá siempre la dirección de la \textbf{última celda ocupada} por la pila de registros de activación (cuando la pila esté vacía, el valor de \emph{CP} será la dirección de la celda anterior -la última celda ocupada por el display-)
+	\item Registro \emph{CP}: Contendrá siempre la dirección de la \textbf{última celda ocupada} por la pila de registros de activación (cuando la pila esté vacía, el valor de \emph{CP} será la dirección de la celda anterior: la última celda ocupada por los datos estáticos)
 	\item \emph{Display}: Secuencia de celdas ocupadas por los displays.
 \end{itemize}
 
@@ -549,9 +549,9 @@ Las primeras celdas de la memoria se destinarán a mantener la información de e
 \frametitle{Inicio I}
 
 \begin{itemize}
-	\uncover<1->{\item Se fija el \emph{display 0} a la primera celda de datos estáticos}
-	\uncover<2->{\item Se fija el \emph{CP} a la posición de la última celda ocupada por los datos estáticos.}
-	\uncover<3->{\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación}
+    \uncover<1->{\item Se fija el \emph{display 0} a la primera celda de datos estáticos}
+    \uncover<2->{\item Se fija el \emph{CP} a la posición de la última celda ocupada por los datos estáticos.}
+    \uncover<3->{\item Con ello se consigue un esquema homogéneo de direccionamiento de datos estáticos y de datos en los registros de activación}
 \end{itemize}
 
   \begin{tikzpicture}
