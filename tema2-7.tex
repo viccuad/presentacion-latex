@@ -593,8 +593,8 @@ Ejemplo: inicio(2,5)
   \begin{tikzpicture}
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.2em, align=center}]
 
-    \uncover<-2>{\node[box] at (0,0) (x0) {};}
-    \uncover<3->{\node[box, fill=red!40] at (0,0) (x0) {0x8};}
+    \uncover<-2>{\node[box] at (0,0) (x0) {};};
+    \uncover<3->{\node[box, fill=red!40] at (0,0) (x0) {0x8};};
 
     \uncover<-1>{
       \node[box, right = of x0] (x1) {};
@@ -758,9 +758,9 @@ Ejemplo: apila-ret(0x87) , siendo 0x87 el nº de instrucción.
   \begin{tikzpicture}
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.6em, align=center}]
 
-    \uncover<1->{\node[box, fill=red!40] at (0,0) (x0) {0x8};}
+    \node[box, fill=red!40] at (0,0) (x0) {0x8};
 
-    \uncover<1->{\node[box, right = of x0, fill=green!40] (x1) {0x4};};
+    \node[box, right = of x0, fill=green!40] (x1) {0x4};
     \node[box, right = of x1, fill=green!40] (x2) {};
     \node[box, right = of x2, fill=green!40] (x3) {};
 
@@ -771,8 +771,7 @@ Ejemplo: apila-ret(0x87) , siendo 0x87 el nº de instrucción.
     \node[box, right = of x9] (x10) {};
     \node[box, right = of x10] (x11) {};
     \node[box, right = of x11] (x12) {};
-    \node[box, right = of x12] (x13) {};
-    \node[box, right = of x13] (x14) {\ldots};
+    \node[box, right = of x12] (x13) {\ldots};
 
     \node[box, draw=none, above = of x0] {\small{0x0}};
     \node[box, draw=none, above = of x8.north west] {\small{0x4}};
@@ -780,8 +779,8 @@ Ejemplo: apila-ret(0x87) , siendo 0x87 el nº de instrucción.
     \node[box, draw=none, above = of x12] {\small{0x12}};
 
 
-    \uncover<1->{\draw[-latex, dashed] (x1.south) -- ($(x1.south)-(0,0.2)$) -- ($(x8.south west)-(0,0.2)+(0.1,0)$) -- ($(x8.south west)+(0.1,0)$);};
-    \uncover<1->{\draw[-latex, dashed] (x0.south) -- ($(x0.south)-(0,0.5)$) -- ($(x9.south west)-(0.1,0.5)$) -- ($(x9.south west)-(0.1,0)$);};
+    \draw[-latex, dashed] (x1.south) -- ($(x1.south)-(0,0.2)$) -- ($(x8.south west)-(0,0.2)+(0.1,0)$) -- ($(x8.south west)+(0.1,0)$);
+    \draw[-latex, dashed] (x0.south) -- ($(x0.south)-(0,0.5)$) -- ($(x9.south west)-(0.1,0.5)$) -- ($(x9.south west)-(0.1,0)$);
 
   \end{tikzpicture}
 
@@ -898,7 +897,33 @@ ffun
 
 Ejemplo: prologo(1,7)
 
-Dibujo
+  \begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center}]
+
+    \node[box, fill=red!40] at (0,0) (x0) {0x8};
+
+    \node[box, right = of x0, fill=green!40] (x1) {0x4};
+    \node[box, right = of x1, fill=green!40] (x2) {¿?};
+    \node[box, right = of x2, fill=green!40] (x3) {};
+
+    \node[box, right = of x3, fill=blue!40, minimum width=4em] (x8) {\ldots};
+
+    \node[box, right = of x8, fill=pink!40] (x9) {0x87};
+    \uncover<-1>{\node[box, right = of x9] (x10) {};};
+    \uncover<2->{\node[box, right = of x9, fill=pink!40] (x10) {¿?};};
+    \node[box, right = of x10] (x11) {};
+    \node[box, right = of x11] (x12) {};
+    \node[box, right = of x12] (x13) {\ldots};
+
+    \node[box, draw=none, above = of x0] {\small{0x0}};
+    \node[box, draw=none, above = of x8.north west] {\small{0x4}};
+    \node[box, draw=none, above = of x8.north east] {\small{0x8}};
+    \node[box, draw=none, above = of x11] {\small{0x11}};
+    \node[box, draw=none, above = of x12] {\small{0x12}};
+
+    \uncover<2->{\draw[-latex] (x2.south) -- ($(x2.south)-(0,0.4)$) -- ($(x10.south)-(0,0.4)$) -- (x10.south);};
+
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -928,7 +953,33 @@ ffun
 
 Ejemplo: prologo(1,7)
 
-Dibujo
+  \begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center}]
+
+    \node[box, fill=red!40] at (0,0) (x0) {0x8};
+
+    \node[box, right = of x0, fill=green!40] (x1) {0x4};
+    \uncover<-1>{\node[box, right = of x1, fill=green!40] (x2) {¿?};};
+    \uncover<2->{\node[box, right = of x1, fill=green!40] (x2) {0x11};};
+    \node[box, right = of x2, fill=green!40] (x3) {};
+
+    \node[box, right = of x3, fill=blue!40, minimum width=4em] (x8) {\ldots};
+
+    \node[box, right = of x8, fill=pink!40] (x9) {0x87};
+    \node[box, right = of x9, fill=pink!40] (x10) {¿?};
+    \node[box, right = of x10] (x11) {};
+    \node[box, right = of x11] (x12) {};
+    \node[box, right = of x12] (x13) {\ldots};
+
+    \node[box, draw=none, above = of x0] {\small{0x0}};
+    \node[box, draw=none, above = of x8.north west] {\small{0x4}};
+    \node[box, draw=none, above = of x8.north east] {\small{0x8}};
+    \node[box, draw=none, above = of x11] (etq11) {\small{0x11}};
+    \node[box, draw=none, above = of x12] {\small{0x12}};
+
+    \uncover<2->{\draw[-latex, dashed] ($(etq11.south)+(0,0.2)$) -- ($(x11.south)-(0,0.4)$) -- ($(x2.south)-(0,0.4)$) -- (x2.south);};
+
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -958,7 +1009,51 @@ ffun
 
 Ejemplo: prologo(1,7)
 
-Dibujo
+  \begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
+      short/.style={minimum width = 1.8em}]
+
+    \uncover<-1>{\node[box, fill=red!40] at (0,0) (x0) {0x8};}
+    \uncover<2->{\node[box, fill=red!40] at (0,0) (x0) {0x16};}
+
+    \node[box, right = of x0, fill=green!40] (x3) {\ldots};
+
+    \node[box, right = of x3, fill=blue!40, minimum width=4em] (x8) {\ldots};
+
+    \node[box, right = of x8, fill=pink!40] (x9) {0x87};
+    \node[box, right = of x9, fill=pink!40] (x10) {¿?};
+    
+    \uncover<-1>{
+      \node[box, short, right = of x10] (x11) {};
+      \node[box, short, right = of x11] (x12) {};
+      \node[box, short, right = of x12] (x13) {};
+      \node[box, short, right = of x13] (x14) {};
+      \node[box, short, right = of x14] (x15) {};
+      \node[box, short, right = of x15] (x16) {};
+      };
+    \uncover<2->{
+      \node[box, short, right = of x10, fill=cyan!40] (x11) {};
+      \node[box, short, right = of x11, fill=cyan!40] (x12) {};
+      \node[box, short, right = of x12, fill=cyan!40] (x13) {};
+      \node[box, short, right = of x13, fill=cyan!40] (x14) {};
+      \node[box, short, right = of x14, fill=cyan!40] (x15) {};
+      \node[box, short, right = of x15, fill=cyan!40] (x16) {};
+      };
+
+    \node[box, short, right = of x16] (x17) {};
+    \node[box, short, right = of x17] (x18) {\ldots};
+
+    \node[box, draw=none, above = of x0] {\small{0x0}};
+    \node[box, draw=none, above = of x8.north west] {\small{0x4}};
+    \node[box, draw=none, above = of x8.north east] {\small{0x8}};
+    \node[box, draw=none, above = of x12] {\small{0x12}};
+    \node[box, draw=none, above = of x16] {\small{0x16}};
+
+    \uncover<2->{
+      \draw[-latex, dashed] (x0.south) -- ($(x0.south)-(0,0.4)$) -- ($(x16.south)-(0,0.4)$) -- (x16.south);
+    };
+
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
