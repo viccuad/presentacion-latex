@@ -2,22 +2,41 @@
 % TODO añadir resumen al final
 % TODO tildes dentro de lstlistings. dentro de lstlisting, y por culpa de beamer, solo se pueden usar espacios y no tabs para indentar :(
 
-\documentclass[hyperref={pdfpagelabels=false},tree-dvips]{beamer}
+\documentclass[hyperref={pdfpagelabels=false},tree-dvips,compress]{beamer}
 % By  using hyperref={pdfpagelabels=false} you get rid off:
 %	Package hyperref Warning: Option `pdfpagelabels' is turned off
 %	(hyperref)                because \thepage is undefined.
 %	Hyperref stopped early
 
-%\usetheme{Madrid}
+
+% lista de themes: http://www.hartwork.org/beamer-theme-matrix/
+
 %\usetheme{Warsaw} %muestra las secciones, pero ocupa mucho espacio
 %\usetheme{Amsterdam}
 %\usetheme{Darmstadt}
 
 %\usetheme{CambridgeUS}
 %\usecolortheme{whale}
-\usetheme{Frankfurt}
-% lista de themes: http://www.hartwork.org/beamer-theme-matrix/
 
+%\usetheme{Madrid}
+%\usetheme{Boadilla}
+%\usetheme{Frankfurt}
+%\usetheme{Berlin}
+%\usetheme{Dresden}
+
+\usecolortheme{whale}
+\useinnertheme{default}
+\useoutertheme[subsection=false,footline=authorinstitute]{miniframes}
+
+% Solo subsections en los circulos:
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\slideentry}{\advance\beamer@xpos by1\relax}{}{}{}
+\newcommand*{\nofurther@beamer@link}{\gdef\beamer@link(##1/##2){}}
+\pretocmd{\beamer@link}{\nofurther@beamer@link}{}{}
+\let\beamer@linkorig=\beamer@link
+\def\beamer@subsectionentry#1#2#3#4#5{\advance\beamer@xpos by1\relax\let\beamer@link=\beamer@linkorig}
+\makeatother
 
 %\setbeameroption{show notes}
 %\setbeameroption{hide notes} % default
@@ -366,7 +385,7 @@ molaria tener los displays etiquetados con nivel 1 etc
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Nueva arquitect.}
+\section{Nueva arquitectura}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Memoria}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
