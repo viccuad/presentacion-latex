@@ -918,7 +918,6 @@ Ejemplo: prologo(1,7)
     \node[box, draw=none, above = of x0] {\small{0x0}};
     \node[box, draw=none, above = of x8.north west] {\small{0x4}};
     \node[box, draw=none, above = of x8.north east] {\small{0x8}};
-    \node[box, draw=none, above = of x11] {\small{0x11}};
     \node[box, draw=none, above = of x12] {\small{0x12}};
 
     \uncover<2->{\draw[-latex] (x2.south) -- ($(x2.south)-(0,0.4)$) -- ($(x10.south)-(0,0.4)$) -- (x10.south);};
@@ -1013,8 +1012,8 @@ Ejemplo: prologo(1,7)
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
       short/.style={minimum width = 1.8em}]
 
-    \uncover<-1>{\node[box, fill=red!40] at (0,0) (x0) {0x8};}
-    \uncover<2->{\node[box, fill=red!40] at (0,0) (x0) {0x16};}
+    \uncover<-1>{\node[box, fill=red!40] at (0,0) (x0) {0x8};};
+    \uncover<2->{\node[box, fill=red!40] at (0,0) (x0) {0x16};};
 
     \node[box, right = of x0, fill=green!40] (x3) {\ldots};
 
@@ -1113,8 +1112,6 @@ Asociado con el prodecimiento $proc \ p(...)$:
     \item Apilar la dirección de retorno y saltar usando \emph{ir-ind}
 \end{enumerate}
 
-dibujo de lo que aparece al hacer los pasos
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -1169,9 +1166,71 @@ ffun
 
 Ejemplo: epilogo(1)
 
-Dibujo
+\begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
+      short/.style={minimum width = 1.8em}]
+
+    \node[box, fill=red!40] at (0,0) (x0) {0x16};
+
+    \node[box, right = of x0, fill=green!40] (x3) {\ldots};
+
+    \node[box, right = of x3, fill=blue!40, minimum width=4em] (x8) {\ldots};
+
+    \node[box, right = of x8, fill=pink!40] (x9) {0x87};
+    \node[box, right = of x9, fill=pink!40] (x10) {¿?};
+    
+    \node[box, short, right = of x10, fill=cyan!40] (x11) {};
+    \node[box, short, right = of x11, fill=cyan!40] (x12) {};
+    \node[box, short, right = of x12, fill=cyan!40] (x13) {};
+    \node[box, short, right = of x13, fill=cyan!40] (x14) {};
+    \node[box, short, right = of x14, fill=cyan!40] (x15) {};
+    \node[box, short, right = of x15, fill=cyan!40] (x16) {};
+
+    \node[box, short, right = of x16] (x17) {};
+    \node[box, short, right = of x17] (x18) {\ldots};
+
+    \node[box, draw=none, above = of x0] {\small{0x0}};
+    \node[box, draw=none, above = of x8.north west] {\small{0x4}};
+    \node[box, draw=none, above = of x8.north east] {\small{0x8}};
+    \node[box, draw=none, above = of x12] {\small{0x12}};
+    \node[box, draw=none, above = of x16] {\small{0x16}};
+
+    \uncover<2->{
+      \draw[-latex] (x9.south) -- ($(x9.south)-(0,0.45)$) -- ($(x11.south)-(0,0.45)$);
+      \node[box, draw=none, below =0.1 of x14] {Pila de evaluación};
+    };
+  
+  \end{tikzpicture}
 
 \end{frame}
+\begin{frame}[fragile]
+\frametitle{Epílogo: Ejemplo II}
+
+\begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily]
+fun epilogo(nivel) devuelve
+   // apilar la dir. retorno:
+   apila-dir(0x1+nivel)      ||
+   apila(2)                  ||
+   resta                     ||
+   apila-ind                 ||
+   // liberar espacio (mover CP):
+   @b@apila-dir(0x1+nivel)   ||@
+   @b@apila(3)               ||@
+   @b@resta                  ||@
+   @b@copia                  ||@ // si no se usa copia, hay que mover CP lo ultimo
+   @b@desapila-dir(0x0)      ||@
+   // recupear antiguo display:
+   apila(2)                  ||
+   suma                      ||
+   apila-ind                 ||
+   desapila-dir(0x1+nivel)
+ffun
+\end{lstlisting}
+
+¿Es la mejor forma de implementar el epílogo, con mover el CP en 2º lugar?
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Epílogo: Ejemplo II}
@@ -1199,9 +1258,44 @@ ffun
 
 Ejemplo: epilogo(1)
 
-¿Es la mejor forma de implementar el epílogo, con mover el CP en 2º lugar?
+\begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
+      short/.style={minimum width = 1.8em}]
 
-Dibujo
+    \uncover<-1>{\node[box, fill=red!40] at (0,0) (x0) {0x16};};
+    \uncover<2->{\node[box, fill=red!40] at (0,0) (x0) {0x8};};
+
+    \node[box, right = of x0, fill=green!40] (x3) {\ldots};
+
+    \node[box, right = of x3, fill=blue!40, minimum width=4em] (x8) {\ldots};
+
+    \node[box, right = of x8, fill=pink!40] (x9) {0x87};
+    \node[box, right = of x9, fill=pink!40] (x10) {¿?};
+    
+    \node[box, short, right = of x10, fill=cyan!40] (x11) {};
+    \node[box, short, right = of x11, fill=cyan!40] (x12) {};
+    \node[box, short, right = of x12, fill=cyan!40] (x13) {};
+    \node[box, short, right = of x13, fill=cyan!40] (x14) {};
+    \node[box, short, right = of x14, fill=cyan!40] (x15) {};
+    \node[box, short, right = of x15, fill=cyan!40] (x16) {};
+    
+    \node[box, short, right = of x16] (x17) {};
+    \node[box, short, right = of x17] (x18) {\ldots};
+
+    \node[box, draw=none, above = of x0] {\small{0x0}};
+    \node[box, draw=none, above = of x8.north west] {\small{0x4}};
+    \node[box, draw=none, above = of x8.north east] {\small{0x8}};
+    \node[box, draw=none, above = of x12] {\small{0x12}};
+    \node[box, draw=none, above = of x16] {\small{0x16}};
+
+    \uncover<-1>{
+      \draw[-latex, dashed] (x0.south) -- ($(x0.south)-(0,0.4)$) -- ($(x16.south)-(0,0.4)$) -- (x16.south);
+    };
+    \uncover<2->{
+      \draw[-latex, dashed] (x0.south) -- ($(x0.south)-(0,0.4)$) -- ($(x8.south)-(0,0.4)$) -- (x8.south);
+    };
+
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1231,7 +1325,32 @@ ffun
 
 Ejemplo: epilogo(1)
 
-Dibujo
+  \begin{tikzpicture}
+      [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center}]
+
+    \node[box, fill=red!40] at (0,0) (x0) {0x8};
+
+    \node[box, right = of x0, fill=green!40] (x1) {0x4};
+    \uncover<-1>{\node[box, right = of x1, fill=green!40] (x2) {0x11};}
+    \uncover<2->{\node[box, right = of x1, fill=green!40] (x2) {¿?};}
+    \node[box, right = of x2, fill=green!40] (x3) {};
+
+    \node[box, right = of x3, fill=blue!40, minimum width=4em] (x8) {\ldots};
+
+    \node[box, right = of x8, fill=pink!40] (x9) {0x87};
+    \node[box, right = of x9, fill=pink!40] (x10) {¿?};
+    \node[box, right = of x10, fill=cyan!40] (x11) {};
+    \node[box, right = of x11, fill=cyan!40] (x12) {};
+    \node[box, right = of x12, fill=cyan!40] (x13) {\ldots};
+
+    \node[box, draw=none, above = of x0] {\small{0x0}};
+    \node[box, draw=none, above = of x8.north west] {\small{0x4}};
+    \node[box, draw=none, above = of x8.north east] {\small{0x8}};
+    \node[box, draw=none, above = of x12] {\small{0x12}};
+
+    \uncover<2->{\draw[-latex] (x10.south) -- ($(x10.south)-(0,0.4)$) -- ($(x2.south)-(0,0.4)$) -- (x2.south);};
+
+  \end{tikzpicture}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1299,7 +1418,7 @@ dibujo de la memoria
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Resumen}
-
+  \begin{center}
 	\begin{tikzpicture}
 		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
 		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
@@ -1319,7 +1438,7 @@ dibujo de la memoria
     \draw[-latex, dashed] (H.west) -- ($(H.west)-(0.5,0)$) -- ($(B.north west)-(0.5,0.1)$) --($(B.north west)-(0,0.1)$);
 
 	\end{tikzpicture}
-
+  \end{center}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Recap.}
