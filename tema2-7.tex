@@ -2042,7 +2042,7 @@ Decs ::= Dec
 fun accesoVar(id) devuelve
    apila-dir(0x1+id.nivel)    ||  // dir del display
    apila(id.dir)              ||  // desplazamiento respecto al display
-   suma                           // traer dir0valor a Cima
+   suma                           // traer dir o valor a Cima
    // aqui nos falta un apila_ind !!!
    ( si id.clase = pvar entonces apila-ind
    si no $\lambda$ )
@@ -2190,7 +2190,7 @@ Ejemplo: \textbf{inicio(2,5)}
 
 \end{columns}
 \uncover<+->{¿Hay que parchear?\\}
-\uncover<+->{Sí, para apuntar al main, del cual no sabemos su dirección todavía}
+\uncover<+->{Sí, el ir-a para apuntar al main, del cual no sabemos su dir todavía}
 
 
 \end{frame}
@@ -2280,18 +2280,11 @@ inicio: Dir de la 1ºa instrucción (despues de \emph{Decs})
 	   I.etqh = Decs.etq + longPrologo
 	   Bloque.etq = I.etq + longEpilogo + 1
 	   @bold@Bloque.cod = Decs.cod ||
-	                      prologo(Bloque.nh, Decs.dir) ||
+	                      prologo(Bloque.nh,
+	                              Decs.dir) ||
 	                      I.cod  ||
 	                      epilogo(Bloque.nh ) ||
 	                      ir-ind@
-	Bloque ::= I
-	   @bold@Bloque.cod = prologo(Bloque.nh, Bloque.dirh ) ||
-	                I.cod               ||
-	                epilogo(Bloque.nh ) ||
-	                ir-ind@
-	   I.etqh = Bloque.etqh + longPrologo
-	   Bloque.inicio = Bloque.etqh
-	   Bloque.etq = I.etq + longEpilogo + 1
 	\end{lstlisting}
 
 \column{.3\textwidth}
@@ -2310,6 +2303,17 @@ inicio: Dir de la 1ºa instrucción (despues de \emph{Decs})
 	\end{tikzpicture}
 
 \end{columns}
+
+	\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+	Bloque ::= I
+	   @bold@Bloque.cod = prologo(Bloque.nh, Bloque.dirh ) ||
+	                I.cod               ||
+	                epilogo(Bloque.nh ) ||
+	                ir-ind@
+	   I.etqh = Bloque.etqh + longPrologo
+	   Bloque.inicio = Bloque.etqh
+	   Bloque.etq = I.etq + longEpilogo + 1
+	\end{lstlisting}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
