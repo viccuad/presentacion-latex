@@ -2675,7 +2675,57 @@ ffun
 1              & raizCuadrada      & prodedimiento     & $<tipo:<t:proc, params: [modo:variable,tipo:<t:num>]>>$ \\ \hline
 \end{tabular*}
 
-dibujo con a y b y los desplazamientos, y el cp apuntando a 17 y el display a 11
+	\begin{tikzpicture}
+		[box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2em, align=center},
+		short/.style={minimum width = 1.8em}]
+
+		\node[box, fill=red!40] at (0,0) (x0) {\small{0x17}};
+
+		% displays
+		\node[box, right = of x0, fill=green!40, minimum width=1.5em] (x1) {\small{0x4}};
+		\node[box, right = of x1, fill=green!40, minimum width=1.5em] (x2) {\small{0x11}};
+		\node[box, right = of x2, fill=green!40, minimum width=1.5em] (x3) {\tiny{?}};
+
+		% main
+		\node[box, right = of x3, fill=blue!40, minimum width=1em] (x4) {\tiny{1}};
+		\node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{5}};
+		\node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{8}};
+		\node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{12}};
+		\node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{res}};
+
+		% distEuclidea
+		\node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
+		\node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
+		\node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
+		\node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
+		\node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
+		\node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
+		\node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{0x8}};
+		\node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{a}};
+		\node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{b}};
+
+		% labels
+		\node[box, draw=none, above = of x11,rotate=45, xshift=1.5em,yshift=-0.5em] {\tiny{Disp+0}};
+		\node[box, draw=none, above = of x12,rotate=45, xshift=1.5em,,yshift=-0.5em] {\tiny{Disp+1}};
+		\node[box, draw=none, above = of x13,rotate=45, xshift=1.5em,,yshift=-0.5em] {\tiny{Disp+2}};
+		\node[box, draw=none, above = of x14,rotate=45, xshift=1.5em,,yshift=-0.5em] {\tiny{Disp+3}};
+		\node[box, draw=none, above = of x15,rotate=45, xshift=1.5em,,yshift=-0.5em] {\tiny{Disp+4}};
+		\node[box, draw=none, above = of x16,rotate=45, xshift=1.5em,,yshift=-0.5em] {\tiny{Disp+5}};
+		\node[box, draw=none, above = of x17,rotate=45, xshift=1.5em,,yshift=-0.5em] {\tiny{Disp+6}};
+
+		\node[box, draw=none, above = of x0] {\small{0}};
+		\node[box, draw=none, above = of x1] {\small{1}};
+		\node[box, draw=none, above = of x2] {\small{2}};
+		\node[box, draw=none, above = of x3] {\small{3}};
+		\node[box, draw=none, above = of x4] {\small{4}};
+		\node[box, draw=none, above = of x5] {\small{5}};
+		\node[box, draw=none, above = of x6] {\small{6}};
+		\node[box, draw=none, above = of x7] {\small{7}};
+		\node[box, draw=none, above = of x8] {\small{8}};
+		\node[box, draw=none, above = of x9] {\small{9}};
+		\node[box, draw=none, above = of x10] {\small{10}};
+	\end{tikzpicture}
+
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
