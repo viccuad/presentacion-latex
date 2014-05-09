@@ -2340,8 +2340,6 @@ AParams ::= LAparams
    AParams.etq = LAParams.etq + longFinPaso
 \end{lstlisting}
 
-	dibujo con punteros a inicio y etqh y etq
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
@@ -2387,7 +2385,6 @@ cons fin-paso = desapila
 cons longFinPaso = 1
 \end{lstlisting}
 
-dibujo de pilas
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2405,8 +2402,6 @@ fun direccionParFormal(pformal) devuelve
 ffun
 fun longdireccionParFormal(pformal) devuelve 2 ffun
 \end{lstlisting}
-
-dibujo de pilas
 
 \begin{itemize}
 	\item Función para realizar el paso de los parámetros
@@ -2645,7 +2640,7 @@ Mem ::= id
 	\item Además, si el parámetro es por variable(referencia) (tipo \emph{pvar}), debe realizarse un apilado indirecto para acceder al enlace en sí
 \end{itemize}
 
-\begin{lstlisting}[style=codigoMP,basicstyle=\footnotesize\ttfamily,mathescape]
+\begin{lstlisting}[style=codigoMP,basicstyle=\tiny\ttfamily,mathescape]
 fun accesoVar(id) devuelve
    apila-dir(0x1+id.nivel) ||
    apila(id.dir)           ||
