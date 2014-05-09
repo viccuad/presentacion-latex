@@ -2271,27 +2271,45 @@ inicio: Dir de la 1ºa instrucción (despues de \emph{Decs})
 \begin{frame}[fragile]
 \frametitle{Traducción: Bloque de código del proc.}
 
-\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
-Bloque ::= Decs && I
-   Decs.etqh = Bloque.etqh
-   @bold@Bloque.inicio@ = Decs.etq
-   I.etqh = Decs.etq + longPrologo
-   Bloque.etq = I.etq + longEpilogo + 1
-   @bold@Bloque.cod = Decs.cod || prologo(Bloque.nh, Decs.dir) ||
-                I.cod                                    ||
-                epilogo(Bloque.nh )                      ||
-                ir-ind@
-Bloque ::= I
-   @bold@Bloque.cod = prologo(Bloque.nh, Bloque.dirh ) ||
-                I.cod                            ||
-                epilogo(Bloque.nh )              ||
-                ir-ind@
-   I.etqh = Bloque.etqh + longPrologo
-   Bloque.inicio = Bloque.etqh
-   Bloque.etq = I.etq + longEpilogo + 1
-\end{lstlisting}
+\begin{columns}[T]
+\column{.7\textwidth}
+	\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
+	Bloque ::= Decs && I
+	   Decs.etqh = Bloque.etqh
+	   @bold@Bloque.inicio@ = Decs.etq
+	   I.etqh = Decs.etq + longPrologo
+	   Bloque.etq = I.etq + longEpilogo + 1
+	   @bold@Bloque.cod = Decs.cod ||
+	                      prologo(Bloque.nh, Decs.dir) ||
+	                      I.cod  ||
+	                      epilogo(Bloque.nh ) ||
+	                      ir-ind@
+	Bloque ::= I
+	   @bold@Bloque.cod = prologo(Bloque.nh, Bloque.dirh ) ||
+	                I.cod               ||
+	                epilogo(Bloque.nh ) ||
+	                ir-ind@
+	   I.etqh = Bloque.etqh + longPrologo
+	   Bloque.inicio = Bloque.etqh
+	   Bloque.etq = I.etq + longEpilogo + 1
+	\end{lstlisting}
 
-dibujo prologo cuerpo epilogo
+\column{.3\textwidth}
+	\begin{tikzpicture}
+	[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
+	box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=4em, text width=4em,align=center}]
+		\node[box, below = of A, fill=gray!20] (B) {Prólogo};
+		\node[box, below = of B] (C) {Cuerpo};
+		\node[box, below = of C, fill=gray!20] (D) {Epílogo};
+		\node[box, below = of D] (E) {ir-ind};
+
+		\draw[-latex, dashed]  ($(B.west)+(-2,0.2)$) -- node[fill=white, minimum width=1.2em]{\tiny{Bloque.inicio}} ($(B.west)+(0,0.2)$);
+		\draw[-latex, dashed]  ($(C.west)+(-2,0.2)$) -- node[fill=white, minimum width=1.2em]{\tiny{Is.etqh}} ($(C.west)+(0,0.2)$);
+		\draw[-latex, dashed]  ($(E.west)+(-2,0)$) -- node[fill=white, minimum width=1.2em]{\tiny{Bloque.etqh}} (E.west);
+
+	\end{tikzpicture}
+
+\end{columns}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
