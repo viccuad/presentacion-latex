@@ -2160,23 +2160,23 @@ Ejemplo: \textbf{inicio(2,5)}
 \end{itemize}
 
 \begin{columns}[T]
-\column{.5\textwidth}
+\column{.6\textwidth}
 	\begin{lstlisting}[style=gramaticas,basicstyle=\scriptsize\ttfamily,mathescape]
-	Prog ::= Decs && Is
+	Prog ::= Decs && Is //Subprogs $\in$ Decs
 	   Proc.cod = @bold@inicio(Decs.n,Decs.dir)@ || // Decs.dir: tam del main
 	   @bold@ir-a(Decs.etq)@                     ||
-	   Decs.cod                           || // aqui van los procs.
-	   Is.cod                             ||
+	   Decs.cod  || // aqui van los Subprogs
+	   Is.cod    ||
 	   stop
 	   Decs.etqh = longInicio +1 // +1: ir-a
 	   Is.etqh = Decs.etq
 	\end{lstlisting}
 
-\column{.5\textwidth}
+\column{.4\textwidth}
 	\uncover<+->{
 		\begin{tikzpicture}
 		[minibox/.style={draw, node distance=0pt, outer sep=0pt, minimum height=3em},
-		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=13em, text width=8em,align=center}]
+		box/.style={draw, node distance=0pt, outer sep=0pt, minimum width=10em, text width=8em,align=center}]
 
 			\node[box, fill=gray!40, anchor=west] at (2,-1.5) (tA) {Inicio};
 			\node[box, below = of tA, minimum height=2em] (tB) {ir-a};
@@ -2189,9 +2189,9 @@ Ejemplo: \textbf{inicio(2,5)}
 	}
 
 \end{columns}
-
 \uncover<+->{¿Hay que parchear?\\}
 \uncover<+->{Sí, para apuntar al main, del cual no sabemos su dirección todavía}
+
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
