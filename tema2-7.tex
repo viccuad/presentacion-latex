@@ -1013,7 +1013,7 @@ Ejemplo: \textbf{prologo(1,7)}
     \node[box, draw=none, above = of x11] (etq11) {\small{11}};
     \node[box, draw=none, above = of x12] {\small{12}};
 
-    \uncover<2->{\draw[-latex] ($(etq11.south)+(0,0.2)$) -- ($(x11.south)-(0,0.4)$) -- ($(x2.south)-(0,0.4)$) -- (x2.south);};
+    \uncover<2->{\draw[-latex, dashed] ($(etq11.south)+(0,0.2)$) -- ($(x11.south)-(0,0.4)$) -- ($(x2.south)-(0,0.4)$) -- (x2.south);};
 
   \end{tikzpicture}
 
@@ -1544,7 +1544,7 @@ No es necesaria en nuestra implementación:
 \section{Paso de parámetros}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
-\frametitle{Paso de parámetros}
+\frametitle{Paso de parámetros (durante la prellamada)}
 
 \begin{itemize}[<+->]
 	\item Las posiciones de los parámetros en el reg. de activación son relativas al \emph{CP}
@@ -1554,7 +1554,7 @@ No es necesaria en nuestra implementación:
 \end{itemize}
 
 \uncover<+->{¿Por qué deben precalcularse en ejecución?}
-\uncover<+->{Por que el \emph{CP} se va moviendo y dejan de ser accesibles}
+\uncover<+->{\\Por que el \emph{CP} se va moviendo y dejan de ser accesibles}
 \uncover<+->{
 \begin{columns}[T]
 \column{.4\textwidth}
@@ -1672,45 +1672,45 @@ distanciaEuclidea(@bold@par1,par2,& resultado@);
       [box/.style={draw, node distance=0pt, outer sep=0pt, minimum height=2em, minimum width=2.7em, align=center},
       short/.style={minimum width = 1.8em}]
 
-    \node[box, fill=red!40] at (0,0) (x0) {\small{0x17}};
+    \node[box, fill=red!40, minimum width=2em] at (0,0) (x0) {\small{0x17}};
 
     \node[box, right = of x0, fill=green!40, minimum width=1.5em] (x1) {\small{0x4}};
     \node[box, right = of x1, fill=green!40, minimum width=1.5em] (x2) {\small{0x11}};
     \node[box, right = of x2, fill=green!40, minimum width=1.5em] (x3) {\tiny{?}};
 
 
-    \node[box, right = of x3, fill=blue!40, minimum width=1em] (x4) {\tiny{1}};
-    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{5}};
-    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{8}};
-    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{12}};
-    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{res}};
+    \node[box, right = of x3, fill=blue!40, minimum width=1em] (x4) {\small{1}};
+    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\small{5}};
+    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\small{8}};
+    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\small{12}};
+    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\small{res}};
 
 
-    \node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
+    \node[box, right = of x8, fill=pink!40, minimum width=2em] (x9) {\small{0x87}};
     \node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
 
     \uncover<-1>{
       \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{?}};
       \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{?}};
       \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{?}};
-      \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{?}};
+      \node[box, short, right = of x13, fill=cyan!40, minimum width=1.7em] (x14) {\tiny{?}};
       \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{?}};
       \node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{?}};
       \node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{?}};
       \node[box, short, right = of x17] (x18) {\ldots};
     };
     \uncover<2->{
-      \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
-      \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
+      \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\small{1}};
+      \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\small{5}};
     };
     \uncover<2>{
       \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{?}};
-      \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{?}};
+      \node[box, short, right = of x13, fill=cyan!40, minimum width=1.7em] (x14) {\tiny{?}};
       \draw[-latex] (x5.south west) -- ($(x5.south west)-(0,0.4)$) -- ($(x12.south west)-(0,0.4)$) -- (x12.south west);
     };
     \uncover<3->{
-      \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
-      \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
+      \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\small{8}};
+      \node[box, short, right = of x13, fill=cyan!40, minimum width=1.7em] (x14) {\small{12}};
       \draw[-latex] (x7.south west) -- ($(x7.south west)-(0,0.4)$) -- ($(x14.south west)-(0,0.4)$) -- (x14.south west);
     };
     \uncover<2->{
@@ -1773,17 +1773,17 @@ sumacuadrado(@blue@3*2@,@blue@7@,& res);
     % distEuclidea
     \node[box, right = of x4, fill=pink!40] (x9) {\small{0x87}};
     \node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
-    \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
-    \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
-    \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
-    \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
+    \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\small{1}};
+    \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\small{5}};
+    \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\small{8}};
+    \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\small{12}};
     \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{?}};
     \node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{?}};
     \node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{?}};
 
     % sumaCuadrado
-    \node[box, short, right = of x17, fill=cyan!40, minimum width=1.2em] (x18) {\tiny{217}};
-    \node[box, short, right = of x18, fill=cyan!40, minimum width=1.2em] (x19) {\tiny{?}};
+    \node[box, short, right = of x17, fill=pink!40, minimum width=1.2em] (x18) {\small{217}};
+    \node[box, short, right = of x18, fill=pink!40, minimum width=1.2em] (x19) {\tiny{?}};
 
     \uncover<1-1>{
       \node[box, short, right = of x19, fill=cyan!40, minimum width=1.2em] (x20) {\tiny{?}};
@@ -1791,7 +1791,7 @@ sumacuadrado(@blue@3*2@,@blue@7@,& res);
     }
     % 6
     \uncover<2->{
-      \node[box, short, right = of x19, fill=cyan!40, minimum width=1.2em] (x20) {\tiny{6}};
+      \node[box, short, right = of x19, fill=cyan!40, minimum width=1.2em] (x20) {\small{6}};
       \node[box, short, right = of x20, fill=cyan!40, minimum width=1.2em] (x21) {\tiny{?}};
     };
     \uncover<2-2>{
@@ -1799,8 +1799,8 @@ sumacuadrado(@blue@3*2@,@blue@7@,& res);
     }
     % 7
     \uncover<3->{
-      \node[box, short, right = of x19, fill=cyan!40, minimum width=1.2em] (x20) {\tiny{6}};
-      \node[box, short, right = of x20, fill=cyan!40, minimum width=1.2em] (x21) {\tiny{7}};
+      \node[box, short, right = of x19, fill=cyan!40, minimum width=1.2em] (x20) {\small{6}};
+      \node[box, short, right = of x20, fill=cyan!40, minimum width=1.2em] (x21) {\small{7}};
     };
     \uncover<3-3>{
       \draw[-latex]  ($(x9.south)-(0,0.45)$) -- node[fill=white]{Pila de Eval.} ($(x21.south)-(0,0.45)$) -- (x21.south);
@@ -1837,7 +1837,7 @@ sumacuadrado(@blue@3*2@,@blue@7@,& res);
 \end{itemize}
 
 \uncover<+->{¿Cómo sabe el procemiento que ha sido por \textbf{variable (\&)}, y lo que hay en el registro de activación es una dirección de mem.?}
-\uncover<+->{Se accede con indirección: Display + dir. de la variable de la TS}
+\uncover<+->{\\Se accede con indirección: Display + dir. de la variable de la TS}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1864,19 +1864,19 @@ par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
     \node[box, right = of x0, fill=green!40, minimum width=1.5em] (x1) {display};
 
     % main
-    \node[box, right = of x1, fill=blue!40, minimum width=1em] (x4) {\tiny{1}};
-    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{5}};
-    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{8}};
-    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{12}};
-    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{res}};
+    \node[box, right = of x1, fill=blue!40, minimum width=1em] (x4) {\small{1}};
+    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\small{5}};
+    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\small{8}};
+    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\small{12}};
+    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\small{res}};
 
     % distEuclidea
     \node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
     \node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
-    \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
-    \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
-    \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
-    \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
+    \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\small{1}};
+    \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\small{5}};
+    \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\small{8}};
+    \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\small{12}};
 
     \node[box, draw=none, above = of x6] {\small{6}};
     \node[box, draw=none, above = of x8] (etq8) {\small{\textbf{8}}};
@@ -1884,13 +1884,13 @@ par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
     \node[box, draw=none, above = of x12] {\small{12}};
 
     \uncover<1-1>{
-      \node[box, short, right = of x14, fill=cyan!40, minimum width=1.7em] (x15) {\tiny{?}};
+      \node[box, short, right = of x14, fill=cyan!40, minimum width=2em] (x15) {\tiny{?}};
     }
     \uncover<2->{
-      \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{0x8}};
+      \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\small{0x8}};
     };
     \uncover<2-2>{
-      \uncover<2->{\draw[-latex] ($(etq8.south)+(0,0.2)$) -- ($(x8.south)-(0,0.4)$) -- ($(x15.south)-(0,0.4)$) -- (x15.south);};
+      \uncover<2->{\draw[-latex, dashed] ($(etq8.south)+(0,0.2)$) -- ($(x8.south)-(0,0.4)$) -- ($(x15.south)-(0,0.4)$) -- (x15.south);};
     }
 
     \node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{?}};
@@ -1989,22 +1989,22 @@ Decs ::= Dec
 		\node[box, right = of x2, fill=green!40, minimum width=1.5em] (x3) {\tiny{?}};
 
 		% main
-		\node[box, right = of x3, fill=blue!40, minimum width=1em] (x4) {\tiny{1}};
-		\node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{5}};
-		\node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{8}};
-		\node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{12}};
-		\node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{res}};
+		\node[box, right = of x3, fill=blue!40, minimum width=2.5em] (x4) {\tiny{1}};
+		\node[box, right = of x4, fill=blue!40, minimum width=2.5em] (x5) {\tiny{5}};
+		\node[box, right = of x5, fill=blue!40, minimum width=2.5em] (x6) {\tiny{8}};
+		\node[box, right = of x6, fill=blue!40, minimum width=2.5em] (x7) {\tiny{12}};
+		\node[box, right = of x7, fill=blue!40, minimum width=2.5em] (x8) {\tiny{res}};
 
 		% distEuclidea
 		\node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
 		\node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
-		\node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
-		\node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
-		\node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
-		\node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
-		\node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{0x8}};
-		\node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{a}};
-		\node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{b}};
+		\node[box, short, right = of x10, fill=cyan!40, minimum width=2.5em] (x11) {\tiny{1}};
+		\node[box, short, right = of x11, fill=cyan!40, minimum width=2.5em] (x12) {\tiny{5}};
+		\node[box, short, right = of x12, fill=cyan!40, minimum width=2.5em] (x13) {\tiny{8}};
+		\node[box, short, right = of x13, fill=cyan!40, minimum width=2.5em] (x14) {\tiny{12}};
+		\node[box, short, right = of x14, fill=cyan!40, minimum width=2.5em] (x15) {\tiny{0x8}};
+		\node[box, short, right = of x15, fill=cyan!40, minimum width=2.5em] (x16) {\tiny{a}};
+		\node[box, short, right = of x16, fill=cyan!40, minimum width=2.5em] (x17) {\tiny{b}};
 
 		% labels
 		\node[box, draw=none, above = of x11,rotate=45, xshift=1.5em,yshift=-0.5em] {\tiny{Disp+0}};
@@ -2490,26 +2490,26 @@ par1.x:=1; par1.y:=5; par2.x:=8; par2.y:=12;
     \node[box, right = of x0, fill=green!40, minimum width=1.5em] (x1) {display};
 
     % main
-    \node[box, right = of x1, fill=blue!40, minimum width=1em] (x4) {\tiny{1}};
-    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{5}};
-    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{8}};
-    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{12}};
-    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{res}};
+    \node[box, right = of x1, fill=blue!40, minimum width=1em] (x4) {\small{1}};
+    \node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\small{5}};
+    \node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\small{8}};
+    \node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\small{12}};
+    \node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\small{res}};
 
     % distEuclidea
     \node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
     \node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
-    \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
-    \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
-    \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
-    \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
+    \node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\small{1}};
+    \node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\small{5}};
+    \node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\small{8}};
+    \node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\small{12}};
 
     \node[box, draw=none, above = of x6] {\small{6}};
     \node[box, draw=none, above = of x8] (etq8) {\small{\textbf{8}}};
     \node[box, draw=none, above = of x10] {\small{10}};
     \node[box, draw=none, above = of x12] {\small{12}};
-    \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{0x8}};
-    \uncover<2->{\draw[-latex] ($(etq8.south)+(0,0.2)$) -- ($(x8.south)-(0,0.4)$) -- ($(x15.south)-(0,0.4)$) -- (x15.south);};
+    \node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\small{0x8}};
+    \uncover<2->{\draw[-latex, dashed] ($(etq8.south)+(0,0.2)$) -- ($(x8.south)-(0,0.4)$) -- ($(x15.south)-(0,0.4)$) -- (x15.south);};
 
     \node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{?}};
     \node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{?}};
@@ -2686,22 +2686,22 @@ ffun
 		\node[box, right = of x2, fill=green!40, minimum width=1.5em] (x3) {\tiny{?}};
 
 		% main
-		\node[box, right = of x3, fill=blue!40, minimum width=1em] (x4) {\tiny{1}};
-		\node[box, right = of x4, fill=blue!40, minimum width=1em] (x5) {\tiny{5}};
-		\node[box, right = of x5, fill=blue!40, minimum width=1em] (x6) {\tiny{8}};
-		\node[box, right = of x6, fill=blue!40, minimum width=1em] (x7) {\tiny{12}};
-		\node[box, right = of x7, fill=blue!40, minimum width=1em] (x8) {\tiny{res}};
+		\node[box, right = of x3, fill=blue!40, minimum width=2.5em] (x4) {\tiny{1}};
+		\node[box, right = of x4, fill=blue!40, minimum width=2.5em] (x5) {\tiny{5}};
+		\node[box, right = of x5, fill=blue!40, minimum width=2.5em] (x6) {\tiny{8}};
+		\node[box, right = of x6, fill=blue!40, minimum width=2.5em] (x7) {\tiny{12}};
+		\node[box, right = of x7, fill=blue!40, minimum width=2.5em] (x8) {\tiny{res}};
 
 		% distEuclidea
 		\node[box, right = of x8, fill=pink!40] (x9) {\small{0x87}};
 		\node[box, right = of x9, fill=pink!40,minimum width=1em] (x10) {\tiny{?}};
-		\node[box, short, right = of x10, fill=cyan!40, minimum width=1.2em] (x11) {\tiny{1}};
-		\node[box, short, right = of x11, fill=cyan!40, minimum width=1.2em] (x12) {\tiny{5}};
-		\node[box, short, right = of x12, fill=cyan!40, minimum width=1.2em] (x13) {\tiny{8}};
-		\node[box, short, right = of x13, fill=cyan!40, minimum width=1.2em] (x14) {\tiny{12}};
-		\node[box, short, right = of x14, fill=cyan!40, minimum width=1.2em] (x15) {\tiny{0x8}};
-		\node[box, short, right = of x15, fill=cyan!40, minimum width=1.2em] (x16) {\tiny{a}};
-		\node[box, short, right = of x16, fill=cyan!40, minimum width=1.2em] (x17) {\tiny{b}};
+		\node[box, short, right = of x10, fill=cyan!40, minimum width=2.5em] (x11) {\tiny{1}};
+		\node[box, short, right = of x11, fill=cyan!40, minimum width=2.5em] (x12) {\tiny{5}};
+		\node[box, short, right = of x12, fill=cyan!40, minimum width=2.5em] (x13) {\tiny{8}};
+		\node[box, short, right = of x13, fill=cyan!40, minimum width=2.5em] (x14) {\tiny{12}};
+		\node[box, short, right = of x14, fill=cyan!40, minimum width=2.5em] (x15) {\tiny{0x8}};
+		\node[box, short, right = of x15, fill=cyan!40, minimum width=2.5em] (x16) {\tiny{a}};
+		\node[box, short, right = of x16, fill=cyan!40, minimum width=2.5em] (x17) {\tiny{b}};
 
 		% labels
 		\node[box, draw=none, above = of x11,rotate=45, xshift=1.5em,yshift=-0.5em] {\tiny{Disp+0}};
@@ -2733,7 +2733,7 @@ ffun
 \begin{frame}[fragile]
 \frametitle{Preguntas}
 	\begin{center}
-	\fontsize{100}{120}{\selectfont ?}
+	\includegraphics[keepaspectratio, width=\textwidth]{question.png} 
 	\end{center}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
