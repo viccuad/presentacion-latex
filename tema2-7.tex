@@ -319,42 +319,60 @@
 
 	   	\node [minimum width=2cm, node distance=0pt, outer sep=0pt, minimum height=1.5em] at (4.5, -1.5) (regA) {};
 
-      \uncover<-3>{\node [stack, below = of regA] (regB) {};}
-      \uncover<4-4>{\node [stack, below = of regA, fill=violet!40] (regB) {y};}
+      \uncover<-3>{
+        \node [stack, below = of regA] (regB) {};
+        \node [stack, below = of regB] (regC) {};
+        };
+      \uncover<4-4>{
+        \node [stack, below = of regA, fill=violet!40] (regB) {y};
+        \node [stack, below = of regB, fill=violet!40] (regC) {x};
+        };
+      \uncover<5->{
+        \node [stack, below = of regA] (regB) {};
+        \node [stack, below = of regB] (regC) {};
+        };  
 
-      \uncover<-3>{\node [stack, below = of regB] (regC) {};}
-      \uncover<4-4>{\node [stack, below = of regB, fill=violet!40] (regC) {x};}
-
-      \uncover<-2>{\node [stack, below = of regC] (regD) {};}
-      \uncover<3-5>{\node [stack, below = of regC, fill=red!40] (regD) {y};}
-
-      \uncover<-2>{\node [stack, below = of regD] (regE) {};}
-      \uncover<3-5>{\node [stack, below = of regD, fill=red!40] (regE) {x};}
-
+      \uncover<-2>{
+        \node [stack, below = of regC] (regD) {};
+        \node [stack, below = of regD] (regE) {};
+        };
+      \uncover<3-5>{
+        \node [stack, below = of regC, fill=red!40] (regD) {y};
+        \node [stack, below = of regD, fill=red!40] (regE) {x};
+        };
+      \uncover<6->{
+        \node [stack, below = of regC] (regD) {};
+        \node [stack, below = of regD] (regE) {};
+        };
+      
       \uncover<-1>{\node [stack, below = of regE] (regF) {};}
       \uncover<2-6>{\node [stack, below = of regE, fill=blue!40] (regF) {w};}
+      \uncover<7->{\node [stack, below = of regE] (regF) {};}
 
       \node [stack, below = of regF, fill=green!40] (regG) {a};
 
 		  \node [disp] (A) {0x09};
       \node [etq, above = of A] {\small{Disp0}};
-		  \uncover<-1>{\node [disp, right = of A] (B) {null};}
+		  
+      \uncover<-1>{\node [disp, right = of A] (B) {null};}
       \uncover<2-6>{\node [disp, right = of A] (B) {0x13};}
-      	  \uncover<7->{\node [disp, right = of A] (B) {null};}
+      \uncover<7->{\node [disp, right = of A] (B) {null};}
       \node [etq, above = of B] {\small{Disp1}};
-		  \uncover<-2>{\node [disp, right = of B] (C) {null};}
+		  
+      \uncover<-2>{\node [disp, right = of B] (C) {null};}
       \uncover<3-5>{\node [disp, right = of B] (C) {0x24};}
-      	  \uncover<6->{\node [disp, right = of B] (C) {null};}
+      \uncover<6->{\node [disp, right = of B] (C) {null};}
       \node [etq, above = of C] {\small{Disp2}};
-      	  \uncover<-3>{\node [disp, right = of C] (D) {null};}
-      \uncover<4-4>{\node [disp, right = of C] (D) {0x65};}
-          \uncover<5->{\node [disp, right = of C] (D) {null};}
+      
+      \node [disp, right = of C] (D) {null};
       \node [etq, above = of D] {\small{Disp3}};
 
 		  \draw[-latex, dashed] ($(A.south)-(0.2,0)$) |- (regG.west);
 		  \uncover<2-6>{\draw[-latex, dashed] ($(B.south)-(0.2,0)$) |- (regF.west);}
-		  \uncover<3-5>{\draw[-latex, dashed] ($(C.south)-(0.2,0)$) |- (regE.west);}
-		  \uncover<4-4>{\draw[-latex, dashed] ($(D.south)-(0.2,0)$) |- (regC.west);}
+		  \uncover<3-3>{\draw[-latex, dashed] ($(C.south)-(0.2,0)$) |- (regE.west);}
+      \uncover<4-4>{\draw[-latex, dashed] ($(C.south)-(0.2,0)$) |- (regC.west);}
+      \uncover<5-5>{\draw[-latex, dashed] ($(C.south)-(0.2,0)$) |- (regE.west);}
+      
 		\end{tikzpicture}
 	\end{center}
 \end{columns}
